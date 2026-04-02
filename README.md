@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lentera Hijaiyah
 
-## Getting Started
+Web aplikasi pembelajaran Hijaiyah berbasis Next.js App Router, dengan fokus pada:
+- Alur autentikasi pengguna
+- Pembelajaran modul + quiz
+- Pembaca Al-Quran digital (Surah/Juz)
+- Canvas huruf Hijaiyah dengan validasi berbasis AI-rule
 
-First, run the development server:
+## Current Status
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Project plan sudah disusun di PROJECT_PLAN.md.
+- Phase 0 (Foundation) sudah selesai.
+- Implementasi engineering lanjutan sementara diprioritaskan setelah finalisasi desain Figma.
+
+## Product Scope
+
+Public area:
+- Landing page
+- About us
+- Sign in
+- Sign up
+- Forgot password
+
+Authenticated area:
+- Dashboard
+- Pembelajaran Modul (teori -> quiz -> skor)
+- Al-Quran Digital (pilih Surah/Juz -> baca)
+- Canvas Huruf Hijaiyah (pilih huruf -> menulis -> validasi)
+- Profile (lihat/edit profile, ganti password, logout)
+
+## Tech Stack
+
+- Framework: Next.js 16 (App Router)
+- Language: TypeScript
+- Auth: Auth.js (NextAuth)
+- Database: PostgreSQL
+- ORM: Prisma
+- Data Quran: External API
+- AI (MVP): Deterministic stroke similarity scoring untuk canvas Hijaiyah
+
+## Project Structure (Target)
+
+```txt
+app/
+	(public)/
+	(auth)/
+	api/
+components/
+lib/
+	auth/
+	db/
+	quran/
+	learning/
+	hijaiyah/
+	validation/
+prisma/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Referensi detail route dan modul ada di PROJECT_PLAN.md.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Delivery Plan (Backend / Frontend / AI)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Ringkasan fase:
+- Phase 0: Foundation (completed)
+- Phase 1: Auth Foundation
+- Phase 1a: Account Management
+- Phase 2: Quran Reader
+- Phase 3: Learning Module
+- Phase 4: Hijaiyah Canvas MVP
+- Phase 5: Dashboard Orchestration
+- Phase 6: Testing and Hardening
+- Phase 7: Release Readiness
 
-## Learn More
+Setiap fase sudah dipecah ke:
+- Backend Tasks
+- Frontend Tasks
+- AI Tasks
 
-To learn more about Next.js, take a look at the following resources:
+Lihat rincian lengkap di PROJECT_PLAN.md.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Local Development Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 1) Install dependencies
 
-## Deploy on Vercel
+```bash
+bun install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 2) Configure environment variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Salin dari .env.example ke .env.local lalu isi nilainya.
+
+Minimal environment untuk roadmap saat ini:
+- NEXT_PUBLIC_APP_URL
+- DATABASE_URL
+- AUTH_SECRET
+
+## 3) Run development server
+
+```bash
+bun run dev
+```
+
+App akan berjalan di:
+- http://localhost:3000
+
+## 4) Build for production
+
+```bash
+bun run build
+bun run start
+```
+
+## 5) Lint
+
+```bash
+bun run lint
+```
+
+## Documentation References
+
+- Main plan: PROJECT_PLAN.md
+- Agent/workflow rules: AGENTS.md
+- Additional instructions alias: CLAUDE.md
+
+## Notes
+
+- UI font utama saat ini menggunakan Montserrat Alternates dari Google Fonts.
+- Desain publik sedang disesuaikan mengikuti Figma sebelum lanjut ke Phase 1.
