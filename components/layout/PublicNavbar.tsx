@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { LinkButton } from "@/components/ui/button";
+
 export function PublicNavbar() {
   return (
     <header className="bg-[#f4efeb] px-5 py-4 sm:px-8">
@@ -21,12 +23,9 @@ export function PublicNavbar() {
           </Link>
         </nav>
 
-        <Link
-          href="/sign-in"
-          className="rounded-md bg-black px-8 py-2.5 text-sm font-semibold text-white shadow-[4px_4px_0_#d14a35] transition-colors hover:bg-stone-900"
-        >
+        <LinkButton href="/sign-in" variant="ink" size="nav">
           Masuk
-        </Link>
+        </LinkButton>
       </div>
     </header>
   );
