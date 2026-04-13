@@ -3,118 +3,14 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 
+import {
+  landingBenefits,
+  landingFaqs,
+  landingFeatures,
+  landingTestimonials,
+} from "@/data/landing";
 import { LinkButton } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-
-const benefits = [
-  {
-    title: "Gratis. Seru. Efektif.",
-    subtitle:
-      "Belajar di Lentera Hijaiyah nggak bakal ngebosenin. Lewat tantangan seru dan materi singkat, kamu bisa dapetin poin serta buka level baru sambil ngasah kemampuan nulis Arabmu secara nyata.",
-  },
-  {
-    title: "Materi Paling Lengkap",
-    subtitle:
-      "Kami nyediain cara belajar yang paling pas buat melatih jemarimu nulis di canvas digital, lancar baca Al-Quran 30 Juz, sampe paham cara ibadah harian yang bener.",
-  },
-  {
-    title: "Pintar Berkat AI",
-    subtitle:
-      "Lewat teknologi asisten pintar, setiap pelajaran bakal disesuaiin sama kemampuanmu. Sistem kami bakal mastiin kamu belajar di level yang pas, nggak terlalu gampang tapi juga nggak bikin pusing.",
-  },
-  {
-    title: "Semangat Setiap Hari",
-    subtitle:
-      'Kami bantu kamu buat jadiin belajar itu sebagai hobi lewat fitur mirip game, kuis yang menantang, dan pengingat dari maskot "Lentera" biar kamu tetep semangat latihan.',
-  },
-];
-
-const features = [
-  {
-    title: "Lukis Canvas",
-    subtitle: "Latihan menulis huruf hijaiyah langsung di canvas.",
-  },
-  {
-    title: "Tutorial Video",
-    subtitle: "Pelajari cara menulis langkah demi langkah dalam bentuk video.",
-  },
-  {
-    title: "Check Progress",
-    subtitle: "Pantau belajarmu dan lihat perkembangan kemampuanmu.",
-  },
-  {
-    title: "Text Book",
-    subtitle: "Perdalam pemahamanmu dengan materi teori yang lengkap.",
-  },
-  {
-    title: "Komunitas",
-    subtitle: "Saling berbagi pengalaman belajar dengan siswa lainnya.",
-  },
-  {
-    title: "Dan banyak lagi!",
-    subtitle: "Temukan fitur lainnya untuk pembelajaran huruf hijaiyah.",
-  },
-];
-
-const testimonials = [
-  {
-    quote:
-      "Inovasi ini sejalan dengan visi kami dalam mendorong kreativitas siswa dan pembelajaran berdampak nyata.",
-    name: "Ibu Dian Rahma",
-    role: "Wakil Kepala Sekolah",
-    logoSrc: "/next.svg",
-    logoAlt: "Institution logo",
-  },
-  {
-    quote:
-      "Lentera Hijaiyah adalah bukti nyata teknologi AI bisa menyentuh sisi religius dengan cara yang modern.",
-    name: "Zakki Farian",
-    role: "Head of USH",
-    logoSrc: "/vercel.svg",
-    logoAlt: "Partner logo",
-  },
-  {
-    quote:
-      "Aplikasi ini membantu siswa belajar lebih konsisten karena materi singkatnya mudah dipahami setiap hari.",
-    name: "Bapak Arif Nugroho",
-    role: "Guru PAI",
-    logoSrc: "/next.svg",
-    logoAlt: "School logo",
-  },
-];
-
-const faqs = [
-  {
-    question: "Apa itu Lentera Hijaiyah?",
-    answer:
-      "Lentera Hijaiyah adalah platform belajar digital hasil kolaborasi SMPN 1 Seyegan dan UTY Software House untuk membantu siswa menguasai huruf Hijaiyah dan literasi Arab melalui teknologi pintar.",
-  },
-  {
-    question: "Bagaimana cara kerja fitur koreksi tulisannya?",
-    answer:
-      "Sistem membaca pola goresan di canvas lalu membandingkannya dengan bentuk huruf target. Kamu akan mendapatkan skor, feedback, dan saran perbaikan secara langsung.",
-  },
-  {
-    question: "Apakah aplikasi ini bisa diakses lewat HP?",
-    answer:
-      "Bisa. Aplikasi dirancang responsif untuk desktop, tablet, dan ponsel agar latihan tetap nyaman di mana pun.",
-  },
-  {
-    question: "Apa saja materi yang bisa dipelajari selain menulis?",
-    answer:
-      "Selain latihan menulis, kamu bisa belajar membaca Al-Quran, memahami materi teori, serta mengerjakan kuis interaktif untuk mengukur progres.",
-  },
-  {
-    question: "Apakah data belajar saya akan tersimpan dengan aman?",
-    answer:
-      "Ya. Data akun dan progres belajar disimpan dengan kontrol akses dan validasi yang aman sesuai praktik pengembangan aplikasi modern.",
-  },
-  {
-    question: "Bagaimana jika saya menemukan kendala saat menggunakan aplikasi?",
-    answer:
-      "Kamu bisa melaporkan kendala melalui kontak dukungan di halaman profil atau menu bantuan. Tim akan menindaklanjuti laporan secepat mungkin.",
-  },
-];
 
 const sectionContainer = "mx-auto w-full max-w-6xl px-8 sm:px-12";
 
@@ -180,7 +76,7 @@ export default function LandingPage() {
       <section id="benefit-section" className="bg-white/70">
         <div className={`${sectionContainer} py-14`}>
           <div className="mx-auto grid w-full max-w-5xl gap-8">
-            {benefits.map((benefit, index) => {
+            {landingBenefits.map((benefit, index) => {
               const textLeft = index % 2 === 0;
 
               return (
@@ -215,7 +111,7 @@ export default function LandingPage() {
             </h2>
 
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {features.map((feature) => (
+              {landingFeatures.map((feature) => (
                 <div
                   key={feature.title}
                   className="flex h-full flex-col items-center gap-4 bg-transparent px-6 py-8 text-center"
@@ -244,7 +140,7 @@ export default function LandingPage() {
             </h2>
 
             <div ref={testimonialRailRef} className="no-scrollbar mt-10 flex gap-5 overflow-x-auto pb-2">
-              {testimonials.map((testimonial) => (
+              {landingTestimonials.map((testimonial) => (
                 <article
                   key={testimonial.name}
                   className="min-w-[550px] rounded-2xl border border-stone-300 bg-[#dde5ec] p-6 shadow-[4px_4px_0_#3f444a] sm:min-w-[500px]"
@@ -306,13 +202,13 @@ export default function LandingPage() {
             </h2>
 
             <div className="mt-10 overflow-hidden rounded-2xl border-2 border-stone-900 bg-white shadow-[6px_6px_0_#d98a79]">
-              {faqs.map((faq, index) => {
+              {landingFaqs.map((faq, index) => {
                 const isOpen = index === openFaqIndex;
 
                 return (
                   <div
                     key={faq.question}
-                    className={index !== faqs.length - 1 ? "border-b border-stone-400" : ""}
+                    className={index !== landingFaqs.length - 1 ? "border-b border-stone-400" : ""}
                   >
                     <button
                       type="button"
