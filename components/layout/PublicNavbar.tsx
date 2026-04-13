@@ -1,6 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+import { LinkButton } from "@/components/ui/button";
 
 export function PublicNavbar() {
+  const pathname = usePathname();
+
+  const links = [
+    { href: "/", label: "Beranda" },
+    { href: "/about", label: "Tentang Kami" },
+  ];
+
   return (
     <header className="bg-[#f4efeb] px-5 py-4 sm:px-8">
       <div className="flex items-center justify-between gap-4">
@@ -13,20 +25,27 @@ export function PublicNavbar() {
         </Link>
 
         <nav className="flex items-center gap-5 text-sm font-semibold sm:text-base">
-          <Link href="/" className="text-stone-900 hover:text-red-600">
-            Beranda
-          </Link>
-          <Link href="/about" className="text-stone-900 hover:text-red-600">
-            Tentang Kami
-          </Link>
+          {links.map((link) => {
+            const isActive =
+              link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative pb-1 text-stone-900 transition-colors hover:text-red-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-center after:bg-[#d14a35] after:transition-transform after:duration-200 after:content-[''] ${
+                  isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        <Link
-          href="/sign-in"
-          className="rounded-md bg-black px-8 py-2.5 text-sm font-semibold text-white shadow-[4px_4px_0_#d14a35] transition-colors hover:bg-stone-900"
-        >
+        <LinkButton href="/sign-in" variant="ink" size="nav">
           Masuk
-        </Link>
+        </LinkButton>
       </div>
     </header>
   );
