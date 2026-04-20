@@ -7,7 +7,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -69,10 +68,10 @@ model Module {
   id         String   @id @default(uuid())
   title      String
   content    String   @db.Text
-  
+
   categoryId String
   category   ModuleCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  
+
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -86,7 +85,7 @@ model UserModuleProgress {
   id          String    @id @default(uuid())
   isCompleted Boolean   @default(false)
   completedAt DateTime?
-  
+
   userId      String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 

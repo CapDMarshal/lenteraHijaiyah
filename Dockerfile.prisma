@@ -1,0 +1,19 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy dependency files
+COPY package.json package-lock.json* ./
+COPY prisma ./prisma/
+
+# Install dependencies (only what's needed for prisma studio)
+RUN npm install
+
+# Generate prisma client
+RUN npx prisma generate
+
+# Expose default port for Prisma Studio
+EXPOSE 5555
+
+# Run Prisma Studio
+CMD ["npx", "prisma", "studio", "--hostname", "0.0.0.0", "--port", "5555"]
