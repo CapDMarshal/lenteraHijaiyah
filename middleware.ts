@@ -14,7 +14,7 @@ const publicApiRoutes = [
 const authRoutes = ["/sign-in", "/sign-up", "/forgot-password"];
 
 // Daftar halaman frontend publik
-const publicRoutes = ["/", "/about"];
+const publicRoutes = ["/", "/about", "/api-docs"];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -68,7 +68,11 @@ export async function middleware(req: NextRequest) {
   // LOGIKA VALIDASI UNTUK FRONTEND PAGES (FE)
   // ==========================================
   // Abaikan request untuk public assets & file _next (agar load cepat)
-  if (pathname.startsWith("/_next") || pathname.match(/\.(.*)$/)) {
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/swagger.yaml") ||
+    pathname.match(/\.(.*)$/)
+  ) {
     return NextResponse.next();
   }
 

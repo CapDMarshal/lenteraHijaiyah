@@ -5,8 +5,6 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { OAuth2Client } from "google-auth-library";
 
-// Meminjam CLIENT_ID Anda dari Environment Variable.
-// Pastikan GOOGLE_CLIENT_ID sudah dimasukkan ke file .env !!
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export async function POST(req: Request) {
@@ -47,8 +45,8 @@ export async function POST(req: Request) {
       // Jika Google tidak mengirimkan nama, gunakan bagian depan email (sebelum @)
       const finalName = name || email.split("@")[0];
 
-      // Karena Schema Prisma Anda mewajibkan ada 'password',
-      // kita berikan password random (hash UUID acak yang tak mungkin tertebak/login manual).
+      // Karena Schema Prisma mewajibkan ada 'password',
+      // berikan password random (hash UUID acak yang tak mungkin tertebak/login manual).
       const randomPasswordBytes = crypto.randomUUID();
       const hashedRandomPassword = await bcrypt.hash(randomPasswordBytes, 10);
 
