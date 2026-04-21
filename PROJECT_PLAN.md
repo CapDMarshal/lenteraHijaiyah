@@ -9,6 +9,7 @@
 ## 1. Product Scope (Based on User Flow)
 
 Public flow:
+
 - Landing page
 - About us page
 - Sign in
@@ -16,13 +17,15 @@ Public flow:
 - Forgot password
 
 Authenticated flow:
+
 - Dashboard
-- Pembelajaran Modul (module selection -> theory content -> quiz -> score)
+- Pembelajaran Modul (module selection -> theory content -> mark completed)
 - Al-Quran Digital (choose Surah/Juz -> reading page)
 - Canvas Huruf Hijaiyah (choose letter -> write on canvas -> validate -> success message)
 - Profile (view/edit profile -> reset password -> logout)
 
 Priority order:
+
 1. Auth
 2. Quran reader
 3. Learning module
@@ -62,7 +65,6 @@ app/
     learning/
       page.tsx                    # Category/module list
       [categoryId]/page.tsx       # Theory content
-      [categoryId]/quiz/page.tsx  # Quiz + score
 
     hijaiyah/
       page.tsx                    # Letter selector + canvas
@@ -87,8 +89,7 @@ app/
     learning/
       categories/route.ts
       [categoryId]/content/route.ts
-      [categoryId]/quiz/route.ts
-      score/route.ts
+      progress/route.ts
 
     hijaiyah/
       validate/route.ts
@@ -114,8 +115,8 @@ middleware.ts                     # Protect (auth) and selected API routes
   - Response mappers/normalizers
   - Cache policy helpers
 - lib/learning
-  - Quiz logic and scoring engine
-  - Attempt/progress utilities
+  - Content parsing and rendering
+  - Progress tracking utilities
 - lib/hijaiyah
   - Stroke normalization
   - Similarity scoring
@@ -144,8 +145,6 @@ components/
   learning/
     ModuleCard.tsx
     TheoryView.tsx
-    QuizRunner.tsx
-    ScoreCard.tsx
 
   hijaiyah/
     LetterPicker.tsx
@@ -168,25 +167,23 @@ components/
 ## 4. Data Architecture (PostgreSQL + Prisma)
 
 Core/Auth entities:
+
 - User
 - Account
 - Session
 - VerificationToken
 
 App entities:
+
 - Profile
-- LearningCategory
-- LearningContent
-- Quiz
-- QuizQuestion
-- QuizOption
-- QuizAttempt
-- QuizScore
+- ModuleCategory
+- Module
 - HijaiyahLetter
 - HijaiyahAttempt
 - HijaiyahScore
 
 Optional aggregate entity:
+
 - UserModuleProgress
 
 ### 4.1 Prisma Notes
@@ -194,7 +191,7 @@ Optional aggregate entity:
 - Keep all IDs as UUID/CUID consistently.
 - Add createdAt/updatedAt timestamps to mutable records.
 - Add useful indexes:
-  - QuizAttempt(userId, categoryId)
+  - UserModuleProgress(userId, moduleId)
   - HijaiyahAttempt(userId, letterId)
   - Profile(userId unique)
 
@@ -224,90 +221,108 @@ Optional aggregate entity:
 ## Phase 0 - Foundation (Completed)
 
 Backend Tasks:
+
 - Done: Add environment schema and config utilities.
 - Done: Prepare base project structure for future API routes.
 
 Frontend Tasks:
+
 - Done: Create public/auth route groups.
 - Done: Add shared UI primitives and app shell.
 
 AI Tasks:
+
 - Done: Define AI module boundary for future hijaiyah validation (`lib/hijaiyah`).
 
 ## Phase 1 - Auth Foundation
 
 Backend Tasks:
+
 - Install and configure Prisma + PostgreSQL connection.
 - Implement Auth.js (`[...nextauth]`) and credentials auth flow.
 - Implement auth-related route handlers (register, forgot password, reset password).
 - Protect private routes with middleware and session checks.
 
 Frontend Tasks:
+
 - Build sign-in/sign-up/forgot-password forms and states.
 - Connect auth forms to backend contracts with validation/error UI.
 - Add redirect rules (public -> auth pages) after successful login.
 
 AI Tasks:
+
 - Not required in this phase.
 
 ## Phase 1a - Account Management
 
 Backend Tasks:
+
 - Implement profile get/update endpoint.
 - Implement change password endpoint with current-password verification.
 - Implement logout/session invalidation pathway.
 
 Frontend Tasks:
+
 - Build profile edit page and change-password page.
 - Add logout action in authenticated navigation.
 - Add success/error notification states for profile operations.
 
 AI Tasks:
+
 - Not required in this phase.
 
 ## Phase 2 - Quran Reader
 
 Backend Tasks:
+
 - Build external Quran API client and response mappers.
 - Add cached route handlers for Surah/Juz list and reader data.
 - Implement fallback handling for provider failure/timeouts.
 
 Frontend Tasks:
+
 - Build Surah/Juz selector UI.
 - Build reader page with loading/empty/error states.
 - Add navigation controls between Surah/Juz and return-to-list actions.
 
 AI Tasks:
+
 - Optional later: recommendation engine for next Surah/Juz based on user activity.
 
 ## Phase 3 - Learning Module
 
 Backend Tasks:
-- Create module/category/content/quiz schema and seed strategy.
-- Implement endpoints for category content, quiz retrieval, and score save.
-- Store attempt history and score summary per user.
+
+- Create module and category schema and seed strategy.
+- Implement endpoints for category content retrieval.
+- Store module completion status per user.
 
 Frontend Tasks:
+
 - Build module/category list UI.
-- Build theory content page and quiz runner UI.
-- Show score/result and progress summary.
+- Build theory content page.
+- Show reading progress and module completion summary.
 
 AI Tasks:
+
 - Optional later: adaptive quiz difficulty recommendations from attempt history.
 
 ## Phase 4 - Hijaiyah Canvas MVP
 
 Backend Tasks:
+
 - Define payload contract for stroke points and target letter.
 - Implement `/api/hijaiyah/validate` endpoint and persistence for attempts.
 - Add threshold configuration per letter for pass/fail result.
 
 Frontend Tasks:
+
 - Build letter picker and drawing canvas UI.
 - Send stroke data to validation endpoint and display feedback.
 - Implement retry flow and success state/feedback screen.
 
 AI Tasks:
+
 - Implement deterministic stroke normalization and similarity scoring.
 - Build calibration utility for per-letter thresholds.
 - Log evaluation metrics (score distribution, fail/pass rates) for model upgrade readiness.
@@ -315,74 +330,88 @@ AI Tasks:
 ## Phase 5 - Dashboard Orchestration
 
 Backend Tasks:
+
 - Build aggregated progress query for dashboard cards.
 - Add endpoint/service for user module completion snapshot.
 
 Frontend Tasks:
+
 - Implement dashboard cards linking all modules.
 - Show progress indicators for Quran, Learning, and Hijaiyah modules.
 
 AI Tasks:
+
 - Optional: personalized “next best activity” suggestion card.
 
 ## Phase 6 - Testing and Hardening
 
 Backend Tasks:
+
 - Integration tests for auth, profile, learning, quran, and hijaiyah routes.
 - Security checks for authorization, validation, and rate limiting.
 
 Frontend Tasks:
-- Component tests for forms, quiz flow, and dashboard cards.
+
+- Component tests for forms, learning flow, and dashboard cards.
 - E2E flow tests for critical user journeys.
 
 AI Tasks:
+
 - Validate hijaiyah scoring consistency with golden test samples.
 - Add regression tests for threshold and similarity changes.
 
 ## Phase 7 - Release Readiness
 
 Backend Tasks:
+
 - Finalize migrations, seed scripts, and production env vars.
 - Add logs/monitoring for API, auth, and validation endpoints.
 
 Frontend Tasks:
+
 - Final UI polish from Figma and responsive QA pass.
 - Improve accessibility and empty/error UX states.
 
 AI Tasks:
+
 - Freeze MVP scoring parameters and baseline metrics.
 - Prepare roadmap for V2 (adaptive scoring or ML handwriting model).
 
 ## 8. Testing Matrix
 
 Auth:
+
 - register -> login -> access protected page -> logout
 - forgot password -> reset -> login with new password
 
 Quran:
+
 - list Surah/Juz
 - open reader
 - external API failure fallback
 
 Learning:
+
 - module select
 - read theory
-- take quiz
-- save and show score
+- mark as completed
 
 Hijaiyah:
+
 - choose letter
 - draw and submit
 - invalid attempt loop
 - success message
 
 Profile:
+
 - edit profile persistence
 - change password constraints
 
 ## 9. Initial Dependency Plan
 
 Expected additions (implementation stage):
+
 - Auth and security: next-auth, @auth/prisma-adapter, bcryptjs, zod
 - DB: prisma, @prisma/client, pg
 - Optional utilities: react-hook-form, @hookform/resolvers
