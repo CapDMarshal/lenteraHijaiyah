@@ -20,7 +20,7 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // 1. Ambil token dari Cookies (Browser) ATAU Authorization Header (Postman/Mobile)
-  let token = req.cookies.get("auth_token")?.value;
+  let token = req.cookies.get("access_token")?.value;
   if (!token) {
     const authHeader = req.headers.get("authorization");
     if (authHeader?.startsWith("Bearer ")) {
