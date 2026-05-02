@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Lentera Hijaiyah - Auth API (v1)",
-    "description": "Koleksi API untuk proses otentikasi (Custom JWT) Lentera Hijaiyah.",
+    "name": "Lentera Hijaiyah - Auth & Account API (v1)",
+    "description": "Koleksi API untuk otentikasi dan manajemen akun (Custom JWT) Lentera Hijaiyah.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -132,6 +132,102 @@
                 "v1",
                 "auth",
                 "logout"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/user/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Ahmad Fauzi\",\n    \"email\": \"ahmad.updated@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/user/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"currentPassword\": \"rahasia123\",\n    \"newPassword\": \"rahasia456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/user/password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "password"
               ]
             }
           }
