@@ -1,14 +1,20 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 
 import PublicFooter from "@/components/layout/PublicFooter";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const hideShell = pathname === "/sign-in";
+
   return (
     <main className="no-scrollbar flex h-full flex-col overflow-x-hidden overflow-y-auto bg-stone-50">
-      <PublicNavbar />
+      {!hideShell ? <PublicNavbar /> : null}
       <div className="flex-1">{children}</div>
-      <PublicFooter />
+      {!hideShell ? <PublicFooter /> : null}
     </main>
   );
 }
