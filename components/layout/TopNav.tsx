@@ -1,4 +1,8 @@
+"use client";
+
+import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/dashboard", label: "Dashboard" },
@@ -9,18 +13,36 @@ const links = [
 ];
 
 export function TopNav() {
+  const pathname = usePathname();
+
   return (
     <header className="border-b border-stone-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 sm:px-8">
-        <Link href="/dashboard" className="text-base font-semibold tracking-tight text-stone-900">
-          Lentera Hijaiyah
+        <Link href="/dashboard" className="inline-flex items-center">
+          <Image
+            src="/images/logo-wide.png"
+            alt="Lentera Hijaiyah"
+            width={140}
+            height={32}
+            priority
+          />
         </Link>
-        <nav className="hidden gap-4 text-sm text-stone-600 md:flex">
-          {links.map((link) => (
-            <Link key={link.href} href={link.href} className="transition-colors hover:text-stone-900">
-              {link.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-5 text-sm font-semibold text-stone-600 md:flex">
+          {links.map((link) => {
+            const isActive = pathname.startsWith(link.href);
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative pb-1 text-stone-900 transition-colors hover:text-red-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-center after:bg-[#d14a35] after:transition-transform after:duration-200 after:content-[''] ${
+                  isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
       </div>
     </header>
