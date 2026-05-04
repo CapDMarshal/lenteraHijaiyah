@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Lentera Hijaiyah API
-  description: Dokumentasi API untuk sistem autentikasi Custom JWT.
+  description: Dokumentasi API untuk sistem autentikasi dan manajemen akun Custom JWT.
   version: 1.0.0
 servers:
   - url: http://localhost:3000
@@ -69,7 +69,7 @@ paths:
                   example: rahasia123
       responses:
         "200":
-          description: OK - Akan mengembalikan token JWT dan Set-Cookie 'auth_token'
+          description: OK - Akan mengembalikan token JWT dan Set-Cookie 'access_token'
           content:
             application/json:
               schema:
@@ -83,6 +83,59 @@ paths:
                     type: object
         "401":
           description: Email atau password salah
+
+  /api/v1/auth/forgot-password:
+    post:
+      summary: Kirim email reset password
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: ahmad@example.com
+      responses:
+        "200":
+          description: Jika email terdaftar, instruksi reset password akan dikirim
+        "400":
+          description: Input tidak valid / Zod Error
+
+  /api/v1/auth/reset-password:
+    post:
+      summary: Reset password menggunakan token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - password
+              properties:
+                token:
+                  type: string
+                  example: 2d7f5c8a3f6b4d1e9a0c7b2f1e4d9c8b0a2f3c4d5e6f7a8b9c0d1e2f3a4b5c6d
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  example: rahasiaBaru123
+      responses:
+        "200":
+          description: Password berhasil diperbarui
+        "400":
+          description: Token reset tidak valid / kedaluwarsa / input tidak valid
 
   /api/v1/auth/google:
     post:
@@ -125,12 +178,384 @@ paths:
   /api/v1/auth/logout:
     post:
       summary: Logout Pengguna
-      description: Menghapus cookie `auth_token` dari browser
+      description: Menghapus cookie `access_token` dari browser
       tags:
         - Authentication
       responses:
         "200":
           description: Berhasil Logout
+
+  /api/v1/user/profile:
+    get:
+      summary: Ambil profil pengguna saat ini
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "404":
+          description: Pengguna tidak ditemukan di Database
+    put:
+      summary: Update profil pengguna
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Ahmad Fauzi
+                email:
+                  type: string
+                  format: email
+                  example: ahmad.updated@example.com
+      responses:
+        "200":
+          description: Profil berhasil diperbarui
+        "400":
+          description: Input tidak valid / Zod Error
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "404":
+          description: Pengguna tidak ditemukan di Database
+        "409":
+          description: Email sudah terdaftar
+
+  /api/v1/user/password:
+    put:
+      summary: Ubah password pengguna
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - currentPassword
+                - newPassword
+              properties:
+                currentPassword:
+                  type: string
+                  format: password
+                  example: rahasia123
+                newPassword:
+                  type: string
+                  format: password
+                  minLength: 8
+                  example: rahasia456
+      responses:
+        "200":
+          description: Password berhasil diperbarui
+        "400":
+          description: Input tidak valid / Zod Error
+        "401":
+          description: Unauthorized - Token tidak valid / password salah
+        "404":
+          description: Pengguna tidak ditemukan di Database
+
+  /api/v1/learning/categories:
+    get:
+      summary: Ambil daftar kategori modul
+      tags:
+        - Learning
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+
+  /api/v1/learning/categories/{categoryId}/modules:
+    get:
+      summary: Ambil daftar modul berdasarkan kategori
+      tags:
+        - Learning
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID kategori modul
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "404":
+          description: Kategori tidak ditemukan
+
+  /api/v1/learning/modules/{moduleId}:
+    get:
+      summary: Ambil detail modul
+      tags:
+        - Learning
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: moduleId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID modul
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "404":
+          description: Modul tidak ditemukan
+    put:
+      summary: Update modul (Admin)
+      tags:
+        - Learning - Admin
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: moduleId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID modul
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Tajwid Dasar (Update)
+                content:
+                  type: string
+                  example: Ringkasan modul tajwid dasar yang diperbarui.
+                pdfKey:
+                  type: string
+                  example: learning/tajwid-dasar/1714800000000-tajwid-dasar.pdf
+                categoryId:
+                  type: string
+                  format: uuid
+                  example: 11111111-1111-1111-1111-111111111111
+      responses:
+        "200":
+          description: Modul berhasil diperbarui
+        "400":
+          description: Input tidak valid / Zod Error
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "403":
+          description: Forbidden - Hanya admin
+        "404":
+          description: Modul atau kategori tidak ditemukan
+    delete:
+      summary: Hapus modul (Admin)
+      tags:
+        - Learning - Admin
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: moduleId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID modul
+      responses:
+        "200":
+          description: Modul berhasil dihapus
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "403":
+          description: Forbidden - Hanya admin
+        "404":
+          description: Modul tidak ditemukan
+
+  /api/v1/learning/modules:
+    post:
+      summary: Buat modul baru (Admin)
+      tags:
+        - Learning - Admin
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - content
+                - pdfKey
+                - categoryId
+              properties:
+                title:
+                  type: string
+                  example: Tajwid Dasar
+                content:
+                  type: string
+                  example: Ringkasan modul tajwid dasar.
+                pdfKey:
+                  type: string
+                  example: learning/tajwid-dasar/1714800000000-tajwid-dasar.pdf
+                categoryId:
+                  type: string
+                  format: uuid
+                  example: 11111111-1111-1111-1111-111111111111
+      responses:
+        "201":
+          description: Modul berhasil dibuat
+        "400":
+          description: Input tidak valid / Zod Error
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "403":
+          description: Forbidden - Hanya admin
+        "404":
+          description: Kategori tidak ditemukan
+
+  /api/v1/learning/progress:
+    get:
+      summary: Ambil progress belajar pengguna
+      tags:
+        - Learning
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+    post:
+      summary: Update progress belajar pengguna
+      tags:
+        - Learning
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - moduleId
+                - isCompleted
+              properties:
+                moduleId:
+                  type: string
+                  format: uuid
+                  example: 11111111-1111-1111-1111-111111111111
+                isCompleted:
+                  type: boolean
+                  example: true
+      responses:
+        "200":
+          description: Progress berhasil diperbarui
+        "400":
+          description: Input tidak valid / Zod Error
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "404":
+          description: Modul tidak ditemukan
+
+  /api/v1/learning/assets/presign:
+    post:
+      summary: Presign upload PDF (Admin)
+      tags:
+        - Learning - Admin
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fileName
+                - contentType
+              properties:
+                fileName:
+                  type: string
+                  example: tajwid-dasar.pdf
+                contentType:
+                  type: string
+                  example: application/pdf
+                folder:
+                  type: string
+                  example: tajwid-dasar
+      responses:
+        "200":
+          description: Presign berhasil dibuat
+        "400":
+          description: Input tidak valid / format file salah
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "403":
+          description: Forbidden - Hanya admin
+
+  /api/v1/learning/assets:
+    delete:
+      summary: Hapus file PDF (Admin)
+      tags:
+        - Learning - Admin
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - key
+              properties:
+                key:
+                  type: string
+                  example: learning/tajwid-dasar/1714800000000-tajwid-dasar.pdf
+      responses:
+        "200":
+          description: File berhasil dihapus
+        "400":
+          description: Input tidak valid / Zod Error
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "403":
+          description: Forbidden - Hanya admin
 
 components:
   securitySchemes:
@@ -142,5 +567,5 @@ components:
     cookieAuth:
       type: apiKey
       in: cookie
-      name: auth_token
+      name: access_token
       description: "Cookie yang diset secara otomatis oleh browser setelah Login."

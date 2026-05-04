@@ -238,10 +238,10 @@ AI Tasks:
 
 Backend Tasks:
 
-- Install and configure Prisma + PostgreSQL connection.
-- Implement Auth.js (`[...nextauth]`) and credentials auth flow.
-- Implement auth-related route handlers (register, forgot password, reset password).
-- Protect private routes with middleware and session checks.
+- done: Install and configure Prisma + PostgreSQL connection.
+- done: Implement Auth.js (`[...nextauth]`) and credentials auth flow.
+- done: Implement auth-related route handlers (register, forgot password, reset password).
+- done: Protect private routes with middleware and session checks.
 
 Frontend Tasks:
 
@@ -257,9 +257,9 @@ AI Tasks:
 
 Backend Tasks:
 
-- Implement profile get/update endpoint.
-- Implement change password endpoint with current-password verification.
-- Implement logout/session invalidation pathway.
+- done: Implement profile get/update endpoint.
+- done: Implement change password endpoint with current-password verification.
+- done: Implement logout/session invalidation pathway.
 
 Frontend Tasks:
 
@@ -275,7 +275,6 @@ AI Tasks:
 
 Backend Tasks:
 
-- Build external Quran API client and response mappers.
 - Add cached route handlers for Surah/Juz list and reader data.
 - Implement fallback handling for provider failure/timeouts.
 

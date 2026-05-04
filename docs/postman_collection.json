@@ -65,6 +65,62 @@
           }
         },
         {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"ahmad@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/forgot-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "forgot-password"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"{{reset_token}}\",\n    \"password\": \"rahasiaBaru123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/reset-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "reset-password"
+              ]
+            }
+          }
+        },
+        {
           "name": "Get Profile (Me)",
           "request": {
             "method": "GET",
@@ -233,6 +289,313 @@
           }
         }
       ]
+    },
+    {
+      "name": "Learning",
+      "item": [
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "categories"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Modules by Category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/categories/{{category_id}}/modules",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "categories",
+                "{{category_id}}",
+                "modules"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Module Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/modules/{{module_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "modules",
+                "{{module_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Progress",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/progress",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "progress"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Progress",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"moduleId\": \"{{module_id}}\",\n    \"isCompleted\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/progress",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "progress"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    ,
+    {
+      "name": "Learning module - admin",
+      "item": [
+        {
+          "name": "Admin - Presign Upload PDF",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Hanya admin. Jika via cookie, header ini opsional."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fileName\": \"tajwid-dasar.pdf\",\n    \"contentType\": \"application/pdf\",\n    \"folder\": \"tajwid-dasar\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/assets/presign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "assets",
+                "presign"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Create Module",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Hanya admin. Jika via cookie, header ini opsional."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Tajwid Dasar\",\n    \"content\": \"Ringkasan modul tajwid dasar.\",\n    \"pdfKey\": \"{{asset_key}}\",\n    \"categoryId\": \"{{category_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/modules",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "modules"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Update Module",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Hanya admin. Jika via cookie, header ini opsional."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Tajwid Dasar (Update)\",\n    \"content\": \"Ringkasan modul tajwid dasar yang diperbarui.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/modules/{{module_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "modules",
+                "{{module_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete Module",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Hanya admin. Jika via cookie, header ini opsional."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/modules/{{module_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "modules",
+                "{{module_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin - Delete PDF Asset",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Hanya admin. Jika via cookie, header ini opsional."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"key\": \"{{asset_key}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/assets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "assets"
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "event": [
@@ -266,6 +629,30 @@
       "value": "",
       "type": "string",
       "description": "Copy token dari response Login dan paste disini jika tidak ingin menggunakan Cookies."
+    },
+    {
+      "key": "category_id",
+      "value": "",
+      "type": "string",
+      "description": "ID kategori modul untuk testing endpoint learning."
+    },
+    {
+      "key": "module_id",
+      "value": "",
+      "type": "string",
+      "description": "ID modul untuk testing endpoint learning."
+    },
+    {
+      "key": "asset_key",
+      "value": "",
+      "type": "string",
+      "description": "Key object PDF di MinIO (hasil presign)."
+    },
+    {
+      "key": "reset_token",
+      "value": "",
+      "type": "string",
+      "description": "Token reset password dari email Brevo."
     }
   ]
 }

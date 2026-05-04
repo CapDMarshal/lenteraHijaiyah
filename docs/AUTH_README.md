@@ -13,6 +13,8 @@ Kami beralih dari menggunakan _NextAuth_ menjadi **Custom JWT + Edge Middleware*
 6. **Edge Middleware (`middleware.ts`)**: Jantung proteksi aplikasi, memvalidasi JWT dari `cookies` maupun `authorization header`, mendepak _user_ tidak login dari Dashboard dan menyuntikkan ID/Role profil (`x-user-id`) ke backend HTTP headers secara aman untuk rute API selanjutnya.
 7. **Endpoint Me (`GET /api/v1/auth/me`)**: Menerima permintaan _cek status profile_. Tidak perlu bongkar token dua kali, langsung mengonsumsi header `x-user-id` hasil suntikan Middleware.
 8. **Endpoint Logout (`POST /api/v1/auth/logout`)**: Melakukan reset hard-cookie pada _response middleware_ (menghapus cookie `auth_token`).
+9. **Endpoint Forgot Password (`POST /api/v1/auth/forgot-password`)**: Menerbitkan token reset dan mengirim email reset password via SMTP Brevo.
+10. **Endpoint Reset Password (`POST /api/v1/auth/reset-password`)**: Memvalidasi token reset, memperbarui password, dan menghapus token reset.
 
 ## Lokasi Dokumentasi Penunjang:
 
@@ -27,3 +29,14 @@ Terdapat dua file penting tambahan yang telah digenerate pada direktori `docs/`:
 
 - **Cara Penggunaan**: Copy seluruh isi file `docs/swagger.yaml` dan _Paste_ di editor online seperti [editor.swagger.io](https://editor.swagger.io) atau hubungkan di _project documentation tooling_ Anda.
 - Terstruktur rapi beserta deskripsi status balasan (`200 OK`, `400 Bad Request`, `401 Unauthorized`) dan schema JSON-nya.
+
+## Catatan SMTP Brevo (Forgot Password)
+
+Endpoint forgot password menggunakan SMTP Brevo. Pastikan environment berikut tersedia:
+
+- `BREVO_SMTP_HOST`
+- `BREVO_SMTP_PORT`
+- `BREVO_SMTP_USER`
+- `BREVO_SMTP_PASSWORD`
+- `BREVO_SENDER_EMAIL`
+- `BREVO_SENDER_NAME`
