@@ -233,6 +233,147 @@
           }
         }
       ]
+    },
+    {
+      "name": "Learning",
+      "item": [
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "categories"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Modules by Category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/categories/{{category_id}}/modules",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "categories",
+                "{{category_id}}",
+                "modules"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Module Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/modules/{{module_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "modules",
+                "{{module_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Progress",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/progress",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "progress"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Progress",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Optional jika Cookies berfungsi. Jika via mobile/postman tanpa cookie, taruh token di sini."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"moduleId\": \"{{module_id}}\",\n    \"isCompleted\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/learning/progress",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "learning",
+                "progress"
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "event": [
@@ -266,6 +407,18 @@
       "value": "",
       "type": "string",
       "description": "Copy token dari response Login dan paste disini jika tidak ingin menggunakan Cookies."
+    },
+    {
+      "key": "category_id",
+      "value": "",
+      "type": "string",
+      "description": "ID kategori modul untuk testing endpoint learning."
+    },
+    {
+      "key": "module_id",
+      "value": "",
+      "type": "string",
+      "description": "ID modul untuk testing endpoint learning."
     }
   ]
 }
