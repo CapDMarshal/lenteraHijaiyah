@@ -187,14 +187,14 @@ export default async function DashboardPage() {
       userId
         ? prisma.userModuleProgress.findFirst({
             where: { userId, isCompleted: false },
-            include: { module: { select: { id: true, title: true } } },
+            include: { module: { select: { id: true, slug: true, title: true } } },
           })
         : Promise.resolve(null),
       userId
         ? prisma.userModuleProgress.findFirst({
             where: { userId, isCompleted: true },
             orderBy: { completedAt: "desc" },
-            include: { module: { select: { id: true, title: true } } },
+            include: { module: { select: { id: true, slug: true, title: true } } },
           })
         : Promise.resolve(null),
       userId
@@ -285,7 +285,7 @@ export default async function DashboardPage() {
                       {inProgressModule.module.title}
                     </p>
                     <Link
-                      href={`/modul/${inProgressModule.module.id}`}
+                      href={`/modul/${inProgressModule.module.slug}`}
                       className="shrink-0 text-xs font-semibold text-[#d14a35] hover:underline"
                     >
                       Lanjutkan
@@ -308,7 +308,7 @@ export default async function DashboardPage() {
                       {lastCompleted.module.title}
                     </p>
                     <Link
-                      href={`/modul/${lastCompleted.module.id}`}
+                      href={`/modul/${lastCompleted.module.slug}`}
                       className="shrink-0 text-xs font-semibold text-[#d14a35] hover:underline"
                     >
                       Lihat materi

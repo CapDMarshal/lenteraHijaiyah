@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { progressUpdateSchema } from "@/lib/validation/learning";
-import { getMinioPublicUrl } from "@/lib/storage/minio";
 
 export async function GET(req: Request) {
   try {
@@ -42,7 +41,7 @@ export async function GET(req: Request) {
             id: item.module.id,
             title: item.module.title,
             pdfKey: item.module.pdfKey,
-            pdfUrl: getMinioPublicUrl(item.module.pdfKey),
+            pdfUrl: item.module.pdfKey,
             categoryId: item.module.categoryId,
           }
         : null,
