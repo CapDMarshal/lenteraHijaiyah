@@ -84,6 +84,59 @@ paths:
         "401":
           description: Email atau password salah
 
+  /api/v1/auth/forgot-password:
+    post:
+      summary: Kirim email reset password
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: ahmad@example.com
+      responses:
+        "200":
+          description: Jika email terdaftar, instruksi reset password akan dikirim
+        "400":
+          description: Input tidak valid / Zod Error
+
+  /api/v1/auth/reset-password:
+    post:
+      summary: Reset password menggunakan token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - password
+              properties:
+                token:
+                  type: string
+                  example: 2d7f5c8a3f6b4d1e9a0c7b2f1e4d9c8b0a2f3c4d5e6f7a8b9c0d1e2f3a4b5c6d
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  example: rahasiaBaru123
+      responses:
+        "200":
+          description: Password berhasil diperbarui
+        "400":
+          description: Token reset tidak valid / kedaluwarsa / input tidak valid
+
   /api/v1/auth/google:
     post:
       summary: Login/Register menggunakan Google OAuth2
