@@ -11,6 +11,18 @@
   --font-sans: var(--font-montserrat-alternates);
 }
 
+@font-face {
+  font-family: "SurahNu";
+  src: url("/fonts/surahnu.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-nu {
+  font-family: "SurahNu", var(--font-montserrat-alternates), sans-serif;
+}
+
 html,
 body {
   height: 100%;

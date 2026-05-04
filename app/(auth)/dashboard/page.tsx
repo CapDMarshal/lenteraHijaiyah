@@ -1,32 +1,153 @@
+import Image from "next/image";
+
 import { InkCard } from "@/components/ui/card";
 
-const prayerTimes = [
-  { label: "Subuh", time: "04.21", accent: "text-slate-700" },
-  { label: "Dzuhur", time: "11.36", accent: "text-white", active: true },
-  { label: "Ashar", time: "14.57", accent: "text-slate-700" },
-  { label: "Magrib", time: "17.32", accent: "text-slate-700" },
-  { label: "Isya", time: "18.43", accent: "text-slate-700" },
+type ShalatScheduleResponse = {
+  code: number;
+  message: string;
+  data: {
+    provinsi: string;
+    kabkota: string;
+    bulan: number;
+    tahun: number;
+    bulan_nama: string;
+    jadwal: Array<{
+      tanggal: number;
+      tanggal_lengkap: string;
+      hari: string;
+      imsak: string;
+      subuh: string;
+      terbit: string;
+      dhuha: string;
+      dzuhur: string;
+      ashar: string;
+      maghrib: string;
+      isya: string;
+    }>;
+  };
+};
+
+type PrayerItem = {
+  label: string;
+  time: string;
+  active?: boolean;
+};
+
+const prayerOrder = ["subuh", "dzuhur", "ashar", "maghrib", "isya"] as const;
+
+const prayerLabels: Record<(typeof prayerOrder)[number], string> = {
+  subuh: "Subuh",
+  dzuhur: "Dzuhur",
+  ashar: "Ashar",
+  maghrib: "Magrib",
+  isya: "Isya",
+};
+
+const fallbackTimes: PrayerItem[] = [
+  { label: "Subuh", time: "--:--" },
+  { label: "Dzuhur", time: "--:--" },
+  { label: "Ashar", time: "--:--" },
+  { label: "Magrib", time: "--:--" },
+  { label: "Isya", time: "--:--" },
 ];
 
-export default function DashboardPage() {
+function toMinutes(time: string) {
+  const [hours, minutes] = time.split(":").map(Number);
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+    return null;
+  }
+  return hours * 60 + minutes;
+}
+
+function resolveActivePrayer(
+  now: Date,
+  schedule: ShalatScheduleResponse["data"]["jadwal"][0],
+) {
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+  const times = prayerOrder
+    .map((key) => ({ key, minutes: toMinutes(schedule[key]) }))
+    .filter((item): item is { key: (typeof prayerOrder)[number]; minutes: number } =>
+      item.minutes !== null,
+    );
+
+  let activeKey: (typeof prayerOrder)[number] | null = null;
+  for (let index = 0; index < times.length; index += 1) {
+    const current = times[index];
+    const next = times[index + 1];
+    if (!next || (nowMinutes >= current.minutes && nowMinutes < next.minutes)) {
+      activeKey = current.key;
+      break;
+    }
+  }
+
+  return activeKey;
+}
+
+async function getPrayerSchedule(now: Date) {
+  const body = {
+    provinsi: "D.I. Yogyakarta",
+    kabkota: "Kab. Sleman",
+    bulan: now.getMonth() + 1,
+    tahun: now.getFullYear(),
+  };
+
+  const response = await fetch("https://equran.id/api/v2/shalat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const payload = (await response.json()) as ShalatScheduleResponse;
+  return payload.data;
+}
+
+export default async function DashboardPage() {
+  const now = new Date();
+  const schedule = await getPrayerSchedule(now);
+  const today = schedule?.jadwal.find((item) => item.tanggal === now.getDate());
+  const activeKey = today ? resolveActivePrayer(now, today) : null;
+
+  const prayerTimes: PrayerItem[] = today
+    ? prayerOrder.map((key) => ({
+        label: prayerLabels[key],
+        time: today[key],
+        active: activeKey === key,
+      }))
+    : fallbackTimes;
+
   return (
     <section className="space-y-6">
       <div className="flex flex-col gap-6 lg:flex-row">
         <div className="flex flex-1 flex-col gap-6">
-          <InkCard className="flex flex-col gap-6 bg-white">
-            <div className="flex flex-col gap-2">
-              <p className="text-sm font-semibold text-slate-500">Selasa, 12 April 2026</p>
-              <h1 className="text-3xl font-bold tracking-tight text-stone-900">
-                Selamat Pagi, Ridho
-              </h1>
-              <p className="text-sm text-slate-600">Semoga hari Selasa mu menyenangkan</p>
-            </div>
-            <div className="flex items-end justify-between gap-6">
-              <div className="flex-1">
-                <div className="h-32 w-full rounded-2xl border-2 border-dashed border-stone-300 bg-stone-100" />
-                <p className="mt-2 text-xs text-slate-500">Placeholder ilustrasi kucing</p>
+          <InkCard className="!p-0 overflow-hidden bg-white">
+            <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+              <div className="space-y-4 md:pr-5 p-4">
+                <p className="text-sm font-semibold text-slate-500 pb-8">
+                  {today
+                    ? `${today.hari}, ${today.tanggal} ${schedule?.bulan_nama ?? ""} ${schedule?.tahun ?? ""}`
+                    : "-"}
+                </p>
+                <p className="text-xl font-bold tracking-tight text-[#d14a35]">
+                  Selamat Pagi, <span className="text-black">Ridho</span>
+                </p>
+                <p className="text-sm font-semibold text-black">Semoga hari Selasa mu menyenangkan</p>
               </div>
-              <div className="hidden h-24 w-24 rounded-full border-2 border-stone-900 bg-stone-200 sm:block" />
+
+              <div className="flex w-full items-end justify-end md:w-auto">
+                <div className="relative h-[170px] w-[300px]">
+                  <Image
+                    src="/images/cat-5.png"
+                    alt="Ilustrasi kucing"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </div>
             </div>
           </InkCard>
 
@@ -87,7 +208,7 @@ export default function DashboardPage() {
 
         <div className="flex w-full max-w-sm flex-col gap-4">
           <div className="inline-flex items-center justify-center rounded-full bg-[#d96852] px-4 py-2 text-xs font-semibold text-white shadow-[3px_3px_0_#111]">
-            Menurut: Kemenag Jakarta Pusat
+            Menurut: {schedule ? `${schedule.kabkota}, ${schedule.provinsi}` : "-"}
           </div>
 
           {prayerTimes.map((item) => (
@@ -100,7 +221,9 @@ export default function DashboardPage() {
               }
             >
               <div>
-                <p className={`text-xs font-semibold ${item.accent}`}>{item.label}</p>
+                <p className={`text-xs font-semibold ${item.active ? "text-white" : "text-slate-700"}`}>
+                  {item.label}
+                </p>
                 <p className="text-2xl font-bold tracking-tight">{item.time}</p>
               </div>
               <div className="h-10 w-10 rounded-xl border-2 border-dashed border-stone-300 bg-stone-100" />

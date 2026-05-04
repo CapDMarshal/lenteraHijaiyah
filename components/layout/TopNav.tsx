@@ -6,10 +6,10 @@ import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/quran", label: "Quran" },
-  { href: "/learning", label: "Learning" },
-  { href: "/hijaiyah", label: "Hijaiyah" },
-  { href: "/profile", label: "Profile" },
+  { href: "/modul", label: "Modul" },
+  { href: "/quran", label: "Al-Qur'an Digital" },
+  { href: "/hijaiyah", label: "Canvas Hijaiyah" },
+  { href: "/profile", label: "Profil" },
 ];
 
 export function TopNav() {
