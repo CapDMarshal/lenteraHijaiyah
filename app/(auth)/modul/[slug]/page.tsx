@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
 
+import { ModulePdfReader } from "@/components/modul/ModulePdfReader";
 import { moduleCategories, type ModuleItem } from "@/data/modul";
 
 const lastReadKey = "modul:lastRead";
@@ -70,27 +71,7 @@ export default function ModulDetailPage() {
       </div>
 
       <div className="rounded-2xl border-2 border-stone-900 bg-stone-100 shadow-[4px_4px_0_#9ca3af]">
-        <div className="grid gap-4 p-4 lg:grid-cols-[220px_1fr]">
-          <div className="rounded-xl border-2 border-stone-900 bg-white p-3">
-            <p className="text-xs font-semibold text-stone-900">Daftar Halaman</p>
-            <div className="mt-3 space-y-3">
-              {Array.from({ length: 4 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="h-24 rounded-lg border-2 border-dashed border-stone-300 bg-stone-50"
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-xl border-2 border-stone-900 bg-white">
-            <iframe
-              title={moduleItem.title}
-              src={moduleItem.pdfUrl}
-              className="h-[420px] w-full rounded-xl"
-            />
-          </div>
-        </div>
+        <ModulePdfReader pdfUrl={moduleItem.pdfUrl} title={moduleItem.title} />
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
