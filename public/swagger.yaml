@@ -276,6 +276,119 @@ paths:
           description: Unauthorized - Token tidak valid / tidak ada
         "404":
           description: Modul tidak ditemukan
+    put:
+      summary: Update modul (Admin)
+      tags:
+        - Learning - Admin
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: moduleId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID modul
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Tajwid Dasar (Update)
+                content:
+                  type: string
+                  example: Ringkasan modul tajwid dasar yang diperbarui.
+                pdfKey:
+                  type: string
+                  example: learning/tajwid-dasar/1714800000000-tajwid-dasar.pdf
+                categoryId:
+                  type: string
+                  format: uuid
+                  example: 11111111-1111-1111-1111-111111111111
+      responses:
+        "200":
+          description: Modul berhasil diperbarui
+        "400":
+          description: Input tidak valid / Zod Error
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "403":
+          description: Forbidden - Hanya admin
+        "404":
+          description: Modul atau kategori tidak ditemukan
+    delete:
+      summary: Hapus modul (Admin)
+      tags:
+        - Learning - Admin
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: moduleId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID modul
+      responses:
+        "200":
+          description: Modul berhasil dihapus
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "403":
+          description: Forbidden - Hanya admin
+        "404":
+          description: Modul tidak ditemukan
+
+  /api/v1/learning/modules:
+    post:
+      summary: Buat modul baru (Admin)
+      tags:
+        - Learning - Admin
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - content
+                - pdfKey
+                - categoryId
+              properties:
+                title:
+                  type: string
+                  example: Tajwid Dasar
+                content:
+                  type: string
+                  example: Ringkasan modul tajwid dasar.
+                pdfKey:
+                  type: string
+                  example: learning/tajwid-dasar/1714800000000-tajwid-dasar.pdf
+                categoryId:
+                  type: string
+                  format: uuid
+                  example: 11111111-1111-1111-1111-111111111111
+      responses:
+        "201":
+          description: Modul berhasil dibuat
+        "400":
+          description: Input tidak valid / Zod Error
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "403":
+          description: Forbidden - Hanya admin
+        "404":
+          description: Kategori tidak ditemukan
 
   /api/v1/learning/progress:
     get:
@@ -323,6 +436,73 @@ paths:
           description: Unauthorized - Token tidak valid / tidak ada
         "404":
           description: Modul tidak ditemukan
+
+  /api/v1/learning/assets/presign:
+    post:
+      summary: Presign upload PDF (Admin)
+      tags:
+        - Learning - Admin
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fileName
+                - contentType
+              properties:
+                fileName:
+                  type: string
+                  example: tajwid-dasar.pdf
+                contentType:
+                  type: string
+                  example: application/pdf
+                folder:
+                  type: string
+                  example: tajwid-dasar
+      responses:
+        "200":
+          description: Presign berhasil dibuat
+        "400":
+          description: Input tidak valid / format file salah
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "403":
+          description: Forbidden - Hanya admin
+
+  /api/v1/learning/assets:
+    delete:
+      summary: Hapus file PDF (Admin)
+      tags:
+        - Learning - Admin
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - key
+              properties:
+                key:
+                  type: string
+                  example: learning/tajwid-dasar/1714800000000-tajwid-dasar.pdf
+      responses:
+        "200":
+          description: File berhasil dihapus
+        "400":
+          description: Input tidak valid / Zod Error
+        "401":
+          description: Unauthorized - Token tidak valid / tidak ada
+        "403":
+          description: Forbidden - Hanya admin
 
 components:
   securitySchemes:
