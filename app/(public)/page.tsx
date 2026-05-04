@@ -10,6 +10,12 @@ import { LinkButton } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 const sectionContainer = "mx-auto w-full max-w-6xl px-8 sm:px-12";
+const benefitCatImages = [
+  "/images/cat-1.png",
+  "/images/cat-2.png",
+  "/images/cat-3.png",
+  "/images/cat-4.png",
+];
 
 export default function LandingPage() {
   return (
@@ -34,16 +40,15 @@ export default function LandingPage() {
         <div className={`${sectionContainer} pb-12 sm:pb-14`}>
           <hr className="mb-10 border-stone-300" />
 
-          <Card className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-6 border-stone-300 bg-white/70 py-7 sm:flex-row sm:justify-between sm:px-8">
+          <Card className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-6 border-stone-300 bg-white/70 py-7 sm:flex-row sm:justify-center sm:px-8">
             <p className="text-xl font-bold text-stone-900">Hasil kolaborasi antara:</p>
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
-                <Image src="/next.svg" alt="Partner logo one" width={94} height={20} />
+                <Image src="/images/smp-logo.png" alt="Logo SMPN 1 Seyegan" width={50} height={20} />
                 <span className="text-sm font-semibold text-slate-700">SMPN 1 SEYEGAN</span>
               </div>
               <div className="flex items-center gap-2">
-                <Image src="/vercel.svg" alt="Partner logo two" width={94} height={20} />
-                <span className="text-sm font-semibold text-slate-700">UTY Software House</span>
+                <Image src="/images/ush-logo.png" alt="Logo UTY Software House" height={100} width={260} />
               </div>
             </div>
           </Card>
@@ -65,13 +70,20 @@ export default function LandingPage() {
                     <h2 className="text-4xl font-extrabold tracking-tight text-stone-900">
                       {benefit.title}
                     </h2>
-                    <p className="mt-4 max-w-xl text-lg leading-relaxed text-slate-600">
+                    <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-600">
                       {benefit.subtitle}
                     </p>
                   </div>
 
                   <div className={textLeft ? "order-2" : "order-1"}>
-                    <div className="mx-auto aspect-square w-44 rounded-3xl bg-stone-200/80" />
+                    <div className="relative mx-auto aspect-[5/4] w-full max-w-[240px] rounded-3xl">
+                      <Image
+                        src={benefitCatImages[index % benefitCatImages.length]}
+                        alt={`Ilustrasi kucing ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                   </div>
                 </article>
               );

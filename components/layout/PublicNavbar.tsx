@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -16,12 +17,14 @@ export function PublicNavbar() {
   return (
     <header className="bg-[#f4efeb] px-5 py-4 sm:px-8">
       <div className="flex items-center justify-between gap-4">
-        <Link
-          href="/"
-          className="grid h-16 w-20 place-items-center rounded-md border border-dashed border-sky-400 bg-white/70 px-4 text-2xl font-black text-stone-900"
-          aria-label="Lentera Hijaiyah home"
-        >
-          L
+        <Link href="/" aria-label="Lentera Hijaiyah home" className="inline-flex items-center">
+          <Image
+            src="/images/logo-horizontal.png"
+            alt="Lentera Hijaiyah"
+            width={150}
+            height={36}
+            priority
+          />
         </Link>
 
         <nav className="flex items-center gap-5 text-sm font-semibold sm:text-base">
