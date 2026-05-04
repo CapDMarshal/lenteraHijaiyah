@@ -8,7 +8,7 @@ import { PublicNavbar } from "@/components/layout/PublicNavbar";
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const hideShell = pathname === "/sign-in";
+  const hideShell = pathname === "/sign-in" || pathname === "/sign-up";
 
   return (
     <main className="no-scrollbar flex h-full flex-col overflow-x-hidden overflow-y-auto bg-stone-50">

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { LinkButton } from "@/components/ui/button";
@@ -57,7 +58,59 @@ function EyeOffIcon() {
 }
 
 export default function SignInPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [formValues, setFormValues] = useState({
+    email: "",
+    password: ""
+  });
+
+  const handleChange = (field: "email" | "password", value: string) => {
+    setFormValues((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const formatFieldErrors = (errors?: Record<string, string[]>) => {
+    if (!errors) {
+      return null;
+    }
+
+    const messages = Object.values(errors).flat().filter(Boolean);
+    return messages.length ? messages[0] : null;
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setErrorMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/v1/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formValues)
+      });
+
+      const payload = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        const fieldMessage = formatFieldErrors(payload?.errors);
+        const message = fieldMessage || payload?.message || "Login gagal. Coba lagi.";
+        setErrorMessage(message);
+        return;
+      }
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("SIGN_IN_ERROR", error);
+      setErrorMessage("Terjadi kesalahan jaringan. Coba lagi.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section className="h-full bg-[#f4efeb]">
@@ -75,14 +128,25 @@ export default function SignInPage() {
         <div className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center">
           <h1 className="text-center text-5xl font-bold tracking-tight text-stone-900 mb-5  ">MASUK</h1>
 
-          <form className="mt-8 space-y-8" action="#" method="post">
-            <TextField type="email" name="email" autoComplete="email" placeholder="Email" />
+          <form className="mt-8 space-y-8" onSubmit={handleSubmit}>
+            <TextField
+              type="email"
+              name="email"
+              autoComplete="email"
+              placeholder="Email"
+              value={formValues.email}
+              onChange={(event) => handleChange("email", event.target.value)}
+              required
+            />
 
             <TextField
               type={showPassword ? "text" : "password"}
               name="password"
               autoComplete="current-password"
               placeholder="Password"
+              value={formValues.password}
+              onChange={(event) => handleChange("password", event.target.value)}
+              required
               endAdornment={
                 <button
                   type="button"
@@ -95,16 +159,23 @@ export default function SignInPage() {
               }
             />
 
+            {errorMessage ? (
+              <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                {errorMessage}
+              </p>
+            ) : null}
+
             <Link href="/forgot-password" className="block text-sm font-semibold text-[#d14a35] hover:underline">
               Lupa password?
             </Link>
 
             <button
               type="submit"
-              className="group inline-flex w-full rounded-[12px] bg-[#d96852] p-0 focus-visible:outline-none"
+              className="group inline-flex w-full rounded-[12px] bg-[#d96852] p-0 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-70"
+              disabled={isSubmitting}
             >
               <span className="inline-flex w-full -translate-x-1 -translate-y-1 items-center justify-center rounded-[12px] bg-black px-8 py-4 text-xl font-medium text-white transition-transform duration-200 ease-out group-hover:-translate-x-1.5 group-hover:-translate-y-1.5 group-active:-translate-x-0.5 group-active:-translate-y-0.5">
-                MASUK
+                {isSubmitting ? "Memproses..." : "MASUK"}
               </span>
             </button>
           </form>
