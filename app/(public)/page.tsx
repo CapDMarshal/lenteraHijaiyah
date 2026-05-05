@@ -23,10 +23,10 @@ export default function LandingPage() {
         <div className={`${sectionContainer} py-10 sm:py-12`}>
           <div className="relative mx-auto max-w-2xl mt-8 space-y-16 text-center">
             {/* Decorative Assets */}
-            <div className="absolute -left-110 -top-8 -z-0 hidden md:block">
+            <div className="absolute -top-8 -z-0 hidden sm:block sm:-left-[10%] md:-left-[30%] lg:-left-[65%]">
               <Image src="/images/hero-swirl.png" alt="Swirl decoration" width={300} height={300} className="object-contain" priority />
             </div>
-            <div className="absolute -right-80 top-12 -z-0 hidden md:block">
+            <div className="absolute top-12 -z-0 hidden sm:block sm:-right-[5%] md:-right-[20%] lg:-right-[40%]">
               <Image src="/images/hero-star.png" alt="Star decoration" width={120} height={120} className="object-contain" priority />
             </div>
 
