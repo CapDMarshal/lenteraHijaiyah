@@ -15,7 +15,7 @@ export function PublicNavbar() {
   ];
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 bg-[#F7EDE8]/90 px-20 py-4 backdrop-blur">
+    <header className="fixed left-0 right-0 top-0 z-90 bg-[#F7EDE8]/90 px-20 py-4 backdrop-blur">
       <div className="flex items-center justify-between gap-4">
         <Link href="/" aria-label="Lentera Hijaiyah home" className="inline-flex items-center">
           <Image
@@ -36,9 +36,8 @@ export function PublicNavbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative pb-1 text-stone-900 transition-colors hover:text-red-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-center after:bg-[#d14a35] after:transition-transform after:duration-200 after:content-[''] ${
-                  isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
-                }`}
+                className={`relative pb-1 text-stone-900 transition-colors hover:text-red-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-center after:bg-[#d14a35] after:transition-transform after:duration-200 after:content-[''] ${isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
+                  }`}
               >
                 {link.label}
               </Link>
