@@ -25,53 +25,59 @@ export const landingFeatures = [
   {
     title: "Lukis Canvas",
     subtitle: "Latihan menulis huruf hijaiyah langsung di canvas.",
+    image: "/images/fitur/canvas.png",
   },
   {
-    title: "Tutorial Video",
-    subtitle: "Pelajari cara menulis langkah demi langkah dalam bentuk video.",
+    title: "Al-Qur'an Digital",
+    subtitle: "Baca Al-Qur'an secara langsung di website.",
+    image: "/images/fitur/quran.png",
   },
   {
     title: "Check Progress",
     subtitle: "Pantau belajarmu dan lihat perkembangan kemampuanmu.",
+    image: "/images/fitur/proses.png",
   },
   {
     title: "Text Book",
     subtitle: "Perdalam pemahamanmu dengan materi teori yang lengkap.",
+    image: "/images/fitur/book.png",
   },
   {
     title: "Komunitas",
     subtitle: "Saling berbagi pengalaman belajar dengan siswa lainnya.",
+    image: "/images/fitur/komunitas.png",
   },
   {
     title: "Dan banyak lagi!",
     subtitle: "Temukan fitur lainnya untuk pembelajaran huruf hijaiyah.",
+    image: "/images/fitur/etc.png",
   },
 ];
 
 export const landingTestimonials = [
   {
     quote:
+      "Platform ini menunjukkan bagaimana teknologi dapat memperkuat nilai pendidikan Islam di era digital.",
+    name: "MS Hendriyawan A",
+    role: "Wakil Rektor IV UTY",
+    logoSrc: "/images/uty-logo.png",
+    logoAlt: "Logo UTY",
+  },
+  {
+    quote:
       "Inovasi ini sejalan dengan visi kami dalam mendorong kreativitas siswa dan pembelajaran berdampak nyata.",
-    name: "Ibu Dian Rahma",
-    role: "Wakil Kepala Sekolah",
-    logoSrc: "/next.svg",
-    logoAlt: "Institution logo",
+    name: "Ibu Tri Woro",
+    role: "Kepala Sekolah SMPN 1 Seyegan",
+    logoSrc: "/images/smp-logo.png",
+    logoAlt: "Logo SMPN 1 Seyegan",
   },
   {
     quote:
       "Lentera Hijaiyah adalah bukti nyata teknologi AI bisa menyentuh sisi religius dengan cara yang modern.",
     name: "Zakki Farian",
     role: "Head of USH",
-    logoSrc: "/vercel.svg",
-    logoAlt: "Partner logo",
-  },
-  {
-    quote:
-      "Aplikasi ini membantu siswa belajar lebih konsisten karena materi singkatnya mudah dipahami setiap hari.",
-    name: "Bapak Arif Nugroho",
-    role: "Guru PAI",
-    logoSrc: "/next.svg",
-    logoAlt: "School logo",
+    logoSrc: "/images/ush-hori.png",
+    logoAlt: "Logo UTY Software House",
   },
 ];
 

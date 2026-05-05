@@ -7,9 +7,8 @@ import {
 import FaqSectionClient from "@/components/landing/FaqSectionClient";
 import TestimonialsSectionClient from "@/components/landing/TestimonialsSectionClient";
 import { LinkButton } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 
-const sectionContainer = "mx-auto w-full max-w-6xl px-8 sm:px-12";
+const sectionContainer = "px-20";
 const benefitCatImages = [
   "/images/cat-1.png",
   "/images/cat-2.png",
@@ -22,11 +21,11 @@ export default function LandingPage() {
     <>
       <section className="bg-[#f4efeb]">
         <div className={`${sectionContainer} py-10 sm:py-12`}>
-          <div className="mx-auto max-w-2xl space-y-6 text-center">
-            <h1 className="text-5xl font-black leading-tight tracking-tight text-stone-900 sm:text-6xl">
+          <div className="mx-auto max-w-2xl mt-8 space-y-16 text-center">
+            <h1 className="text-6xl font-black leading-tight tracking-tight text-stone-900 sm:text-6xl">
               Teman Belajar <span className="text-[#d14a35]">Hijaiyah</span>
             </h1>
-            <p className="text-lg text-slate-600">
+            <p className="text-lg text-slate-600 font-semibold">
               Kuasai cara menulis dan membaca huruf Hijaiyah dengan panduan pintar dari AI.
             </p>
             <LinkButton href="/sign-up" variant="ink" size="hero">
@@ -38,26 +37,24 @@ export default function LandingPage() {
 
       <section className="bg-[#f4efeb]">
         <div className={`${sectionContainer} pb-12 sm:pb-14`}>
-          <hr className="mb-10 border-stone-300" />
-
-          <Card className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-6 border-stone-300 bg-white/70 py-7 sm:flex-row sm:justify-center sm:px-8">
-            <p className="text-xl font-bold text-stone-900">Hasil kolaborasi antara:</p>
-            <div className="flex items-center gap-6">
+          <div className="flex w-full flex-col items-center justify-between gap-6 rounded-br-2xl border-b-2 border-r-2 border-stone-900 bg-[#F7EDE8] px-8 py-6 shadow-[4px_4px_0_#111111] sm:flex-row">
+            <p className="text-2xl ml-16 font-bold text-stone-900">Hasil kolaborasi antara:</p>
+            <div className="flex items-center gap-24">
               <div className="flex items-center gap-2">
-                <Image src="/images/smp-logo.png" alt="Logo SMPN 1 Seyegan" width={50} height={20} />
-                <span className="text-sm font-semibold text-slate-700">SMPN 1 SEYEGAN</span>
+                <Image src="/images/smp-logo.png" alt="Logo SMPN 1 Seyegan" width={75} height={75} className="object-contain" />
+                <span className="text-xl font-semibold text-slate-700">SMPN 1 SEYEGAN</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Image src="/images/ush-logo.png" alt="Logo UTY Software House" height={100} width={260} />
+              <div className="flex items-center gap-2 mr-16">
+                <Image src="/images/ush-logo.png" alt="Logo UTY Software House" height={40} width={360} className="object-contain" />
               </div>
             </div>
-          </Card>
+          </div>
         </div>
       </section>
 
       <section id="benefit-section" className="bg-white/70">
         <div className={`${sectionContainer} py-14`}>
-          <div className="mx-auto grid w-full max-w-5xl gap-8">
+          <div className="grid w-full gap-8">
             {landingBenefits.map((benefit, index) => {
               const textLeft = index % 2 === 0;
 
@@ -76,7 +73,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className={textLeft ? "order-2" : "order-1"}>
-                    <div className="relative mx-auto aspect-[5/4] w-full max-w-[240px] rounded-3xl">
+                    <div className="relative mx-auto aspect-[5/4] w-full max-w-[360px] rounded-3xl">
                       <Image
                         src={benefitCatImages[index % benefitCatImages.length]}
                         alt={`Ilustrasi kucing ${index + 1}`}
@@ -94,7 +91,7 @@ export default function LandingPage() {
 
       <section id="feature-section" className="bg-[#f4efeb]">
         <div className={`${sectionContainer} py-16`}>
-          <div className="mx-auto w-full max-w-5xl">
+          <div className="w-full">
             <h2 className="text-center text-4xl font-extrabold tracking-tight text-stone-900">
               Fitur & Games
             </h2>
@@ -105,7 +102,14 @@ export default function LandingPage() {
                   key={feature.title}
                   className="flex h-full flex-col items-center gap-4 bg-transparent px-6 py-8 text-center"
                 >
-                  <div className="aspect-square w-16 rounded-2xl bg-stone-200/90" />
+                  <div className="relative aspect-square w-32 bg-transparent">
+                    <Image
+                      src={feature.image}
+                      alt={feature.title}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
                   <h3 className="text-3xl font-bold tracking-tight text-stone-900">{feature.title}</h3>
                   <p className="text-lg leading-relaxed text-slate-600">{feature.subtitle}</p>
                 </div>

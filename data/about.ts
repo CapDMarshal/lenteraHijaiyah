@@ -8,8 +8,8 @@ export const aboutFiturItems = [
     subtitle: "Latihan menulis huruf hijaiyah langsung di canvas.",
   },
   {
-    title: "Tutorial Video",
-    subtitle: "Pelajari cara menulis langkah demi langkah dalam bentuk video.",
+    title: "Al-Qur'an Digital",
+    subtitle: "Baca Al-Qur'an secara langsung di website.",
   },
   {
     title: "Check Progress",
