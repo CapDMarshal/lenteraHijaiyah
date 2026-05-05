@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
+import { IonIcon } from "@/components/ui/ion-icon";
 import { TextField } from "@/components/ui/text-field";
 
 const tabs = [
-  { key: "profil", label: "Profil" },
-  { key: "akun", label: "Akun" },
-  { key: "point", label: "Point" },
+  { key: "profil", label: "Profil", icon: "person-outline" },
+  { key: "akun", label: "Akun", icon: "settings-outline" },
 ] as const;
 
 type TabKey = (typeof tabs)[number]["key"];
@@ -63,7 +64,9 @@ function EyeOffIcon() {
 }
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabKey>("profil");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -90,6 +93,13 @@ export default function ProfilePage() {
     const parts = [profileForm.firstName.trim(), profileForm.lastName.trim()].filter(Boolean);
     return parts.join(" ");
   }, [profileForm.firstName, profileForm.lastName]);
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    await fetch("/api/v1/auth/logout", { method: "POST" });
+    router.push("/sign-in");
+  };
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -221,20 +231,41 @@ export default function ProfilePage() {
                   key={tab.key}
                   type="button"
                   onClick={() => setActiveTab(tab.key)}
-                  className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold ${
-                    isActive
-                      ? "border-l-4 border-[#d14a35] bg-white text-stone-900"
-                      : "text-stone-600 hover:text-stone-900"
-                  }`}
+                  className={`group relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors duration-200 ${isActive ? "text-stone-900" : "text-stone-600 hover:text-stone-900"
+                    }`}
                 >
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-stone-100 text-xs">
-                    {tab.label.charAt(0)}
+                  {/* Animated left border */}
+                  <span
+                    className={`absolute left-0 top-0 h-full w-1 origin-center rounded-full bg-[#d14a35] transition-transform duration-200 ease-out ${isActive ? "scale-y-100" : "scale-y-0 group-hover:scale-y-100"
+                      }`}
+                  />
+                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-md text-sm">
+                    <IonIcon name={tab.icon} />
                   </span>
                   {tab.label}
                 </button>
               );
             })}
           </div>
+
+          {/* Logout */}
+          <button
+            type="button"
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="group relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-red-700 transition-colors duration-200 hover:text-stone-900 disabled:opacity-60"
+          >
+            {/* Animated left border */}
+            <span className="absolute left-0 top-0 h-full w-1 origin-center scale-y-0 rounded-full bg-[#d14a35] transition-transform duration-200 ease-out group-hover:scale-y-100" />
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-md text-sm">
+              {isLoggingOut ? (
+                <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                </svg>
+              ) : <IonIcon name="log-out-outline" />}
+            </span>
+            {isLoggingOut ? "Keluar..." : "Logout"}
+          </button>
         </div>
       </aside>
 
@@ -263,7 +294,7 @@ export default function ProfilePage() {
               ) : null}
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-stone-700">Email</label>
-                <TextField value={profileForm.email} disabled />
+                <TextField value={profileForm.email} disabled wrapperClassName="bg-stone-200 cursor-not-allowed" className="text-stone-400" />
                 <p className="text-xs text-slate-500">
                   *Anda dapat mengubah alamat email melalui menu{" "}
                   <span className="text-[#d14a35]">Akun</span>.
@@ -275,6 +306,7 @@ export default function ProfilePage() {
                 <TextField
                   placeholder="Nama depan"
                   value={profileForm.firstName}
+                  wrapperClassName="bg-white"
                   onChange={(event) =>
                     setProfileForm((prev) => ({ ...prev, firstName: event.target.value }))
                   }
@@ -286,6 +318,7 @@ export default function ProfilePage() {
                 <TextField
                   placeholder="Nama belakang"
                   value={profileForm.lastName}
+                  wrapperClassName="bg-white"
                   onChange={(event) =>
                     setProfileForm((prev) => ({ ...prev, lastName: event.target.value }))
                   }
@@ -325,6 +358,7 @@ export default function ProfilePage() {
                   <label className="text-xs font-semibold text-stone-700">Email baru *</label>
                   <TextField
                     value={accountEmail}
+                    wrapperClassName="bg-white"
                     onChange={(event) => setAccountEmail(event.target.value)}
                   />
                   <p className="text-xs text-slate-500">
@@ -365,6 +399,7 @@ export default function ProfilePage() {
                     type={showCurrentPassword ? "text" : "password"}
                     placeholder="password saat ini"
                     value={passwordForm.currentPassword}
+                    wrapperClassName="bg-white"
                     onChange={(event) =>
                       setPasswordForm((prev) => ({
                         ...prev,
@@ -390,6 +425,7 @@ export default function ProfilePage() {
                     type={showNewPassword ? "text" : "password"}
                     placeholder="masukkan password baru"
                     value={passwordForm.newPassword}
+                    wrapperClassName="bg-white"
                     onChange={(event) =>
                       setPasswordForm((prev) => ({
                         ...prev,
@@ -415,6 +451,7 @@ export default function ProfilePage() {
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="konfirmasi password"
                     value={passwordForm.confirmPassword}
+                    wrapperClassName="bg-white"
                     onChange={(event) =>
                       setPasswordForm((prev) => ({
                         ...prev,
@@ -446,14 +483,7 @@ export default function ProfilePage() {
           </div>
         ) : null}
 
-        {activeTab === "point" ? (
-          <div className="rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-[4px_4px_0_#9ca3af]">
-            <h2 className="text-base font-semibold text-stone-900">Point</h2>
-            <p className="mt-3 text-sm text-slate-600">
-              Placeholder informasi poin pengguna.
-            </p>
-          </div>
-        ) : null}
+
       </div>
     </section>
   );

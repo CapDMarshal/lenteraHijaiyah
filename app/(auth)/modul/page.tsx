@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState, useEffect } from "react";
 
 import { ModuleCard } from "@/components/modul/ModuleCard";
@@ -59,9 +60,8 @@ export default function ModulPage() {
                   key={category.key}
                   type="button"
                   onClick={() => setActiveKey(category.key)}
-                  className={`relative pb-1 text-sm font-semibold text-stone-900 transition-colors hover:text-red-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-center after:bg-[#d14a35] after:transition-transform after:duration-200 after:content-[''] ${
-                    isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
-                  }`}
+                  className={`relative pb-1 text-sm font-semibold text-stone-900 transition-colors hover:text-red-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-center after:bg-[#d14a35] after:transition-transform after:duration-200 after:content-[''] ${isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
+                    }`}
                 >
                   {category.label}
                 </button>
@@ -129,16 +129,26 @@ export default function ModulPage() {
             </a>
           </div>
         ) : (
-          <div className="space-y-4">
-            <p className="text-sm font-semibold text-stone-900">Yuk, buka modul pertamamu!</p>
-            <div className="mx-auto flex h-24 w-40 items-center justify-center rounded-2xl border-2 border-dashed border-stone-300 bg-white text-xs text-slate-500">
-              Placeholder ilustrasi kucing
+          <div className="space-y-0">
+            <p className="text-lg font-semibold text-stone-900">Yuk, buka modul pertamamu!</p>
+            <div className="mx-auto flex justify-center">
+              <div className="relative h-[150px] w-[350px] drop-shadow-md">
+                <Image
+                  src="/images/cat-11.png"
+                  alt="Mulai belajar"
+                  fill
+                  className="object-contain"
+                  sizes="250px"
+                />
+              </div>
             </div>
             <button
               type="button"
-              className="inline-flex rounded-md bg-black px-4 py-2 text-xs font-semibold text-white shadow-[3px_3px_0_#9ca3af]"
+              className="group inline-flex rounded-md bg-[#9ca3af] p-0"
             >
-              Mulai Belajar Sekarang
+              <span className="inline-flex -translate-x-1 -translate-y-1 items-center justify-center rounded-md bg-black px-6 py-3 text-sm font-semibold text-white transition-transform duration-200 ease-out group-hover:-translate-x-1.5 group-hover:-translate-y-1.5 group-active:-translate-x-0.5 group-active:-translate-y-0.5">
+                Mulai Belajar Sekarang
+              </span>
             </button>
           </div>
         )}

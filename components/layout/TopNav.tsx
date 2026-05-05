@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 const links = [
@@ -16,14 +15,6 @@ const links = [
 export function TopNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  const handleLogout = async () => {
-    if (isLoggingOut) return;
-    setIsLoggingOut(true);
-    await fetch("/api/v1/auth/logout", { method: "POST" });
-    router.push("/sign-in");
-  };
 
   return (
     <header className="border-b border-stone-200 bg-white/90 px-20 py-4 backdrop-blur">
@@ -52,27 +43,6 @@ export function TopNav() {
               </Link>
             );
           })}
-
-          {/* Logout */}
-          <button
-            type="button"
-            onClick={handleLogout}
-            disabled={isLoggingOut}
-            className="group inline-flex rounded-lg bg-[#d96852] p-0 disabled:opacity-70"
-          >
-            <span className="inline-flex -translate-x-1 -translate-y-1 items-center justify-center gap-2 rounded-lg bg-black px-6 py-2 text-sm font-semibold text-white transition-transform duration-200 ease-out group-hover:-translate-x-1.5 group-hover:-translate-y-1.5 group-active:translate-x-0 group-active:translate-y-0 group-disabled:-translate-x-1 group-disabled:-translate-y-1">
-              {isLoggingOut ? (
-                <>
-                  <svg className="h-3.5 w-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-                  </svg>
-                  Keluar...
-                </>
-              ) : (
-                "Logout"
-              )}
-            </span>
-          </button>
         </nav>
       </div>
     </header>

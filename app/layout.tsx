@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat_Alternates } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const montserratAlternates = Montserrat_Alternates({
@@ -21,6 +22,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${montserratAlternates.variable} antialiased`}>
       <body>{children}</body>
+      <Script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" />
+      <Script noModule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" />
     </html>
   );
 }
