@@ -7,8 +7,8 @@ const sectionContainer = "px-20";
 export default function AboutPage() {
   return (
     <>
-      <section className="bg-[#f4efeb]">
-        <div className={`${sectionContainer} py-10 sm:py-12`}>
+      <section className="bg-[#f4efeb] relative z-50">
+        <div className={`${sectionContainer} py-10 pb-16 sm:pb-32 relative`}>
           <div className="relative mx-auto max-w-2xl mt-8 space-y-24 text-center pt-16 pb-16">
             {/* Decorative Assets */}
             <div className="absolute -left-110 -top-8 -z-0 hidden md:block">
@@ -28,11 +28,16 @@ export default function AboutPage() {
               Coba Sekarang
             </LinkButton>
           </div>
+
+          {/* Section Connector String */}
+          <div className="absolute left-1/2 -bottom-18 -translate-x-1/2 z-0 hidden md:block">
+            <Image src="/images/sectionstr.svg" alt="Connector" width={45} height={120} className="object-contain" priority />
+          </div>
         </div>
       </section>
 
-      <section className="bg-white">
-        <div className={`${sectionContainer} py-14`}>
+      <section className="bg-white relative z-40">
+        <div className={`${sectionContainer} pb-14 pt-24 sm:pt-32`}>
           <h2 className="text-center text-5xl font-black tracking-tight text-stone-900 sm:text-6xl">
             Tentang Kami
           </h2>

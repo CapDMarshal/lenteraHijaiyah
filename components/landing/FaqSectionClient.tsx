@@ -16,8 +16,8 @@ export default function FaqSectionClient({ sectionContainerClass }: FaqSectionCl
   };
 
   return (
-    <section id="faq-section" className="bg-[#f4efeb]">
-      <div className={`${sectionContainerClass} py-16`}>
+    <section id="faq-section" className="bg-[#f4efeb] relative z-10">
+      <div className={`${sectionContainerClass} pb-16 pt-24 sm:pt-32`}>
         <div className="mx-auto w-full max-w-6xl">
           <h2 className="text-center text-5xl font-black tracking-tight text-stone-900 sm:text-6xl">
             Pertanyaan yang sering diajukan

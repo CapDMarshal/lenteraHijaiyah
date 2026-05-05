@@ -28,9 +28,9 @@ export default function TestimonialsSectionClient({
   };
 
   return (
-    <section id="testimonial-section" className="bg-white/70">
-      <div className={`${sectionContainerClass} py-16`}>
-        <div className="mx-auto w-full max-w-6xl">
+    <section id="testimonial-section" className="bg-white/70 relative z-20">
+      <div className={`${sectionContainerClass} pb-16 pt-24 sm:pt-32 sm:pb-32 relative`}>
+        <div className="mx-auto w-full max-w-6xl relative z-10">
           <h2 className="text-center text-5xl font-semibold tracking-tight text-stone-900 sm:text-4xl">
             Apa yang mereka katakan
           </h2>
@@ -81,6 +81,11 @@ export default function TestimonialsSectionClient({
               {">"}
             </button>
           </div>
+        </div>
+
+        {/* Section Connector String */}
+        <div className="absolute left-1/2 -bottom-18 -translate-x-1/2 z-0 hidden md:block">
+          <Image src="/images/sectionstr.svg" alt="Connector" width={45} height={120} className="object-contain" priority />
         </div>
       </div>
     </section>

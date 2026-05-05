@@ -43,9 +43,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="bg-[#f4efeb]">
-        <div className={`${sectionContainer} pb-12 sm:pb-14`}>
-          <div className="flex w-full flex-col items-center justify-between gap-6 rounded-br-2xl border-b-2 border-r-2 border-stone-900 bg-[#F7EDE8] px-8 py-6 shadow-[4px_4px_0_#111111] sm:flex-row">
+      <section className="bg-[#f4efeb] relative z-50">
+        <div className={`${sectionContainer} pb-12 sm:pb-32 relative`}>
+          <div className="flex w-full flex-col items-center justify-between gap-6 rounded-br-2xl border-b-2 border-r-2 border-stone-900 bg-[#F7EDE8] px-8 py-6 shadow-[4px_4px_0_#111111] sm:flex-row relative z-10">
             <p className="text-2xl ml-16 font-bold text-stone-900">Hasil kolaborasi antara:</p>
             <div className="flex items-center gap-24">
               <div className="flex items-center gap-2">
@@ -57,12 +57,17 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
+
+          {/* Section Connector String */}
+          <div className="absolute left-1/2 -bottom-18 -translate-x-1/2 z-0 hidden md:block">
+            <Image src="/images/sectionstr.svg" alt="Connector" width={45} height={120} className="object-contain" priority />
+          </div>
         </div>
       </section>
 
-      <section id="benefit-section" className="bg-white/70">
-        <div className={`${sectionContainer} py-14`}>
-          <div className="grid w-full gap-8">
+      <section id="benefit-section" className="bg-white/70 relative z-40">
+        <div className={`${sectionContainer} pb-14 pt-10 sm:pb-32 relative`}>
+          <div className="grid w-full gap-8 relative z-10">
             {landingBenefits.map((benefit, index) => {
               const textLeft = index % 2 === 0;
 
@@ -94,11 +99,16 @@ export default function LandingPage() {
               );
             })}
           </div>
+
+          {/* Section Connector String */}
+          <div className="absolute left-1/2 -bottom-18 -translate-x-1/2 z-0 hidden md:block">
+            <Image src="/images/sectionstr.svg" alt="Connector" width={45} height={120} className="object-contain" priority />
+          </div>
         </div>
       </section>
 
-      <section id="feature-section" className="bg-[#f4efeb]">
-        <div className={`${sectionContainer} py-16`}>
+      <section id="feature-section" className="bg-[#f4efeb] relative z-30">
+        <div className={`${sectionContainer} pb-16 pt-24 sm:pt-32 sm:pb-32 relative`}>
           <div className="w-full">
             <h2 className="text-center text-4xl font-extrabold tracking-tight text-stone-900">
               Fitur & Games
@@ -124,11 +134,16 @@ export default function LandingPage() {
               ))}
             </div>
 
-            <div className="mt-12 flex justify-center">
+            <div className="mt-12 flex justify-center relative z-10">
               <LinkButton href="/sign-in" variant="ink" size="hero">
                 Lihat Semua
               </LinkButton>
             </div>
+          </div>
+
+          {/* Section Connector String */}
+          <div className="absolute left-1/2 -bottom-18 -translate-x-1/2 z-0 hidden md:block">
+            <Image src="/images/sectionstr.svg" alt="Connector" width={45} height={120} className="object-contain" priority />
           </div>
         </div>
       </section>
