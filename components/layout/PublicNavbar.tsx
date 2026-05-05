@@ -15,7 +15,7 @@ export function PublicNavbar() {
   ];
 
   return (
-    <header className="bg-[#f4efeb] px-5 py-4 sm:px-8">
+    <header className="bg-[#f4efeb] px-20 py-4">
       <div className="flex items-center justify-between gap-4">
         <Link href="/" aria-label="Lentera Hijaiyah home" className="inline-flex items-center">
           <Image

@@ -39,14 +39,14 @@ export default function TestimonialsSectionClient({
             {landingTestimonials.map((testimonial) => (
               <article
                 key={testimonial.name}
-                className="min-w-[550px] rounded-2xl border border-stone-300 bg-[#dde5ec] p-6 shadow-[4px_4px_0_#3f444a] sm:min-w-[500px]"
+                className="flex min-w-[550px] flex-col rounded-2xl border border-stone-300 bg-[#dde5ec] p-6 shadow-[4px_4px_0_#3f444a] sm:min-w-[500px]"
               >
                 <p className="text-6xl font-black leading-none text-[#d14a35]">,,</p>
                 <p className="mt-4 text-center text-2xl leading-relaxed text-stone-900">
                   {testimonial.quote}
                 </p>
 
-                <div className="mt-8 flex items-center justify-between gap-4">
+                <div className="mt-auto flex items-center justify-between gap-4 pt-8">
                   <div className="flex items-center gap-3">
                     <div className="grid h-14 w-14 place-items-center rounded-full border-2 border-stone-900 bg-white text-xl font-bold text-stone-900">
                       {testimonial.name.charAt(0)}

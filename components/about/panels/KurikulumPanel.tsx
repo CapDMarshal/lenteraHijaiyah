@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { LinkButton } from "@/components/ui/button";
 
 export default function KurikulumPanel() {
@@ -17,8 +19,10 @@ export default function KurikulumPanel() {
         </p>
       </article>
 
-      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[160px_1fr]">
-        <div className="mx-auto aspect-square w-32 rounded-3xl bg-stone-200" />
+      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[250px_1fr]">
+        <div className="relative mx-auto h-[250px] w-[250px] max-h-[250px]">
+          <Image src="/images/cat-8.png" alt="Ilustrasi pembelajaran" fill className="object-contain" />
+        </div>
         <div className="space-y-4">
           <h3 className="text-4xl font-black tracking-tight text-stone-900">Pembelajaran Berbasis Data</h3>
           <p className="text-lg leading-relaxed text-slate-600">
@@ -29,7 +33,7 @@ export default function KurikulumPanel() {
         </div>
       </article>
 
-      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[1fr_160px]">
+      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[1fr_250px]">
         <div className="space-y-4">
           <h3 className="text-4xl font-black tracking-tight text-stone-900">Koreksi Instan dengan AI</h3>
           <p className="text-lg leading-relaxed text-slate-600">
@@ -41,11 +45,15 @@ export default function KurikulumPanel() {
             penulisan yang benar.
           </p>
         </div>
-        <div className="mx-auto aspect-square w-32 rounded-3xl bg-stone-200" />
+        <div className="relative mx-auto h-[250px] w-[250px] max-h-[250px]">
+          <Image src="/images/cat-9.png" alt="Ilustrasi AI" fill className="object-contain" />
+        </div>
       </article>
 
-      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[160px_1fr]">
-        <div className="mx-auto aspect-square w-32 rounded-3xl bg-stone-200" />
+      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[250px_1fr]">
+        <div className="relative mx-auto h-[250px] w-[250px] max-h-[250px]">
+          <Image src="/images/cat-10.png" alt="Ilustrasi pengembangan" fill className="object-contain" />
+        </div>
         <div className="space-y-4">
           <h3 className="text-4xl font-black tracking-tight text-stone-900">Pengembangan Berkelanjutan</h3>
           <p className="text-lg leading-relaxed text-slate-600">

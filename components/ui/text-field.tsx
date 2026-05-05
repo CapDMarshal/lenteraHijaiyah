@@ -16,7 +16,7 @@ export function TextField({
   return (
     <div
       className={cn(
-        "flex h-14 w-full items-center rounded-xl border-2 border-stone-900 bg-[#f8f7f6] px-4 shadow-[2px_2px_0_#2b2b2b]",
+        "flex h-14 w-full items-center rounded-xl border-2 border-stone-900 bg-[#F7EDE8] px-4 shadow-[2px_2px_0_#2b2b2b]",
         wrapperClassName,
       )}
     >

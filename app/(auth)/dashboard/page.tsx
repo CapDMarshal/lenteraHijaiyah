@@ -36,6 +36,7 @@ type ShalatScheduleResponse = {
 type PrayerItem = {
   label: string;
   time: string;
+  emoji?: string;
   active?: boolean;
 };
 
@@ -54,6 +55,14 @@ const prayerLabels: Record<(typeof prayerOrder)[number], string> = {
   ashar: "Ashar",
   maghrib: "Magrib",
   isya: "Isya",
+};
+
+const prayerEmojis: Record<(typeof prayerOrder)[number], string> = {
+  subuh: "⭐",
+  dzuhur: "☀️",
+  ashar: "⛅",
+  maghrib: "🌥️",
+  isya: "🌙",
 };
 
 const fallbackTimes: PrayerItem[] = [
@@ -168,6 +177,7 @@ export default async function DashboardPage() {
   const prayerTimes: PrayerItem[] = today
     ? prayerOrder.map((key) => ({
         label: prayerLabels[key],
+        emoji: prayerEmojis[key],
         time: today[key],
         active: activeKey === key,
       }))
@@ -382,7 +392,7 @@ export default async function DashboardPage() {
                 </p>
                 <p className="text-2xl font-bold tracking-tight">{item.time}</p>
               </div>
-              <div className="h-10 w-10 rounded-xl border-2 border-dashed border-stone-300 bg-stone-100" />
+              <span className="text-2xl">{item.emoji ?? "🕌"}</span>
             </div>
           ))}
         </div>

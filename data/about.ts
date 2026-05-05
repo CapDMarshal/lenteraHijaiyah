@@ -8,8 +8,8 @@ export const aboutFiturItems = [
     subtitle: "Latihan menulis huruf hijaiyah langsung di canvas.",
   },
   {
-    title: "Tutorial Video",
-    subtitle: "Pelajari cara menulis langkah demi langkah dalam bentuk video.",
+    title: "Al-Qur'an Digital",
+    subtitle: "Baca Al-Qur'an secara langsung di website.",
   },
   {
     title: "Check Progress",
@@ -35,17 +35,20 @@ export const aboutTimItems = [
     description:
       "Bagian rekayasa (engineering) adalah fungsi terbesar kami di Lentera Hijaiyah. Mereka membangun, menjalankan, dan memelihara produk serta fitur kami.",
     imageLeft: true,
+    image: "/images/cat-tim-1.png",
   },
   {
     title: "Produk",
     description:
       "Tim produk di Lentera Hijaiyah berfokus pada mendefinisikan, meluncurkan, dan meningkatkan semua yang kami bangun.",
     imageLeft: false,
+    image: "/images/cat-tim-2.png",
   },
   {
     title: "Desain",
     description:
       "Desain menggabungkan desain produk, seni, animasi, merek, dan pengalaman untuk menghadirkan kesenangan pada produk kami.",
     imageLeft: true,
+    image: "/images/cat-tim-3.png",
   },
 ];
