@@ -1,14 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
-import { getMinioPublicUrl } from "@/lib/storage/minio";
 
 type RouteContext = {
-  params: { categoryId: string };
+  params: Promise<{ categoryId: string }>;
 };
 
 export async function GET(_req: Request, context: RouteContext) {
   try {
-    const { categoryId } = context.params;
+    const { categoryId } = await context.params;
 
     const category = await prisma.moduleCategory.findUnique({
       where: { id: categoryId },
@@ -41,7 +40,7 @@ export async function GET(_req: Request, context: RouteContext) {
       title: module.title,
       content: module.content,
       pdfKey: module.pdfKey,
-      pdfUrl: getMinioPublicUrl(module.pdfKey),
+      pdfUrl: module.pdfKey,
       categoryId: module.categoryId,
       createdAt: module.createdAt,
       updatedAt: module.updatedAt,

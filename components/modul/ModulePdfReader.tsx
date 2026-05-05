@@ -71,7 +71,7 @@ export function ModulePdfReader({ pdfUrl, title }: ModulePdfReaderProps) {
       setThumbnails([]);
 
       try {
-        const pdfjs = await import("pdfjs-dist/legacy/build/pdf");
+        const pdfjs = await import("pdfjs-dist");
         pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
         const loadingTask = pdfjs.getDocument(pdfUrl);
