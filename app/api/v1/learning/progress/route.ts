@@ -8,7 +8,7 @@ export async function GET(req: Request) {
 
     if (!userId) {
       return NextResponse.json(
-        { message: "Unauthorized. ID Pengguna tidak ditemukan." },
+        { message: "Unauthorized." },
         { status: 401 }
       );
     }
@@ -54,7 +54,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("GET_PROGRESS_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
 
     if (!userId) {
       return NextResponse.json(
-        { message: "Unauthorized. ID Pengguna tidak ditemukan." },
+        { message: "Unauthorized." },
         { status: 401 }
       );
     }
@@ -90,7 +90,7 @@ export async function POST(req: Request) {
 
     if (!module) {
       return NextResponse.json(
-        { message: "Modul tidak ditemukan." },
+        { message: "Module not found." },
         { status: 404 }
       );
     }
@@ -126,7 +126,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("UPDATE_PROGRESS_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

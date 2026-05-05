@@ -56,7 +56,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("RESET_PASSWORD_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

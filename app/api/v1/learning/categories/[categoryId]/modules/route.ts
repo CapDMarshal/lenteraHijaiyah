@@ -16,7 +16,7 @@ export async function GET(_req: Request, context: RouteContext) {
 
     if (!category) {
       return NextResponse.json(
-        { message: "Kategori tidak ditemukan." },
+        { message: "Category not found." },
         { status: 404 }
       );
     }
@@ -35,12 +35,20 @@ export async function GET(_req: Request, context: RouteContext) {
       },
     });
 
+    let resolvePdfUrl = (key: string) => key;
+    try {
+      const { getMinioPublicUrl } = await import("@/lib/storage/minio");
+      resolvePdfUrl = getMinioPublicUrl;
+    } catch {
+      // MinIO not configured, fall back to raw key
+    }
+
     const data = modules.map((module) => ({
       id: module.id,
       title: module.title,
       content: module.content,
       pdfKey: module.pdfKey,
-      pdfUrl: module.pdfKey,
+      pdfUrl: resolvePdfUrl(module.pdfKey),
       categoryId: module.categoryId,
       createdAt: module.createdAt,
       updatedAt: module.updatedAt,
@@ -48,7 +56,7 @@ export async function GET(_req: Request, context: RouteContext) {
 
     return NextResponse.json(
       {
-        message: "Berhasil mengambil modul",
+        message: "Successfully fetched modules",
         category,
         modules: data,
       },
@@ -57,7 +65,7 @@ export async function GET(_req: Request, context: RouteContext) {
   } catch (error) {
     console.error("GET_CATEGORY_MODULES_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

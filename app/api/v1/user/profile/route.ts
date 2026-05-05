@@ -19,7 +19,7 @@ export async function GET(req: Request) {
         id: true,
         name: true,
         email: true,
-        role: true,
+        // role: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -27,7 +27,7 @@ export async function GET(req: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { message: "Pengguna tidak ditemukan." },
+        { message: "User not found." },
         { status: 404 }
       );
     }
@@ -39,7 +39,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("GET_PROFILE_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }
@@ -51,7 +51,7 @@ export async function PUT(req: Request) {
 
     if (!userId) {
       return NextResponse.json(
-        { message: "Unauthorized. ID Pengguna tidak ditemukan." },
+        { message: "Unauthorized." },
         { status: 401 }
       );
     }
@@ -75,7 +75,7 @@ export async function PUT(req: Request) {
 
     if (!currentUser) {
       return NextResponse.json(
-        { message: "Pengguna tidak ditemukan." },
+        { message: "User not found." },
         { status: 404 }
       );
     }
@@ -88,7 +88,7 @@ export async function PUT(req: Request) {
 
       if (existingEmail) {
         return NextResponse.json(
-          { message: "Email sudah terdaftar" },
+          { message: "Email already registered" },
           { status: 409 }
         );
       }
@@ -117,7 +117,7 @@ export async function PUT(req: Request) {
   } catch (error) {
     console.error("UPDATE_PROFILE_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

@@ -13,7 +13,7 @@ export async function GET(req: Request) {
 
     if (!userId) {
       return NextResponse.json(
-        { message: "Unauthorized. ID Pengguna tidak ditemukan." },
+        { message: "Unauthorized." },
         { status: 401 },
       );
     }
@@ -31,7 +31,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("GET_QURAN_PROGRESS_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 },
     );
   }
@@ -43,7 +43,7 @@ export async function PUT(req: Request) {
 
     if (!userId) {
       return NextResponse.json(
-        { message: "Unauthorized. ID Pengguna tidak ditemukan." },
+        { message: "Unauthorized." },
         { status: 401 },
       );
     }
@@ -74,7 +74,7 @@ export async function PUT(req: Request) {
   } catch (error) {
     console.error("UPDATE_QURAN_PROGRESS_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 },
     );
   }

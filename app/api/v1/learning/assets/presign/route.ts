@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   try {
     if (!ensureAdmin(req)) {
       return NextResponse.json(
-        { message: "Forbidden. Hanya admin yang diizinkan." },
+        { message: "Forbidden." },
         { status: 403 }
       );
     }
