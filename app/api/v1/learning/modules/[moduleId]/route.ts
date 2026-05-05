@@ -41,6 +41,14 @@ export async function GET(_req: Request, context: RouteContext) {
       );
     }
 
+    let resolvePdfUrl = (key: string) => key;
+    try {
+      const { getMinioPublicUrl } = await import("@/lib/storage/minio");
+      resolvePdfUrl = getMinioPublicUrl;
+    } catch {
+      // MinIO not configured, fall back to raw key
+    }
+
     return NextResponse.json(
       {
         message: "Berhasil mengambil modul",
@@ -49,7 +57,7 @@ export async function GET(_req: Request, context: RouteContext) {
           title: module.title,
           content: module.content,
           pdfKey: module.pdfKey,
-          pdfUrl: module.pdfKey,
+          pdfUrl: resolvePdfUrl(module.pdfKey),
           categoryId: module.categoryId,
           category: module.category,
           createdAt: module.createdAt,
@@ -134,12 +142,20 @@ export async function PUT(req: Request, context: RouteContext) {
       },
     });
 
+    let resolvePdfUrl = (key: string) => key;
+    try {
+      const { getMinioPublicUrl } = await import("@/lib/storage/minio");
+      resolvePdfUrl = getMinioPublicUrl;
+    } catch {
+      // MinIO not configured, fall back to raw key
+    }
+
     return NextResponse.json(
       {
         message: "Modul berhasil diperbarui",
         module: {
           ...updated,
-          pdfUrl: updated.pdfKey,
+          pdfUrl: resolvePdfUrl(updated.pdfKey),
         },
       },
       { status: 200 }

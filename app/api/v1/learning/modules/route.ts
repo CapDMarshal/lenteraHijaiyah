@@ -26,10 +26,24 @@ export async function GET(req: Request) {
         title: true,
         categoryId: true,
         category: { select: { name: true } },
+        pdfKey: true,
       },
     });
 
-    return NextResponse.json({ modules }, { status: 200 });
+    let resolvePdfUrl = (key: string) => key;
+    try {
+      const { getMinioPublicUrl } = await import("@/lib/storage/minio");
+      resolvePdfUrl = getMinioPublicUrl;
+    } catch {
+      // MinIO not configured, fall back to raw key
+    }
+
+    const data = modules.map((module) => ({
+      ...module,
+      pdfUrl: resolvePdfUrl(module.pdfKey),
+    }));
+
+    return NextResponse.json({ modules: data }, { status: 200 });
   } catch (error) {
     console.error("GET_MODULES_ERROR", error);
     return NextResponse.json(

@@ -35,12 +35,20 @@ export async function GET(_req: Request, context: RouteContext) {
       },
     });
 
+    let resolvePdfUrl = (key: string) => key;
+    try {
+      const { getMinioPublicUrl } = await import("@/lib/storage/minio");
+      resolvePdfUrl = getMinioPublicUrl;
+    } catch {
+      // MinIO not configured, fall back to raw key
+    }
+
     const data = modules.map((module) => ({
       id: module.id,
       title: module.title,
       content: module.content,
       pdfKey: module.pdfKey,
-      pdfUrl: module.pdfKey,
+      pdfUrl: resolvePdfUrl(module.pdfKey),
       categoryId: module.categoryId,
       createdAt: module.createdAt,
       updatedAt: module.updatedAt,
