@@ -95,7 +95,7 @@ export const landingFaqs = [
   {
     question: "Apakah aplikasi ini bisa diakses lewat HP?",
     answer:
-      "Bisa. Aplikasi dirancang responsif untuk desktop, tablet, dan ponsel agar latihan tetap nyaman di mana pun.",
+      "Saat ini aplikasi masih dalam tahap pengembangan, aplikasi ini akan segera hadir di hp android kesayanganmu.",
   },
   {
     question: "Apa saja materi yang bisa dipelajari selain menulis?",

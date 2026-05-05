@@ -192,7 +192,7 @@ function DrawingCanvas({
   };
 
   return (
-    <div className="relative rounded-2xl border-2 border-stone-900 bg-white shadow-[6px_6px_0_#1c1917] overflow-hidden">
+    <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border-2 border-stone-900 bg-white shadow-[6px_6px_0_#1c1917]">
       <button
         type="button"
         onClick={onClear}
@@ -205,7 +205,7 @@ function DrawingCanvas({
         ref={canvasRef}
         width={600}
         height={440}
-        className="w-full cursor-crosshair touch-none"
+        className="h-full w-full cursor-crosshair touch-none"
         style={{ display: "block" }}
         onMouseDown={startDraw}
         onMouseMove={draw}
@@ -340,7 +340,9 @@ export default function HijaiyahPage() {
 
           {/* Canvas + button */}
           <div className="flex flex-1 flex-col gap-4">
-            <DrawingCanvas canvasRef={canvasRef} onClear={handleClear} />
+            <div className="h-[436px]">
+              <DrawingCanvas canvasRef={canvasRef} onClear={handleClear} />
+            </div>
 
             <button
               type="button"

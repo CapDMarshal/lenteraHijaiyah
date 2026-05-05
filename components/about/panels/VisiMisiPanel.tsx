@@ -1,8 +1,12 @@
+import Image from "next/image";
+
 export default function VisiMisiPanel() {
   return (
     <div className="space-y-12 py-10">
-      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[160px_1fr]">
-        <div className="mx-auto aspect-square w-32 rounded-3xl bg-stone-200" />
+      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[250px_1fr]">
+        <div className="relative mx-auto h-[250px] w-[250px] max-h-[250px]">
+          <Image src="/images/cat-6.png" alt="Ilustrasi visi" fill className="object-contain" />
+        </div>
         <div className="space-y-4">
           <h3 className="text-4xl font-black tracking-tight text-stone-900">Belajar Tanpa Batas.</h3>
           <p className="text-lg leading-relaxed text-slate-600">
@@ -13,7 +17,7 @@ export default function VisiMisiPanel() {
         </div>
       </article>
 
-      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[1fr_160px]">
+      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[1fr_250px]">
         <div className="space-y-4">
           <h3 className="text-4xl font-black tracking-tight text-stone-900">
             Ubah Tantangan Jadi Permainan.
@@ -24,7 +28,9 @@ export default function VisiMisiPanel() {
             game edukatif.
           </p>
         </div>
-        <div className="mx-auto aspect-square w-32 rounded-3xl bg-stone-200" />
+        <div className="relative mx-auto h-[250px] w-[250px] max-h-[250px]">
+          <Image src="/images/cat-7.png" alt="Ilustrasi misi" fill className="object-contain" />
+        </div>
       </article>
 
       <article className="space-y-5">
