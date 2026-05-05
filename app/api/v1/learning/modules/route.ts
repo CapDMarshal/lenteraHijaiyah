@@ -1,12 +1,43 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { moduleCreateSchema } from "@/lib/validation/learning";
-import { getMinioPublicUrl } from "@/lib/storage/minio";
 
 const ensureAdmin = (req: Request) => {
   const role = req.headers.get("x-user-role");
   return role === "ADMIN";
 };
+
+export async function GET(req: Request) {
+  try {
+    const userId = req.headers.get("x-user-id");
+
+    if (!userId) {
+      return NextResponse.json(
+        { message: "Unauthorized. ID Pengguna tidak ditemukan." },
+        { status: 401 },
+      );
+    }
+
+    const modules = await prisma.module.findMany({
+      orderBy: { title: "asc" },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        categoryId: true,
+        category: { select: { name: true } },
+      },
+    });
+
+    return NextResponse.json({ modules }, { status: 200 });
+  } catch (error) {
+    console.error("GET_MODULES_ERROR", error);
+    return NextResponse.json(
+      { message: "Terjadi kesalahan internal server" },
+      { status: 500 },
+    );
+  }
+}
 
 export async function POST(req: Request) {
   try {
@@ -50,6 +81,7 @@ export async function POST(req: Request) {
       },
       select: {
         id: true,
+        slug: true,
         title: true,
         content: true,
         pdfKey: true,
@@ -59,13 +91,19 @@ export async function POST(req: Request) {
       },
     });
 
+    // Lazily resolve minio URL — safe to fail if env not configured
+    let pdfUrl = pdfKey;
+    try {
+      const { getMinioPublicUrl } = await import("@/lib/storage/minio");
+      pdfUrl = getMinioPublicUrl(pdfKey);
+    } catch {
+      // MinIO not configured, fall back to raw key
+    }
+
     return NextResponse.json(
       {
         message: "Modul berhasil dibuat",
-        module: {
-          ...module,
-          pdfUrl: getMinioPublicUrl(module.pdfKey),
-        },
+        module: { ...module, pdfUrl },
       },
       { status: 201 }
     );

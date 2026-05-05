@@ -2,14 +2,11 @@ export type ModuleItem = {
   slug: string;
   title: string;
   summary: string;
-  durationMinutes: number;
-  pages: number;
-  level: "Dasar" | "Menengah" | "Lanjut";
   pdfUrl: string;
 };
 
 export type ModuleCategory = {
-  key: "fiqih" | "aqidah" | "pai" | "arab";
+  key: "aqidah" | "bahasa-arab" | "fiqih" | "pai" | "ski";
   label: string;
   description: string;
   modules: ModuleItem[];
@@ -17,72 +14,61 @@ export type ModuleCategory = {
 
 export const moduleCategories: ModuleCategory[] = [
   {
-    key: "fiqih",
-    label: "Fiqih",
+    key: "aqidah",
+    label: "Aqidah Akhlak",
     description:
-      "Alur belajar terpadu untuk membentuk karakter dan akhlak mulia pelajar muslim.",
+      "Pembelajaran tentang pokok-pokok keimanan dan pembentukan akhlak mulia bagi pelajar muslim.",
     modules: [
       {
-        slug: "fiqih-wudhu",
-        title: "Memahami Thaharah dan Wudhu",
-        summary: "Dasar bersuci, adab wudhu, dan praktik sehari-hari.",
-        durationMinutes: 40,
-        pages: 120,
-        level: "Dasar",
-        pdfUrl: "/pdf/fiqih-wudhu.pdf",
-      },
-      {
-        slug: "fiqih-shalat",
-        title: "Tuntunan Shalat Fardhu",
-        summary: "Rukun, bacaan, dan gerakan shalat yang benar.",
-        durationMinutes: 55,
-        pages: 160,
-        level: "Dasar",
-        pdfUrl: "/pdf/fiqih-shalat.pdf",
-      },
-      {
-        slug: "fiqih-puasa",
-        title: "Puasa Ramadhan dan Sunnah",
-        summary: "Ketentuan puasa, niat, dan amalan sunnah.",
-        durationMinutes: 60,
-        pages: 180,
-        level: "Menengah",
-        pdfUrl: "/pdf/fiqih-puasa.pdf",
+        slug: "akidah-akhlak-kelas-7",
+        title: "Akidah Akhlak MTs Kelas VII",
+        summary:
+          "Pengenalan dasar-dasar akidah Islam dan pembentukan akhlak terpuji untuk siswa kelas VII Madrasah Tsanawiyah.",
+        pdfUrl: "/pdf/modul/aqidah akhlak/AKIDAH AKHLAK MTS KELAS VII.pdf",
       },
     ],
   },
   {
-    key: "aqidah",
-    label: "Aqidah Akhlak",
+    key: "bahasa-arab",
+    label: "Bahasa Arab",
     description:
-      "Alur belajar terpadu untuk memahami pilar keimanan secara mendalam.",
+      "Penguatan kemampuan membaca, menulis, dan memahami teks berbahasa Arab sebagai bahasa Al-Qur'an.",
     modules: [
       {
-        slug: "aqidah-iman-islam-ihsan",
-        title: "Memahami Konsep Iman, Islam, dan Ihsan",
-        summary: "Landasan iman sebagai pilar utama seorang muslim.",
-        durationMinutes: 45,
-        pages: 200,
-        level: "Dasar",
-        pdfUrl: "/pdf/aqidah-iman-islam-ihsan.pdf",
+        slug: "bahasa-arab-kelas-7",
+        title: "Bahasa Arab Kelas VII",
+        summary:
+          "Pengenalan kosakata dan struktur kalimat dasar bahasa Arab untuk siswa kelas VII.",
+        pdfUrl: "/pdf/modul/bahasa arab/BAHASA ARAB KELAS VII.pdf",
       },
       {
-        slug: "aqidah-akhlak-terpuji",
-        title: "Akhlak Terpuji: Sabar, Ikhtiar, dan Tawakal",
-        summary: "Latihan karakter lewat akhlak mulia.",
-        durationMinutes: 50,
-        pages: 140,
-        level: "Dasar",
-        pdfUrl: "/pdf/akidah-1.pdf",
+        slug: "bahasa-arab-kelas-8",
+        title: "Bahasa Arab Kelas VIII",
+        summary:
+          "Pengembangan kemampuan membaca dan memahami teks bahasa Arab tingkat menengah untuk siswa kelas VIII.",
+        pdfUrl: "/pdf/modul/bahasa arab/BAHASA ARAB KELAS VIII.pdf",
       },
       {
-        slug: "aqidah-asmaul-husna",
-        title: "Mengenal Sifat Allah (Asmaul Husna)",
-        summary: "Memahami kebesaran Allah lewat nama-nama-Nya.",
-        durationMinutes: 60,
-        pages: 190,
-        level: "Menengah",
-        pdfUrl: "/pdf/aqidah-asmaul-husna.pdf",
+        slug: "bahasa-arab-kelas-9",
+        title: "Bahasa Arab Kelas IX",
+        summary:
+          "Pendalaman bahasa Arab dan latihan percakapan serta pemahaman teks untuk siswa kelas IX.",
+        pdfUrl: "/pdf/modul/bahasa arab/BAHASA ARAB KELAS IX.pdf",
+      },
+    ],
+  },
+  {
+    key: "fiqih",
+    label: "Fiqih",
+    description:
+      "Panduan hukum Islam praktis mencakup ibadah sehari-hari, thaharah, shalat, puasa, dan muamalah.",
+    modules: [
+      {
+        slug: "fikih-kelas-8",
+        title: "Fikih Kelas VIII",
+        summary:
+          "Pembahasan hukum-hukum fiqih tingkat lanjut mencakup ibadah, muamalah, dan akhlak untuk siswa kelas VIII.",
+        pdfUrl: "/pdf/modul/fiqih/FIKIH KELAS VIII.pdf",
       },
     ],
   },
@@ -90,69 +76,29 @@ export const moduleCategories: ModuleCategory[] = [
     key: "pai",
     label: "Pendidikan Agama Islam",
     description:
-      "Pembelajaran terpadu untuk memahami dasar-dasar agama Islam.",
+      "Pembelajaran terpadu nilai-nilai Islam yang mencakup keimanan, ibadah, akhlak, dan kehidupan bermasyarakat.",
     modules: [
       {
-        slug: "pai-sejarah-nabi",
-        title: "Sejarah Nabi dan Rasul",
-        summary: "Kisah teladan dan pelajaran dari para nabi.",
-        durationMinutes: 35,
-        pages: 95,
-        level: "Dasar",
-        pdfUrl: "/pdf/pai-sejarah-nabi.pdf",
-      },
-      {
-        slug: "pai-ibadah-harian",
-        title: "Ibadah Harian",
-        summary: "Adab dan praktik ibadah dalam keseharian.",
-        durationMinutes: 50,
-        pages: 130,
-        level: "Dasar",
-        pdfUrl: "/pdf/pai-ibadah-harian.pdf",
-      },
-      {
-        slug: "pai-akhlak-sosial",
-        title: "Akhlak Sosial",
-        summary: "Etika pergaulan dan akhlak di lingkungan sekolah.",
-        durationMinutes: 55,
-        pages: 150,
-        level: "Menengah",
-        pdfUrl: "/pdf/pai-akhlak-sosial.pdf",
+        slug: "pai-kelas-8",
+        title: "Pendidikan Agama Islam Kelas VIII",
+        summary:
+          "Materi PAI kelas VIII meliputi perkembangan Islam, akhlak islami, dan tata cara ibadah yang benar.",
+        pdfUrl: "/pdf/modul/pendidikan agama islam/PAI KELAS VIII.pdf",
       },
     ],
   },
   {
-    key: "arab",
-    label: "Bahasa Arab",
+    key: "ski",
+    label: "Sejarah Kebudayaan Islam",
     description:
-      "Penguatan bahasa Arab untuk memahami teks-teks islami.",
+      "Perjalanan sejarah peradaban Islam dari masa Nabi Muhammad SAW hingga perkembangannya di Nusantara.",
     modules: [
       {
-        slug: "arab-huruf-dasar",
-        title: "Pengenalan Huruf Dasar",
-        summary: "Latihan mengenal huruf dan harakat.",
-        durationMinutes: 30,
-        pages: 80,
-        level: "Dasar",
-        pdfUrl: "/pdf/arab-huruf-dasar.pdf",
-      },
-      {
-        slug: "arab-kosakata-harian",
-        title: "Kosakata Harian",
-        summary: "Kumpulan kata umum dalam kehidupan sehari-hari.",
-        durationMinutes: 45,
-        pages: 110,
-        level: "Dasar",
-        pdfUrl: "/pdf/arab-kosakata-harian.pdf",
-      },
-      {
-        slug: "arab-tata-bahasa",
-        title: "Tata Bahasa Sederhana",
-        summary: "Dasar nahwu dan sharaf pemula.",
-        durationMinutes: 60,
-        pages: 170,
-        level: "Menengah",
-        pdfUrl: "/pdf/arab-tata-bahasa.pdf",
+        slug: "ski-kelas-8",
+        title: "Sejarah Kebudayaan Islam Kelas VIII",
+        summary:
+          "Kajian sejarah dan kebudayaan Islam kelas VIII meliputi dinasti-dinasti Islam dan penyebaran Islam di dunia.",
+        pdfUrl: "/pdf/modul/sejarah kebudayaan islam/SEJARAH KEBUDAYAAN ISLAM KELAS VIII.pdf",
       },
     ],
   },

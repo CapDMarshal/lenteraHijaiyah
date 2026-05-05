@@ -1,6 +1,12 @@
+import Link from "next/link";
+import { cookies } from "next/headers";
 import Image from "next/image";
 
+import { verifyJwt } from "@/lib/auth/jwt";
+import { prisma } from "@/lib/db/prisma";
 import { InkCard } from "@/components/ui/card";
+
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 type ShalatScheduleResponse = {
   code: number;
@@ -33,6 +39,13 @@ type PrayerItem = {
   active?: boolean;
 };
 
+type SurahInfo = {
+  nomor: number;
+  namaLatin: string;
+};
+
+// ─── Constants ───────────────────────────────────────────────────────────────
+
 const prayerOrder = ["subuh", "dzuhur", "ashar", "maghrib", "isya"] as const;
 
 const prayerLabels: Record<(typeof prayerOrder)[number], string> = {
@@ -51,11 +64,11 @@ const fallbackTimes: PrayerItem[] = [
   { label: "Isya", time: "--:--" },
 ];
 
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
 function toMinutes(time: string) {
   const [hours, minutes] = time.split(":").map(Number);
-  if (Number.isNaN(hours) || Number.isNaN(minutes)) {
-    return null;
-  }
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) return null;
   return hours * 60 + minutes;
 }
 
@@ -66,22 +79,31 @@ function resolveActivePrayer(
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
   const times = prayerOrder
     .map((key) => ({ key, minutes: toMinutes(schedule[key]) }))
-    .filter((item): item is { key: (typeof prayerOrder)[number]; minutes: number } =>
-      item.minutes !== null,
+    .filter(
+      (item): item is { key: (typeof prayerOrder)[number]; minutes: number } =>
+        item.minutes !== null,
     );
 
   let activeKey: (typeof prayerOrder)[number] | null = null;
-  for (let index = 0; index < times.length; index += 1) {
-    const current = times[index];
-    const next = times[index + 1];
+  for (let i = 0; i < times.length; i += 1) {
+    const current = times[i];
+    const next = times[i + 1];
     if (!next || (nowMinutes >= current.minutes && nowMinutes < next.minutes)) {
       activeKey = current.key;
       break;
     }
   }
-
   return activeKey;
 }
+
+function getGreeting(hour: number): string {
+  if (hour >= 4 && hour < 11) return "Pagi";
+  if (hour >= 11 && hour < 15) return "Siang";
+  if (hour >= 15 && hour < 18) return "Sore";
+  return "Malam";
+}
+
+// ─── Data Fetchers ────────────────────────────────────────────────────────────
 
 async function getPrayerSchedule(now: Date) {
   const body = {
@@ -90,28 +112,59 @@ async function getPrayerSchedule(now: Date) {
     bulan: now.getMonth() + 1,
     tahun: now.getFullYear(),
   };
-
   const response = await fetch("https://equran.id/api/v2/shalat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
     cache: "no-store",
   });
-
-  if (!response.ok) {
-    return null;
-  }
-
+  if (!response.ok) return null;
   const payload = (await response.json()) as ShalatScheduleResponse;
   return payload.data;
 }
 
+async function getSurahName(surahNumber: number): Promise<string> {
+  try {
+    const res = await fetch(
+      `https://equran.id/api/v2/surat/${surahNumber}`,
+      { next: { revalidate: 86400 } },
+    );
+    if (!res.ok) return `Surah ${surahNumber}`;
+    const payload = (await res.json()) as { data: SurahInfo };
+    return payload.data.namaLatin;
+  } catch {
+    return `Surah ${surahNumber}`;
+  }
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
 export default async function DashboardPage() {
+  // Auth
+  const cookieStore = await cookies();
+  const token = cookieStore.get("access_token")?.value ?? null;
+  const jwtPayload = token
+    ? await verifyJwt<{ id: string; role: string }>(token)
+    : null;
+
+  const user = jwtPayload
+    ? await prisma.user.findUnique({
+        where: { id: jwtPayload.id },
+        select: { name: true },
+      })
+    : null;
+
+  const userName = user?.name ?? "Pengguna";
+
+  // Time & greeting
   const now = new Date();
+  const wibHour = (now.getUTCHours() + 7) % 24;
+  const greeting = getGreeting(wibHour);
+
+  // Prayer schedule
   const schedule = await getPrayerSchedule(now);
   const today = schedule?.jadwal.find((item) => item.tanggal === now.getDate());
   const activeKey = today ? resolveActivePrayer(now, today) : null;
-
   const prayerTimes: PrayerItem[] = today
     ? prayerOrder.map((key) => ({
         label: prayerLabels[key],
@@ -120,10 +173,49 @@ export default async function DashboardPage() {
       }))
     : fallbackTimes;
 
+  // Module progress
+  const userId = jwtPayload?.id ?? null;
+
+  const [totalModules, completedProgresses, inProgressModule, lastCompleted, quranProgress] =
+    await Promise.all([
+      prisma.module.count(),
+      userId
+        ? prisma.userModuleProgress.count({
+            where: { userId, isCompleted: true },
+          })
+        : Promise.resolve(0),
+      userId
+        ? prisma.userModuleProgress.findFirst({
+            where: { userId, isCompleted: false },
+            include: { module: { select: { id: true, slug: true, title: true } } },
+          })
+        : Promise.resolve(null),
+      userId
+        ? prisma.userModuleProgress.findFirst({
+            where: { userId, isCompleted: true },
+            orderBy: { completedAt: "desc" },
+            include: { module: { select: { id: true, slug: true, title: true } } },
+          })
+        : Promise.resolve(null),
+      userId
+        ? prisma.userQuranProgress.findUnique({ where: { userId } })
+        : Promise.resolve(null),
+    ]);
+
+  const progressPercent =
+    totalModules > 0 ? Math.round((completedProgresses / totalModules) * 100) : 0;
+
+  // Surah name lookup only if there's quran progress
+  const surahName = quranProgress
+    ? await getSurahName(quranProgress.surahNumber)
+    : null;
+
   return (
     <section className="space-y-6">
       <div className="flex flex-col gap-6 lg:flex-row">
         <div className="flex flex-1 flex-col gap-6">
+
+          {/* ── Greeting card ── */}
           <InkCard className="!p-0 overflow-hidden bg-white">
             <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
               <div className="space-y-4 md:pr-5 p-4">
@@ -133,11 +225,12 @@ export default async function DashboardPage() {
                     : "-"}
                 </p>
                 <p className="text-xl font-bold tracking-tight text-[#d14a35]">
-                  Selamat Pagi, <span className="text-black">Ridho</span>
+                  Selamat {greeting}, <span className="text-black">{userName}</span>
                 </p>
-                <p className="text-sm font-semibold text-black">Semoga hari Selasa mu menyenangkan</p>
+                <p className="text-sm font-semibold text-black">
+                  Semoga hari {today?.hari ?? "ini"} mu menyenangkan
+                </p>
               </div>
-
               <div className="flex w-full items-end justify-end md:w-auto">
                 <div className="relative h-[170px] w-[300px]">
                   <Image
@@ -151,64 +244,127 @@ export default async function DashboardPage() {
             </div>
           </InkCard>
 
-          <InkCard className="space-y-4 bg-white">
+          {/* ── Aktivitas Belajar ── */}
+          <InkCard className="space-y-5 bg-white">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold text-stone-900">Aktivitas Belajar</h2>
-              <span className="rounded-full bg-stone-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                Minggu ini
-              </span>
             </div>
 
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                  <span>Sudah dipelajari</span>
-                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-emerald-700">modul</span>
+            {/* Module section */}
+            <div className="space-y-3">
+              {/* Header + progress stat */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-base">📚</span>
+                  <span className="text-sm font-bold text-stone-800">Modul</span>
                 </div>
-                <div className="flex items-center justify-between rounded-xl border-2 border-stone-900 bg-white px-4 py-3 shadow-[3px_3px_0_#d96852]">
-                  <p className="text-sm font-semibold text-stone-800">
-                    Memahami Konsep Iman, Islam, dan Ihsan
-                  </p>
-                  <button type="button" className="text-xs font-semibold text-[#d14a35]">
-                    Lihat materi
-                  </button>
-                </div>
+                <span className="text-xs font-semibold text-slate-500">
+                  {completedProgresses} dari {totalModules} diselesaikan
+                </span>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                  <span>Sedang dipelajari</span>
-                  <span className="rounded-full bg-[#fce5d8] px-2 py-0.5 text-[#d14a35]">modul</span>
-                </div>
-                <div className="flex items-center justify-between rounded-xl border-2 border-stone-900 bg-white px-4 py-3 shadow-[3px_3px_0_#d96852]">
-                  <p className="text-sm font-semibold text-stone-800">
-                    Akhlak Terpuji: Sabar, Ikhtiar, dan Tawakal
-                  </p>
-                  <button type="button" className="text-xs font-semibold text-[#d14a35]">
-                    Lanjutkan
-                  </button>
-                </div>
+              {/* Progress bar */}
+              <div className="h-2.5 w-full overflow-hidden rounded-full bg-stone-100 border border-stone-200">
+                <div
+                  className="h-full rounded-full bg-[#d14a35] transition-all duration-500"
+                  style={{ width: `${progressPercent}%` }}
+                />
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                  <span>Sedang dipelajari</span>
-                  <span className="rounded-full bg-[#fce5d8] px-2 py-0.5 text-[#d14a35]">al-qur'an</span>
+              {/* Sedang dipelajari */}
+              {inProgressModule ? (
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                    <span>Sedang dipelajari</span>
+                    <span className="rounded-full bg-[#fce5d8] px-2 py-0.5 text-[#d14a35]">
+                      modul
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border-2 border-stone-900 bg-white px-4 py-3 shadow-[3px_3px_0_#d96852]">
+                    <p className="text-sm font-semibold text-stone-800 line-clamp-1 flex-1 pr-3">
+                      {inProgressModule.module.title}
+                    </p>
+                    <Link
+                      href={`/modul/${inProgressModule.module.slug}`}
+                      className="shrink-0 text-xs font-semibold text-[#d14a35] hover:underline"
+                    >
+                      Lanjutkan
+                    </Link>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between rounded-xl border-2 border-stone-900 bg-white px-4 py-3 shadow-[3px_3px_0_#d96852]">
-                  <p className="text-sm font-semibold text-stone-800">Al-Baqarah ayat 48</p>
-                  <button type="button" className="text-xs font-semibold text-[#d14a35]">
-                    Lanjutkan
-                  </button>
+              ) : null}
+
+              {/* Terakhir diselesaikan */}
+              {lastCompleted ? (
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                    <span>Terakhir diselesaikan</span>
+                    <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-emerald-700">
+                      modul
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border-2 border-stone-900 bg-white px-4 py-3 shadow-[3px_3px_0_#d96852]">
+                    <p className="text-sm font-semibold text-stone-800 line-clamp-1 flex-1 pr-3">
+                      {lastCompleted.module.title}
+                    </p>
+                    <Link
+                      href={`/modul/${lastCompleted.module.slug}`}
+                      className="shrink-0 text-xs font-semibold text-[#d14a35] hover:underline"
+                    >
+                      Lihat materi
+                    </Link>
+                  </div>
                 </div>
+              ) : null}
+
+              {/* Empty state */}
+              {!inProgressModule && !lastCompleted ? (
+                <p className="text-sm text-slate-400 italic">
+                  Belum ada modul yang dipelajari.
+                </p>
+              ) : null}
+            </div>
+
+            {/* Divider */}
+            <div className="border-t-2 border-dashed border-stone-200" />
+
+            {/* Al-Quran section */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="text-base">📖</span>
+                <span className="text-sm font-bold text-stone-800">Al-Qur'an</span>
               </div>
+
+              {quranProgress && surahName ? (
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                    <span>Terakhir dibaca</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border-2 border-stone-900 bg-white px-4 py-3 shadow-[3px_3px_0_#d96852]">
+                    <p className="text-sm font-semibold text-stone-800">
+                      {surahName}, Ayat {quranProgress.ayahNumber}
+                    </p>
+                    <Link
+                      href={`/quran/${quranProgress.surahNumber}?ayah=${quranProgress.ayahNumber}`}
+                      className="shrink-0 text-xs font-semibold text-[#d14a35] hover:underline"
+                    >
+                      Lanjutkan
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-slate-400 italic">
+                  Belum ada riwayat bacaan Al-Qur'an.
+                </p>
+              )}
             </div>
           </InkCard>
         </div>
 
+        {/* ── Prayer schedule ── */}
         <div className="flex w-full max-w-sm flex-col gap-4">
           <div className="inline-flex items-center justify-center rounded-full bg-[#d96852] px-4 py-2 text-xs font-semibold text-white shadow-[3px_3px_0_#111]">
-            Menurut: {schedule ? `${schedule.kabkota}, ${schedule.provinsi}` : "-"}
+            Menurut: equran.id
           </div>
 
           {prayerTimes.map((item) => (

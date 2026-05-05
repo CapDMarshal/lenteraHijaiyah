@@ -19,15 +19,20 @@ function getRequiredEnv(name: string) {
   return value;
 }
 
+function getOptionalEnv(name: string, fallback = "") {
+  return process.env[name] ?? fallback;
+}
+
 export const env: AppEnv = {
   appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
   databaseUrl: getRequiredEnv("DATABASE_URL"),
   authSecret: getRequiredEnv("AUTH_SECRET"),
-  minioEndpoint: getRequiredEnv("MINIO_ENDPOINT"),
-  minioRegion: getRequiredEnv("MINIO_REGION"),
-  minioAccessKey: getRequiredEnv("MINIO_ACCESS_KEY"),
-  minioSecretKey: getRequiredEnv("MINIO_SECRET_KEY"),
-  minioBucket: getRequiredEnv("MINIO_BUCKET"),
-  minioPublicUrl: getRequiredEnv("MINIO_PUBLIC_URL"),
+  // MinIO is optional — only required when file upload/download features are used
+  minioEndpoint: getOptionalEnv("MINIO_ENDPOINT"),
+  minioRegion: getOptionalEnv("MINIO_REGION", "us-east-1"),
+  minioAccessKey: getOptionalEnv("MINIO_ACCESS_KEY"),
+  minioSecretKey: getOptionalEnv("MINIO_SECRET_KEY"),
+  minioBucket: getOptionalEnv("MINIO_BUCKET"),
+  minioPublicUrl: getOptionalEnv("MINIO_PUBLIC_URL"),
   minioSslVerify: process.env.MINIO_SSL_VERIFY !== "false",
 };

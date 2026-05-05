@@ -67,6 +67,7 @@ model ModuleCategory {
 
 model Module {
   id         String   @id @default(uuid())
+  slug       String   @unique
   title      String
   content    String   @db.Text
   pdfKey     String
