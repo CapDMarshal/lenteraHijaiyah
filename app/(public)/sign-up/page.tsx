@@ -118,8 +118,8 @@ export default function SignUpPage() {
   };
 
   return (
-    <section className="h-full bg-[#f4efeb]">
-      <div className="flex h-full flex-col px-5 py-4 sm:px-8 sm:py-6">
+    <section className="min-h-screen bg-[#F7EDE8]">
+      <div className="flex min-h-screen flex-col px-5 py-4 sm:px-8 sm:py-6">
         <div className="flex items-center justify-between">
           <Link href="/" aria-label="Kembali ke beranda" className="text-5xl leading-none text-stone-900">
             x
