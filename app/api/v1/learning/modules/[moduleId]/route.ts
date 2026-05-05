@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
-import { getMinioPublicUrl } from "@/lib/storage/minio";
 import { moduleUpdateSchema } from "@/lib/validation/learning";
 
 type RouteContext = {
-  params: { moduleId: string };
+  params: Promise<{ moduleId: string }>;
 };
 
 const ensureAdmin = (req: Request) => {
@@ -14,7 +13,7 @@ const ensureAdmin = (req: Request) => {
 
 export async function GET(_req: Request, context: RouteContext) {
   try {
-    const { moduleId } = context.params;
+    const { moduleId } = await context.params;
 
     const module = await prisma.module.findUnique({
       where: { id: moduleId },
@@ -50,7 +49,7 @@ export async function GET(_req: Request, context: RouteContext) {
           title: module.title,
           content: module.content,
           pdfKey: module.pdfKey,
-          pdfUrl: getMinioPublicUrl(module.pdfKey),
+          pdfUrl: module.pdfKey,
           categoryId: module.categoryId,
           category: module.category,
           createdAt: module.createdAt,
@@ -77,7 +76,7 @@ export async function PUT(req: Request, context: RouteContext) {
       );
     }
 
-    const { moduleId } = context.params;
+    const { moduleId } = await context.params;
     const body = await req.json();
     const validationResult = moduleUpdateSchema.safeParse(body);
 
@@ -140,7 +139,7 @@ export async function PUT(req: Request, context: RouteContext) {
         message: "Modul berhasil diperbarui",
         module: {
           ...updated,
-          pdfUrl: getMinioPublicUrl(updated.pdfKey),
+          pdfUrl: updated.pdfKey,
         },
       },
       { status: 200 }
@@ -163,7 +162,7 @@ export async function DELETE(req: Request, context: RouteContext) {
       );
     }
 
-    const { moduleId } = context.params;
+    const { moduleId } = await context.params;
 
     const module = await prisma.module.findUnique({
       where: { id: moduleId },

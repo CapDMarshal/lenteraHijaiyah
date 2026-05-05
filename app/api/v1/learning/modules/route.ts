@@ -58,7 +58,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const { title, content, pdfKey, categoryId } = validationResult.data;
+    const { title, slug: rawSlug, content, pdfKey, categoryId } = validationResult.data;
+    const slug = rawSlug ?? title.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
 
     const category = await prisma.moduleCategory.findUnique({
       where: { id: categoryId },
@@ -74,6 +75,7 @@ export async function POST(req: Request) {
 
     const module = await prisma.module.create({
       data: {
+        slug,
         title,
         content,
         pdfKey,

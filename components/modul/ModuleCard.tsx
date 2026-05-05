@@ -14,11 +14,6 @@ export function ModuleCard({ module, index }: ModuleCardProps) {
         <div className="space-y-2">
           <p className="text-xs font-semibold text-white/80">Langkah {index + 1}</p>
           <p className="text-sm font-semibold text-white">{module.title}</p>
-          <div className="flex flex-wrap items-center gap-3 text-[11px] text-white/90">
-            <span>{module.durationMinutes} menit</span>
-            <span>{module.pages} halaman</span>
-            <span>{module.level}</span>
-          </div>
         </div>
       </div>
     </Link>

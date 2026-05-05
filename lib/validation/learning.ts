@@ -9,6 +9,7 @@ export type ProgressUpdateInput = z.infer<typeof progressUpdateSchema>;
 
 export const moduleCreateSchema = z.object({
   title: z.string().min(2, "Judul minimal 2 karakter"),
+  slug: z.string().min(2, "Slug minimal 2 karakter").optional(),
   content: z.string().min(1, "Konten wajib diisi"),
   pdfKey: z.string().min(1, "PDF key wajib diisi"),
   categoryId: z.string().uuid("Format categoryId tidak valid"),
