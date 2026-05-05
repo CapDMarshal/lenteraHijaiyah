@@ -36,7 +36,7 @@ export async function GET(_req: Request, context: RouteContext) {
 
     if (!module) {
       return NextResponse.json(
-        { message: "Modul tidak ditemukan." },
+        { message: "Module not found." },
         { status: 404 }
       );
     }
@@ -69,7 +69,7 @@ export async function GET(_req: Request, context: RouteContext) {
   } catch (error) {
     console.error("GET_MODULE_DETAIL_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }
@@ -102,7 +102,7 @@ export async function PUT(req: Request, context: RouteContext) {
 
     if (!module) {
       return NextResponse.json(
-        { message: "Modul tidak ditemukan." },
+        { message: "Module not found." },
         { status: 404 }
       );
     }
@@ -117,7 +117,7 @@ export async function PUT(req: Request, context: RouteContext) {
 
       if (!category) {
         return NextResponse.json(
-          { message: "Kategori tidak ditemukan." },
+          { message: "Category not found." },
           { status: 404 }
         );
       }
@@ -163,7 +163,7 @@ export async function PUT(req: Request, context: RouteContext) {
   } catch (error) {
     console.error("UPDATE_MODULE_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }
@@ -187,7 +187,7 @@ export async function DELETE(req: Request, context: RouteContext) {
 
     if (!module) {
       return NextResponse.json(
-        { message: "Modul tidak ditemukan." },
+        { message: "Module not found." },
         { status: 404 }
       );
     }
@@ -197,13 +197,13 @@ export async function DELETE(req: Request, context: RouteContext) {
     });
 
     return NextResponse.json(
-      { message: "Modul berhasil dihapus" },
+      { message: "Module successfully deleted" },
       { status: 200 }
     );
   } catch (error) {
     console.error("DELETE_MODULE_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     // Hindari user enumeration: tetap respon sukses meskipun email tidak ditemukan.
     if (!user) {
       return NextResponse.json(
-        { message: "Jika email terdaftar, instruksi reset password telah dikirim." },
+        { message: "Email has been sent." },
         { status: 200 }
       );
     }
@@ -65,13 +65,13 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(
-      { message: "Jika email terdaftar, instruksi reset password telah dikirim." },
+      { message: "Email has been sent." },
       { status: 200 }
     );
   } catch (error) {
     console.error("FORGOT_PASSWORD_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
     if (!credential) {
       return NextResponse.json(
-        { message: "Token kredensial Google tidak ditemukan" },
+        { message: "Invalid request. Google credential is required." },
         { status: 400 }
       );
     }
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     const payload = ticket.getPayload();
     if (!payload || !payload.email) {
       return NextResponse.json(
-        { message: "Payload token Google tidak valid" },
+        { message: "Invalid Google token payload." },
         { status: 400 }
       );
     }
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
     // Keluarkan Response + Buat Session Cookie (Sama persis dengan Auth Login Biasa)
     const response = NextResponse.json(
       {
-        message: "Login via Google berhasil",
+        message: "Login berhasil",
         token,
         user: {
           id: user.id,
@@ -81,7 +81,7 @@ export async function POST(req: Request) {
 
     // Tempelkan Custom Token kita ke dalam Set-Cookie
     response.cookies.set({
-      name: "auth_token",
+      name: "access_token",
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("GOOGLE_OAUTH_ERROR", error);
     return NextResponse.json(
-      { message: "Verifikasi Google OAuth Gagal atau terjadi masalah server." },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

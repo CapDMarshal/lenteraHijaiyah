@@ -13,7 +13,7 @@ export async function DELETE(req: Request) {
   try {
     if (!ensureAdmin(req)) {
       return NextResponse.json(
-        { message: "Forbidden. Hanya admin yang diizinkan." },
+        { message: "Forbidden." },
         { status: 403 }
       );
     }
@@ -23,7 +23,7 @@ export async function DELETE(req: Request) {
 
     if (!validationResult.success) {
       return NextResponse.json(
-        { message: "Data tidak valid", errors: validationResult.error.flatten().fieldErrors },
+        { message: "Invalid data", errors: validationResult.error.flatten().fieldErrors },
         { status: 400 }
       );
     }
@@ -45,7 +45,7 @@ export async function DELETE(req: Request) {
   } catch (error) {
     console.error("DELETE_ASSET_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

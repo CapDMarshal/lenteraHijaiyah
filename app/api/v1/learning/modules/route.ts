@@ -47,7 +47,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("GET_MODULES_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 },
     );
   }
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
   try {
     if (!ensureAdmin(req)) {
       return NextResponse.json(
-        { message: "Forbidden. Hanya admin yang diizinkan." },
+        { message: "Forbidden." },
         { status: 403 }
       );
     }
@@ -82,7 +82,7 @@ export async function POST(req: Request) {
 
     if (!category) {
       return NextResponse.json(
-        { message: "Kategori tidak ditemukan." },
+        { message: "Category not found." },
         { status: 404 }
       );
     }
@@ -126,7 +126,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("CREATE_MODULE_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }
