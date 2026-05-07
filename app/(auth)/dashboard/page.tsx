@@ -165,9 +165,12 @@ export default async function DashboardPage() {
 
   const userName = user?.name ?? "Pengguna";
 
-  // Time & greeting
-  const now = new Date();
-  const wibHour = (now.getUTCHours() + 7) % 24;
+  // Time & greeting (Force Asia/Jakarta regardless of server timezone)
+  const serverNow = new Date();
+  const wibString = serverNow.toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
+  const now = new Date(wibString);
+  
+  const wibHour = now.getHours();
   const greeting = getGreeting(wibHour);
 
   // Prayer schedule
