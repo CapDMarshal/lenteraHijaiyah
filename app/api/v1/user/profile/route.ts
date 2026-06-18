@@ -22,6 +22,16 @@ export async function GET(req: Request) {
         role: true,
         createdAt: true,
         updatedAt: true,
+        quranProgress: true,
+        moduleProgresses: {
+          where: { isCompleted: true },
+          include: {
+            module: {
+              select: { title: true }
+            }
+          },
+          orderBy: { completedAt: "desc" },
+        }
       },
     });
 
