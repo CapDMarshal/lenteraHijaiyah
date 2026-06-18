@@ -3,13 +3,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { LinkButton } from "@/components/ui/button";
 
 export function PublicNavbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const links = [
     { href: "/", label: "Beranda" },
@@ -17,8 +27,10 @@ export function PublicNavbar() {
   ];
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-[90] bg-[#F7EDE8]/90 px-5 sm:px-10 md:px-20 py-4 backdrop-blur">
-      <div className="flex items-center justify-between gap-4">
+    <header className={`fixed left-0 right-0 top-0 z-[90] px-5 sm:px-10 md:px-20 py-4 transition-all duration-300 ${
+      isScrolled ? "bg-[#F7EDE8]/90 backdrop-blur shadow-sm" : "bg-transparent"
+    }`}>
+      <div className="flex items-center justify-between gap-4 relative">
         <Link href="/" aria-label="Lentera Hijaiyah home" className="inline-flex items-center relative z-50">
           <Image
             src="/images/logo-horizontal.png"
@@ -29,26 +41,27 @@ export function PublicNavbar() {
           />
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-5">
-          <nav className="flex items-center gap-5 text-sm font-semibold sm:text-base">
-            {links.map((link) => {
-              const isActive =
-                link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+        {/* Center: Desktop Nav */}
+        <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 text-sm font-semibold sm:text-base">
+          {links.map((link) => {
+            const isActive =
+              link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
 
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative pb-1 text-stone-900 transition-colors hover:text-red-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-center after:bg-[#d14a35] after:transition-transform after:duration-200 after:content-[''] ${isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
-                    }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative pb-1 text-stone-900 transition-colors hover:text-red-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-center after:bg-[#d14a35] after:transition-transform after:duration-200 after:content-[''] ${isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
+                  }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
 
+        {/* Right: Masuk Button */}
+        <div className="hidden md:flex items-center">
           <LinkButton href="/sign-in" variant="ink" size="nav">
             Masuk
           </LinkButton>

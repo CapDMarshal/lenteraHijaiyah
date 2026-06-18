@@ -32,9 +32,6 @@ export default function TestimonialsSectionClient({
       <div className={`${sectionContainerClass} pb-16 pt-24 sm:pt-32 sm:pb-32 relative`}>
         <div className="mx-auto w-full max-w-6xl relative z-10">
           <div className="relative inline-block w-full text-center">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-6 left-1/2 -translate-x-[110%] sm:-translate-x-[150%]">
-              <path d="M12 18L18 8M22 16L24 6M10 24L2 26" stroke="#d14a35" strokeWidth="3" strokeLinecap="round"/>
-            </svg>
             <h2 className="text-center text-4xl sm:text-5xl font-semibold tracking-tight text-stone-900">
               Apa yang mereka katakan
             </h2>
@@ -44,7 +41,7 @@ export default function TestimonialsSectionClient({
             {landingTestimonials.map((testimonial) => (
               <article
                 key={testimonial.name}
-                className="flex w-[85vw] shrink-0 flex-col rounded-3xl border-[3px] border-stone-900 bg-[#dde5ec] p-6 sm:p-8 shadow-[6px_6px_0_#111111] sm:w-auto sm:min-w-[500px]"
+                className="flex w-[85vw] shrink-0 flex-col rounded-3xl border-[3px] border-stone-900 bg-[#dde5ec] p-6 sm:p-8 shadow-[6px_6px_0_#111111] sm:w-[400px] lg:w-[450px]"
               >
                 <p className="text-6xl font-black leading-none text-[#d14a35]">“</p>
                 <p className="mt-4 text-left text-lg sm:text-xl font-semibold leading-relaxed text-stone-900">

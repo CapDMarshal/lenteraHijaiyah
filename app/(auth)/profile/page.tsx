@@ -52,6 +52,12 @@ export default function ProfilePage() {
     firstName: "",
     lastName: "",
   });
+  const [stats, setStats] = useState({
+    modulesCompleted: 0,
+    hasQuranProgress: false,
+    lastModule: "Belum ada aktivitas",
+    lastQuran: "Belum ada aktivitas",
+  });
   const [accountEmail, setAccountEmail] = useState("");
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: "",
@@ -92,11 +98,38 @@ export default function ProfilePage() {
         }
 
         const payload = (await response.json()) as {
-          user: { name: string; email: string };
+          user: { 
+            name: string; 
+            email: string;
+            quranProgress?: { surahNumber: number; ayahNumber: number } | null;
+            moduleProgresses?: Array<{ module: { title: string } }>;
+          };
         };
         const nameParts = payload.user.name?.split(" ") ?? [];
         const firstName = nameParts.shift() ?? "";
         const lastName = nameParts.join(" ");
+
+        let lastQuranText = "Belum ada aktivitas";
+        if (payload.user.quranProgress) {
+          try {
+            const res = await fetch(`https://equran.id/api/v2/surat/${payload.user.quranProgress.surahNumber}`);
+            if (res.ok) {
+              const data = await res.json();
+              lastQuranText = `${data.data.namaLatin} Ayat ${payload.user.quranProgress.ayahNumber}`;
+            } else {
+              lastQuranText = `Surah Ke-${payload.user.quranProgress.surahNumber} Ayat ${payload.user.quranProgress.ayahNumber}`;
+            }
+          } catch {
+            lastQuranText = `Surah Ke-${payload.user.quranProgress.surahNumber} Ayat ${payload.user.quranProgress.ayahNumber}`;
+          }
+        }
+
+        setStats({
+          modulesCompleted: payload.user.moduleProgresses?.length || 0,
+          hasQuranProgress: !!payload.user.quranProgress,
+          lastModule: payload.user.moduleProgresses?.[0]?.module.title || "Belum ada aktivitas",
+          lastQuran: lastQuranText,
+        });
 
         setProfileForm({
           email: payload.user.email ?? "",
@@ -243,11 +276,11 @@ export default function ProfilePage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="rounded-2xl border-2 border-stone-900 bg-white p-5 shadow-[4px_4px_0_#9ca3af]">
               <p className="text-xs font-bold text-stone-500 mb-1">Modul Selesai</p>
-              <p className="text-3xl font-black text-stone-900">4</p>
+              <p className="text-3xl font-black text-stone-900">{profileLoading ? "-" : stats.modulesCompleted}</p>
             </div>
             <div className="rounded-2xl border-2 border-stone-900 bg-white p-5 shadow-[4px_4px_0_#9ca3af]">
-              <p className="text-xs font-bold text-stone-500 mb-1">Surah Selesai</p>
-              <p className="text-3xl font-black text-stone-900">14</p>
+              <p className="text-xs font-bold text-stone-500 mb-1">Surah Dibaca</p>
+              <p className="text-3xl font-black text-stone-900">{profileLoading ? "-" : (stats.hasQuranProgress ? 1 : 0)}</p>
             </div>
           </div>
         </div>
@@ -258,11 +291,11 @@ export default function ProfilePage() {
           <div className="flex flex-col gap-4">
             <div className="rounded-2xl border-2 border-stone-900 bg-white p-4 shadow-[4px_4px_0_#9ca3af] flex flex-col justify-center">
               <p className="text-xs font-bold text-stone-500 mb-1">Modul</p>
-              <p className="text-sm font-bold text-stone-900">Mengenal Huruf Hijaiyah</p>
+              <p className="text-sm font-bold text-stone-900">{profileLoading ? "Memuat..." : stats.lastModule}</p>
             </div>
             <div className="rounded-2xl border-2 border-stone-900 bg-white p-4 shadow-[4px_4px_0_#9ca3af] flex flex-col justify-center">
               <p className="text-xs font-bold text-stone-500 mb-1">Al-Qur'an</p>
-              <p className="text-sm font-bold text-stone-900">Al-Baqarah Ayat 1-5</p>
+              <p className="text-sm font-bold text-stone-900">{profileLoading ? "Memuat..." : stats.lastQuran}</p>
             </div>
           </div>
         </div>

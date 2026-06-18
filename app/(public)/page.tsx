@@ -45,15 +45,15 @@ export default function LandingPage() {
 
       <section className="bg-[#f4efeb] relative z-50">
         <div className={`${sectionContainer} pb-12 sm:pb-32 relative`}>
-          <div className="flex w-full flex-col items-center justify-center gap-8 rounded-[2rem] border-b-4 border-r-4 border-stone-900 bg-[#F7EDE8] px-6 py-10 sm:py-6 shadow-[4px_4px_0_#111111] lg:flex-row lg:justify-between lg:px-8 relative z-10">
+          <div className="flex w-full flex-col items-center justify-center gap-8 rounded-br-[2rem] border-b-4 border-r-4 border-stone-900 bg-[#F7EDE8] px-6 py-10 sm:py-6 shadow-[4px_4px_0_#111111] lg:flex-row lg:justify-between lg:px-8 relative z-10">
             <p className="text-xl sm:text-2xl lg:ml-16 font-bold text-stone-900 text-center">Hasil kolaborasi antara:</p>
             <div className="flex flex-col items-center gap-8 lg:flex-row lg:gap-24">
               <div className="flex items-center gap-3 sm:gap-4">
-                <Image src="/images/smp-logo.png" alt="Logo SMPN 1 Seyegan" width={60} height={60} className="object-contain sm:w-[75px] sm:h-[75px]" />
+                <Image src="/images/smp-logo.png" alt="Logo SMPN 1 Seyegan" width={75} height={75} className="object-contain h-[60px] w-auto sm:h-[75px]" />
                 <span className="text-lg sm:text-xl font-semibold text-slate-700">SMPN 1 SEYEGAN</span>
               </div>
               <div className="flex items-center lg:mr-16">
-                <Image src="/images/ush-logo.png" alt="Logo UTY Software House" height={35} width={280} className="object-contain sm:h-[40px] sm:w-[360px]" />
+                <Image src="/images/ush-logo.png" alt="Logo UTY Software House" height={75} width={600} className="object-contain h-[60px] w-auto sm:h-[75px]" />
               </div>
             </div>
           </div>
