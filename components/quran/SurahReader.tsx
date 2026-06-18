@@ -161,75 +161,109 @@ export function SurahReader({
 
           return (
             <div key={verse.nomorAyat} id={`ayah-${verse.nomorAyat}`} style={{ scrollMarginTop: "140px" }}>
-              <Card className="rounded-2xl border-2 border-stone-900 bg-white px-5 py-4 shadow-[4px_4px_0_#d96852]">
-                <div className="flex items-start justify-between gap-4">
-                  <button
-                    type="button"
-                    onClick={() => handleBookmark(verse.nomorAyat)}
-                    className={`inline-flex h-7 w-7 items-center justify-center rounded-md border border-stone-200 bg-white text-sm transition-colors ${
-                      isLastRead ? "text-[#d14a35]" : "text-stone-500 hover:text-stone-900"
-                    }`}
-                    aria-label="Simpan terakhir dibaca"
-                  >
-                    <BookmarkIcon filled={isLastRead} />
-                  </button>
-                  <p className="text-xs font-semibold text-slate-500">{verse.nomorAyat}</p>
+              <Card className="rounded-xl border-2 border-stone-900 bg-white p-5 shadow-[3px_3px_0_#9ca3af]">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
+                  {/* Top / Left side: Bookmark & Arabic */}
+                  <div className="flex w-full items-start justify-between gap-4">
+                    <button
+                      type="button"
+                      onClick={() => handleBookmark(verse.nomorAyat)}
+                      className={`mt-2 inline-flex h-6 w-6 shrink-0 items-center justify-center transition-colors ${
+                        isLastRead ? "text-[#d14a35]" : "text-stone-400 hover:text-stone-900"
+                      }`}
+                      aria-label="Simpan terakhir dibaca"
+                    >
+                      <BookmarkIcon filled={isLastRead} />
+                    </button>
+
+                    <div className="flex flex-1 items-start gap-4" dir="rtl">
+                      <p className="text-2xl sm:text-3xl leading-[2.2] text-stone-900 font-medium">
+                        {verse.teksArab}
+                      </p>
+                      <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full border-2 border-[#d14a35] text-[#d14a35] text-xs font-bold bg-white mt-2">
+                        {verse.nomorAyat}
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <p className="mt-3 text-right text-2xl text-stone-900" dir="rtl">
-                  {verse.teksArab}
-                </p>
-                <p className="mt-3 text-sm italic text-[#d14a35]">{verse.teksLatin}</p>
-                <p className="mt-2 text-sm text-slate-600">{verse.teksIndonesia}</p>
+                {/* Bottom side: Transliteration & Translation */}
+                <div className="mt-6 space-y-2">
+                  <p className="text-xs font-semibold text-[#b85b4f]">{verse.teksLatin}</p>
+                  <p className="text-sm font-medium text-[#b85b4f]">{verse.teksIndonesia}</p>
+                </div>
               </Card>
             </div>
           );
         })}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-stone-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-3 sm:px-8">
-          {previousSurah ? (
-            <Link
-              href={`/quran/${previousSurah.nomor}`}
-              className="inline-flex items-center gap-2 rounded-lg border-2 border-stone-900 bg-[#f7ede8] px-4 py-2 text-xs font-semibold text-stone-900 shadow-[3px_3px_0_#d96852]"
-            >
-              ← {previousSurah.namaLatin}
-            </Link>
-          ) : (
-            <span className="rounded-lg border-2 border-stone-200 bg-[#f7ede8] px-4 py-2 text-xs font-semibold text-stone-400">
-              ← Tidak ada
-            </span>
-          )}
+      <div className="fixed bottom-0 left-0 right-0 z-30 border-t-2 border-stone-900 bg-[#f7ede8]">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            {/* Prev (Desktop & Mobile) */}
+            <div className="order-2 flex flex-1 items-center gap-3 sm:order-1 sm:flex-none">
+              {previousSurah ? (
+                <Link
+                  href={`/quran/${previousSurah.nomor}`}
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-stone-900 bg-white px-4 py-2.5 text-xs font-bold text-stone-900 shadow-[2px_2px_0_#9ca3af] hover:translate-y-px hover:translate-x-px hover:shadow-[1px_1px_0_#9ca3af] transition-all sm:flex-none"
+                >
+                  ← {previousSurah.namaLatin}
+                </Link>
+              ) : (
+                <span className="inline-flex flex-1 items-center justify-center rounded-lg border-2 border-stone-200 bg-white px-4 py-2.5 text-xs font-bold text-stone-400 sm:flex-none">
+                  ← Tidak ada
+                </span>
+              )}
 
-          <button
-            type="button"
-            onClick={handleContinue}
-            className={`inline-flex items-center gap-2 rounded-lg border-2 px-4 py-2 text-xs font-semibold shadow-[3px_3px_0_#9ca3af] ${
-              lastRead
-                ? "border-stone-900 bg-[#f7ede8] text-stone-900"
-                : "border-stone-200 bg-[#f7ede8] text-stone-400"
-            }`}
-            disabled={!lastRead}
-          >
-            <span>Lanjutkan membaca</span>
-            <span className={lastRead ? "text-stone-900" : "text-stone-400"}>
-              ({lastReadLabel})
-            </span>
-          </button>
+              {/* Next (Mobile only, sits beside Prev) */}
+              {nextSurah ? (
+                <Link
+                  href={`/quran/${nextSurah.nomor}`}
+                  className="sm:hidden inline-flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-stone-900 bg-black px-4 py-2.5 text-xs font-bold text-white shadow-[2px_2px_0_#d14a35] hover:translate-y-px hover:translate-x-px hover:shadow-[1px_1px_0_#d14a35] transition-all"
+                >
+                  {nextSurah.namaLatin} →
+                </Link>
+              ) : (
+                <span className="sm:hidden inline-flex flex-1 items-center justify-center rounded-lg border-2 border-stone-200 bg-white px-4 py-2.5 text-xs font-bold text-stone-400">
+                  Tidak ada →
+                </span>
+              )}
+            </div>
 
-          {nextSurah ? (
-            <Link
-              href={`/quran/${nextSurah.nomor}`}
-              className="inline-flex items-center gap-2 rounded-lg border-2 border-stone-900 bg-black px-4 py-2 text-xs font-semibold text-white shadow-[3px_3px_0_#d96852]"
+            {/* Continue Button */}
+            <button
+              type="button"
+              onClick={handleContinue}
+              className={`order-1 sm:order-2 inline-flex items-center justify-center gap-2 rounded-lg border-2 px-4 py-2.5 text-xs font-bold shadow-[2px_2px_0_#9ca3af] transition-all sm:flex-1 sm:max-w-xs ${
+                lastRead
+                  ? "border-stone-900 bg-white text-stone-900 hover:translate-y-px hover:translate-x-px hover:shadow-[1px_1px_0_#9ca3af]"
+                  : "border-stone-200 bg-white text-stone-400"
+              }`}
+              disabled={!lastRead}
             >
-              {nextSurah.namaLatin} →
-            </Link>
-          ) : (
-            <span className="rounded-lg border-2 border-stone-200 bg-[#f7ede8] px-4 py-2 text-xs font-semibold text-stone-400">
-              Tidak ada →
-            </span>
-          )}
+              <span>Lanjutkan membaca</span>
+              <span className={lastRead ? "text-stone-900" : "text-stone-400"}>
+                ({lastReadLabel})
+              </span>
+            </button>
+
+            {/* Next (Desktop only) */}
+            <div className="hidden sm:order-3 sm:flex">
+              {nextSurah ? (
+                <Link
+                  href={`/quran/${nextSurah.nomor}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-stone-900 bg-black px-4 py-2.5 text-xs font-bold text-white shadow-[2px_2px_0_#d14a35] hover:translate-y-px hover:translate-x-px hover:shadow-[1px_1px_0_#d14a35] transition-all"
+                >
+                  {nextSurah.namaLatin} →
+                </Link>
+              ) : (
+                <span className="inline-flex items-center justify-center rounded-lg border-2 border-stone-200 bg-white px-4 py-2.5 text-xs font-bold text-stone-400">
+                  Tidak ada →
+                </span>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>

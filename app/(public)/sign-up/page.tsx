@@ -131,9 +131,9 @@ export default function SignUpPage() {
         </div>
 
         <div className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center">
-          <h1 className="text-center text-5xl font-bold tracking-tight text-stone-900 mb-5">Buat Akun</h1>
+          <h1 className="text-center text-4xl font-bold tracking-tight text-stone-900 mb-8">Buat Akun</h1>
 
-          <form className="mt-8 space-y-8" onSubmit={handleSubmit}>
+          <form className="space-y-8" onSubmit={handleSubmit}>
             <TextField
               type="text"
               name="name"

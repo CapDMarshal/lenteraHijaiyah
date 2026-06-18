@@ -8,7 +8,7 @@ import FaqSectionClient from "@/components/landing/FaqSectionClient";
 import TestimonialsSectionClient from "@/components/landing/TestimonialsSectionClient";
 import { LinkButton } from "@/components/ui/button";
 
-const sectionContainer = "px-20";
+const sectionContainer = "px-5 sm:px-10 md:px-20";
 const benefitCatImages = [
   "/images/cat-1.png",
   "/images/cat-2.png",
@@ -21,7 +21,7 @@ export default function LandingPage() {
     <>
       <section className="bg-[#f4efeb]">
         <div className={`${sectionContainer} py-10 sm:py-12`}>
-          <div className="relative mx-auto max-w-2xl mt-8 space-y-16 text-center">
+          <div className="relative mx-auto max-w-2xl mt-8 space-y-10 sm:space-y-16 text-center">
             {/* Decorative Assets */}
             <div className="absolute -top-8 -z-0 hidden sm:block sm:-left-[10%] md:-left-[30%] lg:-left-[65%]">
               <Image src="/images/hero-swirl.png" alt="Swirl decoration" width={300} height={300} className="object-contain" priority />
@@ -30,11 +30,11 @@ export default function LandingPage() {
               <Image src="/images/hero-star.png" alt="Star decoration" width={120} height={120} className="object-contain" priority />
             </div>
 
-            <h1 className="relative z-10 text-6xl font-black leading-tight tracking-tight text-stone-900 sm:text-6xl">
+            <h1 className="relative z-10 text-5xl font-black leading-tight tracking-tight text-stone-900 sm:text-6xl">
               Teman Belajar <span className="text-[#d14a35]">Hijaiyah</span>
             </h1>
-            <p className="text-lg text-slate-600 font-semibold">
-              Kuasai cara menulis dan membaca huruf Hijaiyah dengan panduan pintar dari AI.
+            <p className="text-base sm:text-lg text-slate-600 font-semibold max-w-md mx-auto sm:max-w-none">
+              Kuasai cara menulis dan membaca huruf Hijaiyah dengan panduan pintar dari AI
             </p>
             <LinkButton href="/sign-up" variant="ink" size="hero">
               Coba Sekarang
@@ -45,15 +45,15 @@ export default function LandingPage() {
 
       <section className="bg-[#f4efeb] relative z-50">
         <div className={`${sectionContainer} pb-12 sm:pb-32 relative`}>
-          <div className="flex w-full flex-col items-center justify-between gap-6 rounded-br-2xl border-b-2 border-r-2 border-stone-900 bg-[#F7EDE8] px-8 py-6 shadow-[4px_4px_0_#111111] sm:flex-row relative z-10">
-            <p className="text-2xl ml-16 font-bold text-stone-900">Hasil kolaborasi antara:</p>
-            <div className="flex items-center gap-24">
-              <div className="flex items-center gap-2">
-                <Image src="/images/smp-logo.png" alt="Logo SMPN 1 Seyegan" width={75} height={75} className="object-contain" />
-                <span className="text-xl font-semibold text-slate-700">SMPN 1 SEYEGAN</span>
+          <div className="flex w-full flex-col items-center justify-center gap-8 rounded-[2rem] border-b-4 border-r-4 border-stone-900 bg-[#F7EDE8] px-6 py-10 sm:py-6 shadow-[4px_4px_0_#111111] lg:flex-row lg:justify-between lg:px-8 relative z-10">
+            <p className="text-xl sm:text-2xl lg:ml-16 font-bold text-stone-900 text-center">Hasil kolaborasi antara:</p>
+            <div className="flex flex-col items-center gap-8 lg:flex-row lg:gap-24">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <Image src="/images/smp-logo.png" alt="Logo SMPN 1 Seyegan" width={60} height={60} className="object-contain sm:w-[75px] sm:h-[75px]" />
+                <span className="text-lg sm:text-xl font-semibold text-slate-700">SMPN 1 SEYEGAN</span>
               </div>
-              <div className="flex items-center gap-2 mr-16">
-                <Image src="/images/ush-logo.png" alt="Logo UTY Software House" height={40} width={360} className="object-contain" />
+              <div className="flex items-center lg:mr-16">
+                <Image src="/images/ush-logo.png" alt="Logo UTY Software House" height={35} width={280} className="object-contain sm:h-[40px] sm:w-[360px]" />
               </div>
             </div>
           </div>
@@ -76,7 +76,7 @@ export default function LandingPage() {
                   key={benefit.title}
                   className="grid items-center gap-8 py-2 md:grid-cols-2 md:gap-14"
                 >
-                  <div className={textLeft ? "order-1" : "order-2"}>
+                  <div className={textLeft ? "order-1 md:order-1" : "order-1 md:order-2"}>
                     <h2 className="text-4xl font-extrabold tracking-tight text-stone-900">
                       {benefit.title}
                     </h2>
@@ -85,7 +85,7 @@ export default function LandingPage() {
                     </p>
                   </div>
 
-                  <div className={textLeft ? "order-2" : "order-1"}>
+                  <div className={textLeft ? "order-2 md:order-2" : "order-2 md:order-1"}>
                     <div className="relative mx-auto aspect-[5/4] w-full max-w-[360px] rounded-3xl">
                       <Image
                         src={benefitCatImages[index % benefitCatImages.length]}

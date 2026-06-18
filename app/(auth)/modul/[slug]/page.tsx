@@ -120,44 +120,46 @@ export default function ModulDetailPage() {
 
   return (
     <section className="space-y-6 pb-10">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="grid grid-cols-2 gap-4 sm:flex sm:items-center sm:justify-between">
         <Link
           href="/modul"
-          className="inline-flex items-center gap-2 rounded-lg border-2 border-stone-900 bg-white px-4 py-2 text-xs font-semibold text-stone-900 shadow-[3px_3px_0_#9ca3af]"
+          className="col-span-1 justify-self-start inline-flex items-center gap-2 rounded-lg border-2 border-stone-900 bg-white px-4 py-2 text-xs font-semibold text-stone-900 shadow-[3px_3px_0_#9ca3af] hover:translate-y-px hover:translate-x-px hover:shadow-[2px_2px_0_#9ca3af] transition-all"
         >
           ← Kembali
         </Link>
-        <h1 className="text-sm font-semibold text-stone-900">{moduleItem.title}</h1>
         <button
           type="button"
           onClick={handleMarkComplete}
           disabled={isCompleted || isSaving || !dbModuleId}
-          className={`rounded-lg border-2 px-4 py-2 text-xs font-semibold transition-colors ${
+          className={`col-span-1 sm:order-3 justify-self-end rounded-lg border-2 px-4 py-2 text-xs font-semibold transition-all ${
             isCompleted
               ? "border-emerald-300 bg-emerald-50 text-emerald-700 cursor-default"
               : isSaving || !dbModuleId
                 ? "border-stone-200 bg-stone-100 text-stone-400 cursor-not-allowed"
-                : "border-stone-900 bg-white text-stone-900 shadow-[3px_3px_0_#9ca3af] hover:bg-stone-50"
+                : "border-stone-900 bg-white text-stone-900 shadow-[3px_3px_0_#9ca3af] hover:translate-y-px hover:translate-x-px hover:shadow-[2px_2px_0_#9ca3af]"
           }`}
         >
           {buttonLabel}
         </button>
+        <h1 className="col-span-2 sm:order-2 justify-self-center text-center text-sm font-semibold text-stone-900">
+          {moduleItem.title}
+        </h1>
       </div>
 
       <div className="rounded-2xl border-2 border-stone-900 bg-stone-100 shadow-[4px_4px_0_#9ca3af]">
         <ModulePdfReader pdfUrl={moduleItem.pdfUrl} title={moduleItem.title} />
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mt-6">
         {previousModule ? (
           <Link
             href={`/modul/${previousModule.slug}`}
-            className="inline-flex items-center gap-2 rounded-lg border-2 border-stone-900 bg-white px-4 py-2 text-xs font-semibold text-stone-900 shadow-[3px_3px_0_#9ca3af]"
+            className="inline-flex flex-1 sm:flex-none justify-center items-center gap-2 rounded-lg border-2 border-stone-900 bg-white px-4 py-3 text-xs font-semibold text-stone-900 shadow-[3px_3px_0_#9ca3af] hover:translate-y-px hover:translate-x-px hover:shadow-[2px_2px_0_#9ca3af] transition-all"
           >
             Modul Sebelumnya
           </Link>
         ) : (
-          <span className="rounded-lg border-2 border-stone-200 bg-stone-100 px-4 py-2 text-xs font-semibold text-stone-400">
+          <span className="flex-1 sm:flex-none text-center rounded-lg border-2 border-stone-200 bg-stone-100 px-4 py-3 text-xs font-semibold text-stone-400">
             Modul Sebelumnya
           </span>
         )}
@@ -165,12 +167,12 @@ export default function ModulDetailPage() {
         {nextModule ? (
           <Link
             href={`/modul/${nextModule.slug}`}
-            className="inline-flex items-center gap-2 rounded-lg border-2 border-stone-900 bg-black px-4 py-2 text-xs font-semibold text-white shadow-[3px_3px_0_#d14a35]"
+            className="inline-flex flex-1 sm:flex-none justify-center items-center gap-2 rounded-lg border-2 border-stone-900 bg-black px-4 py-3 text-xs font-semibold text-white shadow-[3px_3px_0_#d14a35] hover:translate-y-px hover:translate-x-px hover:shadow-[2px_2px_0_#d14a35] transition-all"
           >
             Modul Selanjutnya
           </Link>
         ) : (
-          <span className="rounded-lg border-2 border-stone-200 bg-stone-100 px-4 py-2 text-xs font-semibold text-stone-400">
+          <span className="flex-1 sm:flex-none text-center rounded-lg border-2 border-stone-200 bg-stone-100 px-4 py-3 text-xs font-semibold text-stone-400">
             Modul Selanjutnya
           </span>
         )}

@@ -3,13 +3,13 @@ import Image from "next/image";
 export default function VisiMisiPanel() {
   return (
     <div className="space-y-12 py-10">
-      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[250px_1fr]">
-        <div className="relative mx-auto h-[250px] w-[250px] max-h-[250px]">
+      <article className="grid items-center gap-8 md:grid-cols-[250px_1fr]">
+        <div className="order-2 md:order-1 relative mx-auto h-[250px] w-[250px] max-h-[250px]">
           <Image src="/images/cat-6.png" alt="Ilustrasi visi" fill className="object-contain" />
         </div>
-        <div className="space-y-4">
-          <h3 className="text-4xl font-black tracking-tight text-stone-900">Belajar Tanpa Batas.</h3>
-          <p className="text-lg leading-relaxed text-slate-600">
+        <div className="order-1 md:order-2 space-y-4 text-center md:text-left">
+          <h3 className="text-3xl sm:text-4xl font-black tracking-tight text-stone-900">Belajar Tanpa Batas.</h3>
+          <p className="text-base sm:text-lg leading-relaxed text-slate-600 text-left">
             Kami percaya setiap siswa punya kesempatan belajar yang berbeda. Lentera Hijaiyah
             membantu proses belajar untuk menciptakan pengalaman menyenangkan, komunikatif, dan
             terarah lewat latihan menulis, membaca, dan materi ringkas.
@@ -17,18 +17,18 @@ export default function VisiMisiPanel() {
         </div>
       </article>
 
-      <article className="grid items-center gap-8 border-b border-stone-300 pb-10 md:grid-cols-[1fr_250px]">
-        <div className="space-y-4">
-          <h3 className="text-4xl font-black tracking-tight text-stone-900">
+      <article className="grid items-center gap-8 md:grid-cols-[1fr_250px]">
+        <div className="order-1 md:order-1 space-y-4 text-center md:text-right">
+          <h3 className="text-3xl sm:text-4xl font-black tracking-tight text-stone-900 text-left md:text-right">
             Ubah Tantangan Jadi Permainan.
           </h3>
-          <p className="text-lg leading-relaxed text-slate-600">
+          <p className="text-base sm:text-lg leading-relaxed text-slate-600 text-left md:text-right">
             Menghafal huruf Hijaiyah sering kali terasa kaku dan membosankan. Karena itu, kami
             menghadirkan interaksi dan sistem reward sederhana agar belajar terasa seperti bermain
             game edukatif.
           </p>
         </div>
-        <div className="relative mx-auto h-[250px] w-[250px] max-h-[250px]">
+        <div className="order-2 md:order-2 relative mx-auto h-[250px] w-[250px] max-h-[250px]">
           <Image src="/images/cat-7.png" alt="Ilustrasi misi" fill className="object-contain" />
         </div>
       </article>

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { LinkButton } from "@/components/ui/button";
@@ -57,59 +56,29 @@ function EyeOffIcon() {
   );
 }
 
-export default function SignInPage() {
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
+export default function ResetPasswordPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [formValues, setFormValues] = useState({
-    email: "",
-    password: ""
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: ""
   });
 
-  const handleChange = (field: "email" | "password", value: string) => {
+  const handleChange = (field: "currentPassword" | "newPassword" | "confirmPassword", value: string) => {
     setFormValues((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const formatFieldErrors = (errors?: Record<string, string[]>) => {
-    if (!errors) {
-      return null;
-    }
-
-    const messages = Object.values(errors).flat().filter(Boolean);
-    return messages.length ? messages[0] : null;
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setErrorMessage(null);
     setIsSubmitting(true);
-
-    try {
-      const response = await fetch("/api/v1/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formValues)
-      });
-
-      const payload = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        const fieldMessage = formatFieldErrors(payload?.errors);
-        const message = fieldMessage || payload?.message || "Login gagal. Coba lagi.";
-        setErrorMessage(message);
-        return;
-      }
-
-      router.push("/dashboard");
-    } catch (error) {
-      console.error("SIGN_IN_ERROR", error);
-      setErrorMessage("Terjadi kesalahan jaringan. Coba lagi.");
-    } finally {
+    // TODO: implement reset password API call
+    setTimeout(() => {
       setIsSubmitting(false);
-    }
+    }, 1000);
   };
 
   return (
@@ -120,54 +89,71 @@ export default function SignInPage() {
             x
           </Link>
 
-          <LinkButton href="/sign-up" variant="ink" size="nav">
-            Daftar Sekarang
+          <LinkButton href="/sign-in" variant="ink" size="nav">
+            Masuk
           </LinkButton>
         </div>
 
         <div className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center">
-          <h1 className="text-center text-4xl font-bold tracking-tight text-stone-900 mb-8">Masuk</h1>
+          <h1 className="text-center text-4xl font-bold tracking-tight text-stone-900 mb-8">Ganti Password</h1>
 
           <form className="space-y-8" onSubmit={handleSubmit}>
             <TextField
-              type="email"
-              name="email"
-              autoComplete="email"
-              placeholder="Email"
-              value={formValues.email}
-              onChange={(event) => handleChange("email", event.target.value)}
-              required
-            />
-
-            <TextField
-              type={showPassword ? "text" : "password"}
-              name="password"
-              autoComplete="current-password"
-              placeholder="Password"
-              value={formValues.password}
-              onChange={(event) => handleChange("password", event.target.value)}
+              type={showCurrentPassword ? "text" : "password"}
+              name="currentPassword"
+              placeholder="Password saat ini"
+              value={formValues.currentPassword}
+              onChange={(event) => handleChange("currentPassword", event.target.value)}
               required
               endAdornment={
                 <button
                   type="button"
-                  aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
-                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showCurrentPassword ? "Sembunyikan password" : "Tampilkan password"}
+                  onClick={() => setShowCurrentPassword((prev) => !prev)}
                   className="inline-flex items-center text-stone-700 transition-colors hover:text-stone-900"
                 >
-                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                  {showCurrentPassword ? <EyeOffIcon /> : <EyeIcon />}
                 </button>
               }
             />
 
-            {errorMessage ? (
-              <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-                {errorMessage}
-              </p>
-            ) : null}
+            <TextField
+              type={showNewPassword ? "text" : "password"}
+              name="newPassword"
+              placeholder="Password baru"
+              value={formValues.newPassword}
+              onChange={(event) => handleChange("newPassword", event.target.value)}
+              required
+              endAdornment={
+                <button
+                  type="button"
+                  aria-label={showNewPassword ? "Sembunyikan password" : "Tampilkan password"}
+                  onClick={() => setShowNewPassword((prev) => !prev)}
+                  className="inline-flex items-center text-stone-700 transition-colors hover:text-stone-900"
+                >
+                  {showNewPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </button>
+              }
+            />
 
-            <Link href="/forgot-password" className="block text-sm font-semibold text-[#d14a35] hover:underline">
-              Lupa password?
-            </Link>
+            <TextField
+              type={showConfirmPassword ? "text" : "password"}
+              name="confirmPassword"
+              placeholder="Konfirmasi password"
+              value={formValues.confirmPassword}
+              onChange={(event) => handleChange("confirmPassword", event.target.value)}
+              required
+              endAdornment={
+                <button
+                  type="button"
+                  aria-label={showConfirmPassword ? "Sembunyikan password" : "Tampilkan password"}
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  className="inline-flex items-center text-stone-700 transition-colors hover:text-stone-900"
+                >
+                  {showConfirmPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </button>
+              }
+            />
 
             <button
               type="submit"
@@ -175,18 +161,10 @@ export default function SignInPage() {
               disabled={isSubmitting}
             >
               <span className="inline-flex w-full -translate-x-1 -translate-y-1 items-center justify-center rounded-[12px] bg-black px-8 py-4 text-xl font-medium text-white transition-transform duration-200 ease-out group-hover:-translate-x-1.5 group-hover:-translate-y-1.5 group-active:-translate-x-0.5 group-active:-translate-y-0.5">
-                {isSubmitting ? "Memproses..." : "MASUK"}
+                {isSubmitting ? "Memproses..." : "Ubah"}
               </span>
             </button>
           </form>
-
-          <p className="mx-auto mt-8 max-w-md text-center text-xs font-medium leading-relaxed text-slate-500">
-            Dengan masuk ke Lentera Hijaiyah, Anda menyetujui <Link href="/terms" className="text-[#d14a35] hover:underline">
-              Syarat dan Ketentuan
-            </Link> serta <Link href="/privacy" className="text-[#d14a35] hover:underline">
-              Kebijakan Privasi
-            </Link> kami.
-          </p>
         </div>
       </div>
     </section>

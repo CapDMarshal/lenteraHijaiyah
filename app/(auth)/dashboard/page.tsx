@@ -5,6 +5,7 @@ import Image from "next/image";
 import { verifyJwt } from "@/lib/auth/jwt";
 import { prisma } from "@/lib/db/prisma";
 import { InkCard } from "@/components/ui/card";
+import PrayerScheduleClient from "@/components/dashboard/PrayerScheduleClient";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -158,9 +159,9 @@ export default async function DashboardPage() {
 
   const user = jwtPayload
     ? await prisma.user.findUnique({
-        where: { id: jwtPayload.id },
-        select: { name: true },
-      })
+      where: { id: jwtPayload.id },
+      select: { name: true },
+    })
     : null;
 
   const userName = user?.name ?? "Pengguna";
@@ -169,7 +170,7 @@ export default async function DashboardPage() {
   const serverNow = new Date();
   const wibString = serverNow.toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
   const now = new Date(wibString);
-  
+
   const wibHour = now.getHours();
   const greeting = getGreeting(wibHour);
 
@@ -179,11 +180,11 @@ export default async function DashboardPage() {
   const activeKey = today ? resolveActivePrayer(now, today) : null;
   const prayerTimes: PrayerItem[] = today
     ? prayerOrder.map((key) => ({
-        label: prayerLabels[key],
-        emoji: prayerEmojis[key],
-        time: today[key],
-        active: activeKey === key,
-      }))
+      label: prayerLabels[key],
+      emoji: prayerEmojis[key],
+      time: today[key],
+      active: activeKey === key,
+    }))
     : fallbackTimes;
 
   // Module progress
@@ -194,21 +195,21 @@ export default async function DashboardPage() {
       prisma.module.count(),
       userId
         ? prisma.userModuleProgress.count({
-            where: { userId, isCompleted: true },
-          })
+          where: { userId, isCompleted: true },
+        })
         : Promise.resolve(0),
       userId
         ? prisma.userModuleProgress.findFirst({
-            where: { userId, isCompleted: false },
-            include: { module: { select: { id: true, slug: true, title: true } } },
-          })
+          where: { userId, isCompleted: false },
+          include: { module: { select: { id: true, slug: true, title: true } } },
+        })
         : Promise.resolve(null),
       userId
         ? prisma.userModuleProgress.findFirst({
-            where: { userId, isCompleted: true },
-            orderBy: { completedAt: "desc" },
-            include: { module: { select: { id: true, slug: true, title: true } } },
-          })
+          where: { userId, isCompleted: true },
+          orderBy: { completedAt: "desc" },
+          include: { module: { select: { id: true, slug: true, title: true } } },
+        })
         : Promise.resolve(null),
       userId
         ? prisma.userQuranProgress.findUnique({ where: { userId } })
@@ -225,14 +226,14 @@ export default async function DashboardPage() {
 
   return (
     <section className="space-y-6">
-      <div className="flex flex-col gap-6 lg:flex-row">
+      <div className="flex flex-col-reverse gap-6 lg:flex-row">
         <div className="flex flex-1 flex-col gap-6">
 
           {/* ── Greeting card ── */}
           <InkCard className="!p-0 overflow-hidden bg-white">
             <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
               <div className="space-y-4 md:pr-5 p-4">
-                <p className="text-sm font-semibold text-slate-500 pb-8">
+                <p className="text-sm font-semibold text-slate-500 lg:pb-8">
                   {today
                     ? `${today.hari}, ${today.tanggal} ${schedule?.bulan_nama ?? ""} ${schedule?.tahun ?? ""}`
                     : "-"}
@@ -244,7 +245,7 @@ export default async function DashboardPage() {
                   Semoga hari {today?.hari ?? "ini"} mu menyenangkan
                 </p>
               </div>
-              <div className="flex w-full items-end justify-end md:w-auto">
+              <div className="hidden md:flex w-full items-end justify-end md:w-auto">
                 <div className="relative h-[170px] w-[300px]">
                   <Image
                     src="/images/cat-5.png"
@@ -375,30 +376,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* ── Prayer schedule ── */}
-        <div className="flex w-full max-w-sm flex-col gap-4">
-          <div className="inline-flex items-center justify-center rounded-full bg-[#d96852] px-4 py-2 text-xs font-semibold text-white shadow-[3px_3px_0_#111]">
-            Menurut: equran.id
-          </div>
-
-          {prayerTimes.map((item) => (
-            <div
-              key={item.label}
-              className={
-                item.active
-                  ? "flex items-center justify-between rounded-2xl border-2 border-stone-900 bg-[#d14a35] px-4 py-3 text-white shadow-[4px_4px_0_#111]"
-                  : "flex items-center justify-between rounded-2xl border-2 border-stone-900 bg-white px-4 py-3 text-slate-700 shadow-[4px_4px_0_#d96852]"
-              }
-            >
-              <div>
-                <p className={`text-xs font-semibold ${item.active ? "text-white" : "text-slate-700"}`}>
-                  {item.label}
-                </p>
-                <p className="text-2xl font-bold tracking-tight">{item.time}</p>
-              </div>
-              <span className="text-2xl">{item.emoji ?? "🕌"}</span>
-            </div>
-          ))}
-        </div>
+        <PrayerScheduleClient prayerTimes={prayerTimes} />
       </div>
     </section>
   );
