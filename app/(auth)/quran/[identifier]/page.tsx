@@ -84,19 +84,19 @@ export default async function QuranDetailPage({
       />
 
       <div className="mx-auto w-full max-w-4xl space-y-8 pt-6">
-        <div className="text-center">
-          <p className="text-3xl font-semibold text-stone-900" dir="rtl">
+        <div className="text-center space-y-3">
+          <p className="text-4xl leading-relaxed text-stone-900 font-medium" dir="rtl">
             {surah.nama}
           </p>
-          <h1 className="mt-3 text-2xl font-bold text-stone-900">
+          <h1 className="text-2xl font-black text-stone-900">
             {surah.namaLatin} ({surah.arti})
           </h1>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="text-sm font-semibold text-slate-500">
             Surah {surah.tempatTurun} · {surah.jumlahAyat} ayat
           </p>
         </div>
 
-        <div className="text-center text-2xl text-stone-800" dir="rtl">
+        <div className="text-center text-4xl leading-loose text-stone-900 font-medium pt-4" dir="rtl">
           بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ
         </div>
 

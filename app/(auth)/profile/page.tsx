@@ -16,13 +16,7 @@ type TabKey = (typeof tabs)[number]["key"];
 function EyeIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M1.5 12C3.7 7.8 7.5 5.5 12 5.5C16.5 5.5 20.3 7.8 22.5 12C20.3 16.2 16.5 18.5 12 18.5C7.5 18.5 3.7 16.2 1.5 12Z"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M1.5 12C3.7 7.8 7.5 5.5 12 5.5C16.5 5.5 20.3 7.8 22.5 12C20.3 16.2 16.5 18.5 12 18.5C7.5 18.5 3.7 16.2 1.5 12Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.8" />
     </svg>
   );
@@ -31,34 +25,10 @@ function EyeIcon() {
 function EyeOffIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M3 3L21 21"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M10.6 6.3C11.1 6.2 11.5 6.2 12 6.2C16.2 6.2 19.7 8.4 21.8 12C20.9 13.6 19.7 14.9 18.3 15.9"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M14.1 14.3C13.5 14.9 12.8 15.2 12 15.2C10.2 15.2 8.8 13.8 8.8 12C8.8 11.2 9.1 10.5 9.7 9.9"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M6.2 8.2C4.5 9.2 3 10.5 2.2 12C4.3 15.6 7.8 17.8 12 17.8C13.4 17.8 14.7 17.5 15.9 17"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M3 3L21 21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.6 6.3C11.1 6.2 11.5 6.2 12 6.2C16.2 6.2 19.7 8.4 21.8 12C20.9 13.6 19.7 14.9 18.3 15.9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M14.1 14.3C13.5 14.9 12.8 15.2 12 15.2C10.2 15.2 8.8 13.8 8.8 12C8.8 11.2 9.1 10.5 9.7 9.9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M6.2 8.2C4.5 9.2 3 10.5 2.2 12C4.3 15.6 7.8 17.8 12 17.8C13.4 17.8 14.7 17.5 15.9 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -93,6 +63,16 @@ export default function ProfilePage() {
     const parts = [profileForm.firstName.trim(), profileForm.lastName.trim()].filter(Boolean);
     return parts.join(" ");
   }, [profileForm.firstName, profileForm.lastName]);
+
+  const avatarInitials = useMemo(() => {
+    if (!fullName) return "U";
+    return fullName.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
+  }, [fullName]);
+
+  const username = useMemo(() => {
+    if (!profileForm.email) return "username";
+    return profileForm.email.split("@")[0];
+  }, [profileForm.email]);
 
   const handleLogout = async () => {
     if (isLoggingOut) return;
@@ -219,270 +199,327 @@ export default function ProfilePage() {
 
   return (
     <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 pb-10 md:flex-row">
-      <aside className="w-full max-w-xs space-y-4">
-        <div>
-          <p className="text-sm font-semibold text-stone-900">Pengaturan akun</p>
-          <div className="mt-4 flex flex-col gap-2">
-            {tabs.map((tab) => {
-              const isActive = activeTab === tab.key;
 
-              return (
-                <button
-                  key={tab.key}
-                  type="button"
-                  onClick={() => setActiveTab(tab.key)}
-                  className={`group relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors duration-200 ${isActive ? "text-stone-900" : "text-stone-600 hover:text-stone-900"
-                    }`}
-                >
-                  {/* Animated left border */}
-                  <span
-                    className={`absolute left-0 top-0 h-full w-1 origin-center rounded-full bg-[#d14a35] transition-transform duration-200 ease-out ${isActive ? "scale-y-100" : "scale-y-0 group-hover:scale-y-100"
-                      }`}
-                  />
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-md text-sm">
-                    <IonIcon name={tab.icon} />
-                  </span>
-                  {tab.label}
-                </button>
-              );
-            })}
+      {/* Left Column: Profile Dashboard (Mockup) */}
+      <div className="flex w-full md:max-w-sm flex-col gap-6">
+
+        {/* Profile Card */}
+        <div className="rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-[6px_6px_0_#9ca3af] flex flex-col items-center text-center">
+          <div className="h-24 w-24 rounded-full border-2 border-stone-900 bg-[#d14a35] text-white flex items-center justify-center text-4xl font-black mb-4 shadow-[4px_4px_0_#1c1917]">
+            {profileLoading ? "..." : avatarInitials}
+          </div>
+          <h1 className="text-2xl font-bold text-stone-900 leading-tight">
+            {profileLoading ? "Memuat..." : fullName}
+          </h1>
+          <p className="text-sm font-bold text-stone-500 mb-4">
+            @{profileLoading ? "loading" : username}
+          </p>
+
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <span className="rounded-full border-2 border-[#d14a35] bg-white px-4 py-1 text-xs font-black text-[#d14a35]">
+              Siswa
+            </span>
           </div>
 
-          {/* Logout */}
+          {/* Logout Button (Replacing Point) */}
           <button
             type="button"
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="group relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-red-700 transition-colors duration-200 hover:text-stone-900 disabled:opacity-60"
+            className="w-full flex items-center justify-center gap-2 rounded-xl border-2 border-stone-900 bg-black py-4 text-sm font-bold text-white shadow-[4px_4px_0_#d14a35] transition-all hover:translate-y-px hover:translate-x-px hover:shadow-[3px_3px_0_#d14a35] active:translate-y-1 active:translate-x-1 active:shadow-none disabled:opacity-60"
           >
-            {/* Animated left border */}
-            <span className="absolute left-0 top-0 h-full w-1 origin-center scale-y-0 rounded-full bg-[#d14a35] transition-transform duration-200 ease-out group-hover:scale-y-100" />
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded-md text-sm">
-              {isLoggingOut ? (
-                <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-                </svg>
-              ) : <IonIcon name="log-out-outline" />}
-            </span>
+            {isLoggingOut ? (
+              <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+              </svg>
+            ) : <IonIcon name="log-out-outline" className="text-lg" />}
             {isLoggingOut ? "Keluar..." : "Logout"}
           </button>
         </div>
-      </aside>
 
-      <div className="flex-1 space-y-6">
-        {activeTab === "profil" ? (
-          <div className="rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-[4px_4px_0_#9ca3af]">
-            <div className="border-b border-stone-200 pb-3">
-              <h2 className="text-base font-semibold text-stone-900">Profil Pengguna</h2>
+        {/* Statistik Belajar */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-black text-stone-900">Statistik Belajar</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="rounded-2xl border-2 border-stone-900 bg-white p-5 shadow-[4px_4px_0_#9ca3af]">
+              <p className="text-xs font-bold text-stone-500 mb-1">Modul Selesai</p>
+              <p className="text-3xl font-black text-stone-900">4</p>
             </div>
+            <div className="rounded-2xl border-2 border-stone-900 bg-white p-5 shadow-[4px_4px_0_#9ca3af]">
+              <p className="text-xs font-bold text-stone-500 mb-1">Surah Selesai</p>
+              <p className="text-3xl font-black text-stone-900">14</p>
+            </div>
+          </div>
+        </div>
 
-            <div className="mt-5 space-y-4">
-              {profileLoading ? (
-                <p className="text-sm text-slate-500">Memuat profil...</p>
-              ) : null}
+        {/* Aktivitas Terakhir */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-black text-stone-900">Aktivitas Terakhir</h2>
+          <div className="flex flex-col gap-4">
+            <div className="rounded-2xl border-2 border-stone-900 bg-white p-4 shadow-[4px_4px_0_#9ca3af] flex flex-col justify-center">
+              <p className="text-xs font-bold text-stone-500 mb-1">Modul</p>
+              <p className="text-sm font-bold text-stone-900">Mengenal Huruf Hijaiyah</p>
+            </div>
+            <div className="rounded-2xl border-2 border-stone-900 bg-white p-4 shadow-[4px_4px_0_#9ca3af] flex flex-col justify-center">
+              <p className="text-xs font-bold text-stone-500 mb-1">Al-Qur'an</p>
+              <p className="text-sm font-bold text-stone-900">Al-Baqarah Ayat 1-5</p>
+            </div>
+          </div>
+        </div>
 
-              {profileError ? (
-                <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-                  {profileError}
-                </p>
-              ) : null}
+      </div>
 
-              {profileSuccess ? (
-                <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-                  {profileSuccess}
-                </p>
-              ) : null}
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-stone-700">Email</label>
-                <TextField value={profileForm.email} disabled wrapperClassName="bg-stone-200 cursor-not-allowed" className="text-stone-400" />
-                <p className="text-xs text-slate-500">
-                  *Anda dapat mengubah alamat email melalui menu{" "}
-                  <span className="text-[#d14a35]">Akun</span>.
-                </p>
-              </div>
+      {/* Right Column: Settings Forms */}
+      <div className="flex-1 flex flex-col gap-6">
 
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-stone-700">Nama Depan *</label>
-                <TextField
-                  placeholder="Nama depan"
-                  value={profileForm.firstName}
-                  wrapperClassName="bg-white"
-                  onChange={(event) =>
-                    setProfileForm((prev) => ({ ...prev, firstName: event.target.value }))
-                  }
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-stone-700">Nama Belakang *</label>
-                <TextField
-                  placeholder="Nama belakang"
-                  value={profileForm.lastName}
-                  wrapperClassName="bg-white"
-                  onChange={(event) =>
-                    setProfileForm((prev) => ({ ...prev, lastName: event.target.value }))
-                  }
-                />
-              </div>
-
+        {/* Settings Navigation Tabs */}
+        <div className="rounded-2xl border-2 border-stone-900 bg-white p-2 shadow-[4px_4px_0_#9ca3af] flex gap-2">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.key;
+            return (
               <button
+                key={tab.key}
                 type="button"
-                onClick={handleProfileSubmit}
-                className="mt-2 inline-flex rounded-md bg-black px-4 py-2 text-xs font-semibold text-white shadow-[3px_3px_0_#9ca3af]"
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex-1 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-200 ${isActive
+                  ? "bg-black text-white shadow-[2px_2px_0_#d14a35]"
+                  : "bg-white text-stone-600 hover:bg-stone-100 border-2 border-transparent hover:border-stone-200"
+                  }`}
               >
-                Simpan Perubahan
+                <IonIcon name={tab.icon} className="text-lg" />
+                {tab.label}
               </button>
-            </div>
-          </div>
-        ) : null}
+            );
+          })}
+        </div>
 
-        {activeTab === "akun" ? (
-          <div className="space-y-6">
-            <div className="rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-[4px_4px_0_#9ca3af]">
-              <div className="border-b border-stone-200 pb-3">
-                <h2 className="text-base font-semibold text-stone-900">Ubah Email</h2>
+        {/* Form Container */}
+        <div className="flex-1">
+          {activeTab === "profil" ? (
+            <div className="rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-[6px_6px_0_#9ca3af]">
+              <div className="border-b-2 border-stone-100 pb-4">
+                <h2 className="text-lg font-black text-stone-900">Profil Pengguna</h2>
               </div>
-              <div className="mt-5 space-y-4">
-                {emailError ? (
-                  <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-                    {emailError}
+
+              <div className="mt-5 space-y-5">
+                {profileLoading ? (
+                  <p className="text-sm text-slate-500 font-bold">Memuat profil...</p>
+                ) : null}
+
+                {profileError ? (
+                  <p className="rounded-xl border-2 border-stone-900 bg-red-100 px-4 py-3 text-sm font-bold text-red-700 shadow-[2px_2px_0_#1c1917]">
+                    {profileError}
                   </p>
                 ) : null}
 
-                {emailSuccess ? (
-                  <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-                    {emailSuccess}
+                {profileSuccess ? (
+                  <p className="rounded-xl border-2 border-stone-900 bg-emerald-100 px-4 py-3 text-sm font-bold text-emerald-800 shadow-[2px_2px_0_#1c1917]">
+                    {profileSuccess}
                   </p>
                 ) : null}
+
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-stone-700">Email baru *</label>
-                  <TextField
-                    value={accountEmail}
-                    wrapperClassName="bg-white"
-                    onChange={(event) => setAccountEmail(event.target.value)}
-                  />
-                  <p className="text-xs text-slate-500">
-                    *Email akan berubah ketika Anda sudah menekan link verifikasi yang
-                    dikirimkan ke email baru Anda.
+                  <label className="text-xs font-bold text-stone-700">Email</label>
+                  <TextField value={profileForm.email} disabled wrapperClassName="bg-stone-100 border-2 border-stone-200 cursor-not-allowed" className="text-stone-500 font-medium" />
+                  <p className="text-[11px] font-bold text-stone-500">
+                    *Anda dapat mengubah alamat email melalui menu{" "}
+                    <span className="text-[#d14a35]">Akun</span>.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleEmailSubmit}
-                  className="inline-flex rounded-md bg-black px-4 py-2 text-xs font-semibold text-white shadow-[3px_3px_0_#9ca3af]"
-                >
-                  Ubah email
-                </button>
-              </div>
-            </div>
 
-            <div className="rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-[4px_4px_0_#9ca3af]">
-              <div className="border-b border-stone-200 pb-3">
-                <h2 className="text-base font-semibold text-stone-900">Ubah Password</h2>
-              </div>
-              <div className="mt-5 space-y-4">
-                {passwordError ? (
-                  <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-                    {passwordError}
-                  </p>
-                ) : null}
-
-                {passwordSuccess ? (
-                  <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-                    {passwordSuccess}
-                  </p>
-                ) : null}
-                <p className="text-xs text-slate-500">*Isi jika Anda ingin mengubah password.</p>
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-stone-700">Password saat ini *</label>
+                  <label className="text-xs font-bold text-stone-700">Nama Depan *</label>
                   <TextField
-                    type={showCurrentPassword ? "text" : "password"}
-                    placeholder="password saat ini"
-                    value={passwordForm.currentPassword}
-                    wrapperClassName="bg-white"
+                    placeholder="Nama depan"
+                    value={profileForm.firstName}
+                    wrapperClassName="bg-white border-2 border-stone-900 shadow-[2px_2px_0_#9ca3af] focus-within:shadow-[3px_3px_0_#d14a35]"
+                    className="font-bold text-stone-900"
                     onChange={(event) =>
-                      setPasswordForm((prev) => ({
-                        ...prev,
-                        currentPassword: event.target.value,
-                      }))
-                    }
-                    endAdornment={
-                      <button
-                        type="button"
-                        onClick={() => setShowCurrentPassword((prev) => !prev)}
-                        className="text-stone-700"
-                        aria-label={showCurrentPassword ? "Sembunyikan password" : "Tampilkan password"}
-                      >
-                        {showCurrentPassword ? <EyeOffIcon /> : <EyeIcon />}
-                      </button>
+                      setProfileForm((prev) => ({ ...prev, firstName: event.target.value }))
                     }
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-stone-700">Password baru *</label>
+                  <label className="text-xs font-bold text-stone-700">Nama Belakang *</label>
                   <TextField
-                    type={showNewPassword ? "text" : "password"}
-                    placeholder="masukkan password baru"
-                    value={passwordForm.newPassword}
-                    wrapperClassName="bg-white"
+                    placeholder="Nama belakang"
+                    value={profileForm.lastName}
+                    wrapperClassName="bg-white border-2 border-stone-900 shadow-[2px_2px_0_#9ca3af] focus-within:shadow-[3px_3px_0_#d14a35]"
+                    className="font-bold text-stone-900"
                     onChange={(event) =>
-                      setPasswordForm((prev) => ({
-                        ...prev,
-                        newPassword: event.target.value,
-                      }))
-                    }
-                    endAdornment={
-                      <button
-                        type="button"
-                        onClick={() => setShowNewPassword((prev) => !prev)}
-                        className="text-stone-700"
-                        aria-label={showNewPassword ? "Sembunyikan password" : "Tampilkan password"}
-                      >
-                        {showNewPassword ? <EyeOffIcon /> : <EyeIcon />}
-                      </button>
-                    }
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-stone-700">Konfirmasi password baru *</label>
-                  <TextField
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="konfirmasi password"
-                    value={passwordForm.confirmPassword}
-                    wrapperClassName="bg-white"
-                    onChange={(event) =>
-                      setPasswordForm((prev) => ({
-                        ...prev,
-                        confirmPassword: event.target.value,
-                      }))
-                    }
-                    endAdornment={
-                      <button
-                        type="button"
-                        onClick={() => setShowConfirmPassword((prev) => !prev)}
-                        className="text-stone-700"
-                        aria-label={showConfirmPassword ? "Sembunyikan password" : "Tampilkan password"}
-                      >
-                        {showConfirmPassword ? <EyeOffIcon /> : <EyeIcon />}
-                      </button>
+                      setProfileForm((prev) => ({ ...prev, lastName: event.target.value }))
                     }
                   />
                 </div>
 
                 <button
                   type="button"
-                  onClick={handlePasswordSubmit}
-                  className="inline-flex rounded-md bg-black px-4 py-2 text-xs font-semibold text-white shadow-[3px_3px_0_#9ca3af]"
+                  onClick={handleProfileSubmit}
+                  className="mt-4 w-full rounded-xl bg-black px-4 py-4 text-sm font-bold text-white shadow-[4px_4px_0_#d14a35] transition-all hover:translate-y-px hover:translate-x-px hover:shadow-[3px_3px_0_#d14a35] active:translate-y-1 active:translate-x-1 active:shadow-none"
                 >
-                  Simpan Password
+                  Simpan Perubahan
                 </button>
               </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
 
+          {activeTab === "akun" ? (
+            <div className="space-y-6">
+              {/* Ubah Email */}
+              <div className="rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-[6px_6px_0_#9ca3af]">
+                <div className="border-b-2 border-stone-100 pb-4">
+                  <h2 className="text-lg font-black text-stone-900">Ubah Email</h2>
+                </div>
+                <div className="mt-5 space-y-5">
+                  {emailError ? (
+                    <p className="rounded-xl border-2 border-stone-900 bg-red-100 px-4 py-3 text-sm font-bold text-red-700 shadow-[2px_2px_0_#1c1917]">
+                      {emailError}
+                    </p>
+                  ) : null}
+
+                  {emailSuccess ? (
+                    <p className="rounded-xl border-2 border-stone-900 bg-emerald-100 px-4 py-3 text-sm font-bold text-emerald-800 shadow-[2px_2px_0_#1c1917]">
+                      {emailSuccess}
+                    </p>
+                  ) : null}
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-stone-700">Email baru *</label>
+                    <TextField
+                      value={accountEmail}
+                      wrapperClassName="bg-white border-2 border-stone-900 shadow-[2px_2px_0_#9ca3af] focus-within:shadow-[3px_3px_0_#d14a35]"
+                      className="font-bold text-stone-900"
+                      onChange={(event) => setAccountEmail(event.target.value)}
+                    />
+                    <p className="text-[11px] font-bold text-stone-500 leading-relaxed">
+                      *Email akan berubah ketika Anda sudah menekan link verifikasi yang
+                      dikirimkan ke email baru Anda.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleEmailSubmit}
+                    className="w-full rounded-xl bg-black px-4 py-4 text-sm font-bold text-white shadow-[4px_4px_0_#d14a35] transition-all hover:translate-y-px hover:translate-x-px hover:shadow-[3px_3px_0_#d14a35] active:translate-y-1 active:translate-x-1 active:shadow-none"
+                  >
+                    Ubah Email
+                  </button>
+                </div>
+              </div>
+
+              {/* Ubah Password */}
+              <div className="rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-[6px_6px_0_#9ca3af]">
+                <div className="border-b-2 border-stone-100 pb-4">
+                  <h2 className="text-lg font-black text-stone-900">Ubah Password</h2>
+                </div>
+                <div className="mt-5 space-y-5">
+                  {passwordError ? (
+                    <p className="rounded-xl border-2 border-stone-900 bg-red-100 px-4 py-3 text-sm font-bold text-red-700 shadow-[2px_2px_0_#1c1917]">
+                      {passwordError}
+                    </p>
+                  ) : null}
+
+                  {passwordSuccess ? (
+                    <p className="rounded-xl border-2 border-stone-900 bg-emerald-100 px-4 py-3 text-sm font-bold text-emerald-800 shadow-[2px_2px_0_#1c1917]">
+                      {passwordSuccess}
+                    </p>
+                  ) : null}
+
+                  <p className="text-[11px] font-bold text-stone-500">*Isi jika Anda ingin mengubah password.</p>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-stone-700">Password saat ini *</label>
+                    <TextField
+                      type={showCurrentPassword ? "text" : "password"}
+                      placeholder="Masukkan password saat ini"
+                      value={passwordForm.currentPassword}
+                      wrapperClassName="bg-white border-2 border-stone-900 shadow-[2px_2px_0_#9ca3af] focus-within:shadow-[3px_3px_0_#d14a35]"
+                      className="font-bold text-stone-900"
+                      onChange={(event) =>
+                        setPasswordForm((prev) => ({
+                          ...prev,
+                          currentPassword: event.target.value,
+                        }))
+                      }
+                      endAdornment={
+                        <button
+                          type="button"
+                          onClick={() => setShowCurrentPassword((prev) => !prev)}
+                          className="text-stone-700 hover:text-stone-900 px-2"
+                          aria-label={showCurrentPassword ? "Sembunyikan password" : "Tampilkan password"}
+                        >
+                          {showCurrentPassword ? <EyeOffIcon /> : <EyeIcon />}
+                        </button>
+                      }
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-stone-700">Password baru *</label>
+                    <TextField
+                      type={showNewPassword ? "text" : "password"}
+                      placeholder="Masukkan password baru"
+                      value={passwordForm.newPassword}
+                      wrapperClassName="bg-white border-2 border-stone-900 shadow-[2px_2px_0_#9ca3af] focus-within:shadow-[3px_3px_0_#d14a35]"
+                      className="font-bold text-stone-900"
+                      onChange={(event) =>
+                        setPasswordForm((prev) => ({
+                          ...prev,
+                          newPassword: event.target.value,
+                        }))
+                      }
+                      endAdornment={
+                        <button
+                          type="button"
+                          onClick={() => setShowNewPassword((prev) => !prev)}
+                          className="text-stone-700 hover:text-stone-900 px-2"
+                          aria-label={showNewPassword ? "Sembunyikan password" : "Tampilkan password"}
+                        >
+                          {showNewPassword ? <EyeOffIcon /> : <EyeIcon />}
+                        </button>
+                      }
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-stone-700">Konfirmasi password baru *</label>
+                    <TextField
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Konfirmasi password baru"
+                      value={passwordForm.confirmPassword}
+                      wrapperClassName="bg-white border-2 border-stone-900 shadow-[2px_2px_0_#9ca3af] focus-within:shadow-[3px_3px_0_#d14a35]"
+                      className="font-bold text-stone-900"
+                      onChange={(event) =>
+                        setPasswordForm((prev) => ({
+                          ...prev,
+                          confirmPassword: event.target.value,
+                        }))
+                      }
+                      endAdornment={
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword((prev) => !prev)}
+                          className="text-stone-700 hover:text-stone-900 px-2"
+                          aria-label={showConfirmPassword ? "Sembunyikan password" : "Tampilkan password"}
+                        >
+                          {showConfirmPassword ? <EyeOffIcon /> : <EyeIcon />}
+                        </button>
+                      }
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handlePasswordSubmit}
+                    className="w-full rounded-xl bg-black px-4 py-4 text-sm font-bold text-white shadow-[4px_4px_0_#d14a35] transition-all hover:translate-y-px hover:translate-x-px hover:shadow-[3px_3px_0_#d14a35] active:translate-y-1 active:translate-x-1 active:shadow-none"
+                  >
+                    Simpan Password
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
 
       </div>
     </section>

@@ -41,7 +41,7 @@ export default function AboutTabsClient({ defaultTab = "Kurikulum" }: AboutTabsC
 
   return (
     <>
-      <div className="mt-10 flex w-full flex-wrap items-center justify-between gap-3 border-b border-stone-300 pb-5 px-4">
+      <div className="no-scrollbar mt-10 flex w-full items-center justify-start gap-4 overflow-x-auto border-b border-stone-300 pb-5 sm:justify-between sm:gap-3">
         {aboutTabs.map((tab) => {
           const isActive = tab === activeTab;
 
@@ -54,8 +54,8 @@ export default function AboutTabsClient({ defaultTab = "Kurikulum" }: AboutTabsC
               onFocus={() => prefetchTabPanel(tab)}
               className={
                 isActive
-                  ? "rounded-md bg-black px-16 py-3 text-lg font-semibold text-white shadow-[6px_6px_0_#d14a35] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[7px_7px_0_#d14a35] active:translate-y-0.5 active:shadow-[2px_2px_0_#d14a35]"
-                  : "rounded-md px-16 py-3 text-lg font-semibold text-stone-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-stone-100 hover:text-stone-900 active:translate-y-0.5"
+                  ? "shrink-0 whitespace-nowrap rounded-md bg-black px-6 sm:px-16 py-2 sm:py-3 text-base sm:text-lg font-semibold text-white shadow-[4px_4px_0_#d14a35] sm:shadow-[6px_6px_0_#d14a35] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_#d14a35] sm:hover:shadow-[7px_7px_0_#d14a35] active:translate-y-0.5 active:shadow-[2px_2px_0_#d14a35]"
+                  : "shrink-0 whitespace-nowrap rounded-md px-6 sm:px-16 py-2 sm:py-3 text-base sm:text-lg font-semibold text-stone-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-stone-100 hover:text-stone-900 active:translate-y-0.5"
               }
             >
               {tab}

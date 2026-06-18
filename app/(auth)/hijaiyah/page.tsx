@@ -73,58 +73,58 @@ function ResultModal({
 }) {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative flex w-full max-w-lg items-center gap-6 rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-[6px_6px_0_#1c1917]"
+        className="relative flex w-full max-w-[340px] flex-col items-center gap-4 rounded-3xl border-2 border-stone-900 bg-white p-6 shadow-[6px_6px_0_#1c1917]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Cat illustration */}
-        <div className="w-36 shrink-0">
+        <div className="w-40 shrink-0 mt-2">
           <Image
             src={success ? "/images/cat-true.png" : "/images/cat-false.png"}
             alt={success ? "Kucing senang" : "Kucing sedih"}
-            width={144}
-            height={144}
-            className="h-36 w-36 object-contain"
+            width={160}
+            height={160}
+            className="h-40 w-40 object-contain mx-auto"
           />
         </div>
 
         {/* Content */}
-        <div className="flex-1 space-y-3">
-          <p className="text-xl font-bold leading-snug text-stone-900">
+        <div className="flex w-full flex-col items-center space-y-3 text-center">
+          <p className="text-xl font-bold leading-snug text-stone-900 max-w-[200px]">
             {success ? "Yeayy tulisanmu tepat!" : "Yahh tulisanmu belum sesuai!"}
           </p>
-          <p className="text-sm leading-relaxed text-slate-600">
+          <p className="text-[11px] leading-relaxed text-stone-500 font-medium px-2">
             {success ? (
               <>
                 Tulisan udah mirip banget sama huruf{" "}
-                <span className="font-semibold text-[#d14a35]">{letter.label}</span>
-                . ayo tuliskan lagi huruf yang sama atau coba huruf lainnya!!
+                <span className="font-bold text-[#d14a35]">{letter.label}</span>
+                . Ayo tuliskan lagi huruf yang sama atau coba huruf lainnya!!
               </>
             ) : (
               <>
                 Tulisan kamu masih belum mirip dengan{" "}
-                <span className="font-semibold text-[#d14a35]">{letter.label}</span>
-                . ayo tuliskan lagi huruf yang sama atau coba huruf lainnya!!
+                <span className="font-bold text-[#d14a35]">{letter.label}</span>
+                . Ayo tuliskan lagi huruf yang sama atau coba huruf lainnya!!
               </>
             )}
           </p>
-          <div className="flex gap-3 pt-1">
+          <div className="flex w-full gap-3 pt-3">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-xl border-2 border-stone-900 bg-white py-2.5 text-sm font-semibold text-stone-900 transition-colors hover:bg-stone-50"
+              className="flex-1 rounded-xl border-2 border-stone-900 bg-stone-100 py-3 text-xs font-bold text-stone-900 shadow-[3px_3px_0_#1c1917] transition-all hover:translate-y-px hover:translate-x-px hover:shadow-[2px_2px_0_#1c1917]"
             >
               Kembali
             </button>
             <button
               type="button"
               onClick={onRetry}
-              className="flex-1 rounded-xl border-2 border-stone-900 bg-black py-2.5 text-sm font-semibold text-white shadow-[3px_3px_0_#d14a35] transition-colors hover:bg-stone-900"
+              className="flex-1 rounded-xl border-2 border-stone-900 bg-black py-3 text-xs font-bold text-white shadow-[3px_3px_0_#d14a35] transition-all hover:translate-y-px hover:translate-x-px hover:shadow-[2px_2px_0_#d14a35]"
             >
-              Coba lagi
+              {success ? "Coba yang lain" : "Coba lagi"}
             </button>
           </div>
         </div>
@@ -179,7 +179,7 @@ function DrawingCanvas({
     ctx.moveTo(lastPos.current.x, lastPos.current.y);
     ctx.lineTo(pos.x, pos.y);
     ctx.strokeStyle = "#1c1917";
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 6;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.stroke();
@@ -197,7 +197,7 @@ function DrawingCanvas({
         type="button"
         onClick={onClear}
         title="Hapus kanvas"
-        className="absolute top-3 right-3 z-10 grid h-9 w-9 place-items-center rounded-lg border-2 border-stone-900 bg-white text-stone-700 shadow-[2px_2px_0_#9ca3af] hover:bg-stone-50 transition-colors"
+        className="absolute top-4 right-4 z-10 grid h-10 w-10 place-items-center rounded-lg border-2 border-stone-900 bg-white text-stone-900 shadow-[3px_3px_0_#1c1917] hover:translate-y-px hover:translate-x-px hover:shadow-[2px_2px_0_#1c1917] transition-all"
       >
         <EraserIcon />
       </button>
@@ -219,12 +219,74 @@ function DrawingCanvas({
   );
 }
 
+// ─── Mobile Picker Modal ──────────────────────────────────────────────────────
+
+function MobilePickerModal({
+  selected,
+  onSelect,
+  onClose,
+}: {
+  selected: Letter;
+  onSelect: (letter: Letter) => void;
+  onClose: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm" onClick={onClose}>
+      <div 
+        className="w-full max-w-[340px] rounded-2xl border-2 border-stone-900 bg-white p-4 shadow-[6px_6px_0_#d96852] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 border-b-2 border-stone-200 pb-3 flex justify-between items-center shrink-0">
+          <span className="font-bold text-stone-900">Pilih huruf hijaiyah</span>
+          <button onClick={onClose} className="text-stone-400 hover:text-stone-900">✕</button>
+        </div>
+        <div className="max-h-[60vh] overflow-y-auto pr-1 pb-1">
+          <div className="grid grid-cols-3 gap-3">
+            {LETTERS.map((letter) => {
+              const isActive = selected.id === letter.id;
+              return (
+                <button
+                  key={letter.id}
+                  type="button"
+                  onClick={() => onSelect(letter)}
+                  className={`flex flex-col items-center justify-center gap-1 rounded-xl border-2 p-3 transition-all duration-150 ${
+                    isActive
+                      ? "border-[#d14a35] bg-[#d14a35] shadow-[3px_3px_0_#9b2c16]"
+                      : "border-stone-900 bg-white hover:border-[#d14a35] hover:shadow-[3px_3px_0_#d96852]"
+                  }`}
+                >
+                  <div className="flex h-10 w-full items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/aset-hijaiyah/${encodeURIComponent(letter.file)}`}
+                      alt={letter.label}
+                      className={`h-8 w-8 object-contain ${isActive ? "brightness-0 invert" : ""}`}
+                    />
+                  </div>
+                  <span
+                    className={`text-[11px] font-bold capitalize leading-none ${
+                      isActive ? "text-white" : "text-stone-700"
+                    }`}
+                  >
+                    {letter.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function HijaiyahPage() {
   const [selected, setSelected] = useState<Letter>(LETTERS[0]);
   const [result, setResult] = useState<CheckResult>(null);
   const [isChecking, setIsChecking] = useState(false);
+  const [isMobilePickerOpen, setIsMobilePickerOpen] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -285,22 +347,36 @@ export default function HijaiyahPage() {
 
   return (
     <>
-      <section className="space-y-8 pb-12">
+      <section className="space-y-6 pb-12">
         {/* Header */}
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold tracking-tight text-stone-900">
-            Canvas <span className="text-[#d14a35]">Hijaiyah</span>
+            Canvas <span className="text-[#d14a35]">Digital</span>
           </h1>
           <p className="text-sm text-slate-600">
-            Pilih huruf hijaiyah yang ingin dipelajari, lalu tuliskan di kanvas samping
+            Pilih huruf hijaiyah yang ingin dipelajari, lalu tuliskan di kanvas
           </p>
         </div>
 
         {/* Main layout */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
 
-          {/* Letter picker */}
-          <div className="w-full rounded-2xl border-2 border-stone-900 bg-white p-4 shadow-[6px_6px_0_#d96852] lg:w-[560px] lg:shrink-0">
+          {/* Mobile Selector Button */}
+          <div className="flex justify-center lg:hidden">
+            <button 
+              type="button" 
+              onClick={() => setIsMobilePickerOpen(true)}
+              className="flex items-center gap-3 rounded-xl border-2 border-stone-900 bg-white px-5 py-3 text-sm font-bold shadow-[4px_4px_0_#d96852] active:translate-y-px active:shadow-[3px_3px_0_#d96852] transition-all"
+            >
+              Menulis: 
+              <img src={`/aset-hijaiyah/${encodeURIComponent(selected.file)}`} className="h-5 w-5 object-contain ml-1" alt="" /> 
+              <span className="capitalize">{selected.label}</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="ml-1"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          </div>
+
+          {/* Desktop Letter picker */}
+          <div className="hidden w-full rounded-2xl border-2 border-stone-900 bg-white p-4 shadow-[6px_6px_0_#d96852] lg:block lg:w-[560px] lg:shrink-0">
             <div className="max-h-[400px] overflow-y-auto pr-1">
               <div className="grid grid-cols-5 gap-2">
                 {LETTERS.map((letter) => {
@@ -339,8 +415,8 @@ export default function HijaiyahPage() {
           </div>
 
           {/* Canvas + button */}
-          <div className="flex flex-1 flex-col gap-4">
-            <div className="h-[436px]">
+          <div className="flex flex-1 flex-col gap-4 w-full max-w-[440px] mx-auto lg:max-w-none">
+            <div className="aspect-square w-full lg:h-[436px] lg:aspect-auto">
               <DrawingCanvas canvasRef={canvasRef} onClear={handleClear} />
             </div>
 
@@ -348,7 +424,7 @@ export default function HijaiyahPage() {
               type="button"
               onClick={handleCheck}
               disabled={isChecking}
-              className="w-full rounded-xl border-2 border-stone-900 bg-black py-4 text-sm font-bold text-white shadow-[4px_4px_0_#d14a35] transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:translate-y-0"
+              className="w-full rounded-xl border-2 border-stone-900 bg-black py-4 text-sm font-bold text-white shadow-[4px_4px_0_#d14a35] transition-all duration-150 hover:translate-y-px hover:translate-x-px hover:shadow-[3px_3px_0_#d14a35] active:translate-y-1 active:translate-x-1 active:shadow-none disabled:cursor-not-allowed disabled:opacity-60 disabled:transform-none"
             >
               {isChecking ? (
                 <span className="flex items-center justify-center gap-2">
@@ -365,6 +441,18 @@ export default function HijaiyahPage() {
           </div>
         </div>
       </section>
+
+      {/* Mobile Picker Modal */}
+      {isMobilePickerOpen && (
+        <MobilePickerModal 
+          selected={selected} 
+          onSelect={(letter) => {
+            handleSelect(letter);
+            setIsMobilePickerOpen(false);
+          }}
+          onClose={() => setIsMobilePickerOpen(false)}
+        />
+      )}
 
       {/* Result modal */}
       {result && (

@@ -14,7 +14,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col bg-[#F7EDE8]">
       {hideTopNav ? null : <TopNav />}
       <div className="flex-1">
-        <div className="flex flex-1 flex-col gap-6 px-20 py-6">
+        <div className="flex flex-1 flex-col gap-6 px-5 sm:px-10 md:px-20 py-6">
           <main className="flex-1">{children}</main>
         </div>
       </div>

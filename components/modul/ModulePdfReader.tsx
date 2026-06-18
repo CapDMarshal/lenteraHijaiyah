@@ -162,7 +162,8 @@ export function ModulePdfReader({ pdfUrl, title }: ModulePdfReaderProps) {
 
   return (
     <div className="grid max-h-[720px] gap-4 p-3 lg:grid-cols-[220px_1fr]">
-      <div className="flex max-h-[520px] flex-col rounded-xl border-2 border-stone-900 bg-white p-3">
+      {/* Sidebar hidden on mobile */}
+      <div className="hidden lg:flex max-h-[520px] flex-col rounded-xl border-2 border-stone-900 bg-white p-3">
         <p className="text-xs font-semibold text-stone-900">Daftar Halaman</p>
         <p className="mt-1 text-[11px] text-slate-500">{pageLabel}</p>
         <div className="mt-3 flex-1 space-y-3 overflow-y-auto pr-1">
@@ -187,18 +188,44 @@ export function ModulePdfReader({ pdfUrl, title }: ModulePdfReaderProps) {
         </div>
       </div>
 
-      <div className="flex max-h-[520px] flex-col rounded-xl border-2 border-stone-900 bg-white">
-        <div className="border-b border-stone-200 px-3 py-2 text-xs font-semibold text-stone-700">
+      {/* PDF Viewer Panel */}
+      <div className="flex h-[600px] lg:h-auto lg:max-h-[520px] flex-col rounded-xl border-2 border-stone-900 bg-white overflow-hidden">
+        <div className="border-b border-stone-200 px-3 py-2 text-xs font-semibold text-stone-700 truncate">
           {title}
         </div>
-        <div ref={containerRef} className="flex flex-1 items-start justify-center overflow-auto p-3">
+        <div ref={containerRef} className="flex-1 items-start justify-center overflow-auto p-3 flex">
           {pdfError ? (
-            <div className="rounded-xl border-2 border-dashed border-stone-300 bg-stone-50 px-6 py-8 text-sm font-semibold text-stone-600">
+            <div className="rounded-xl border-2 border-dashed border-stone-300 bg-stone-50 px-6 py-8 text-sm font-semibold text-stone-600 m-auto">
               PDF not available
             </div>
           ) : (
-            <canvas ref={canvasRef} className="max-w-full" />
+            <canvas ref={canvasRef} className="max-w-full m-auto" />
           )}
+        </div>
+        
+        {/* Page Navigation for Viewer (Mobile Only) */}
+        <div className="lg:hidden border-t border-stone-200 px-3 py-3 flex flex-col gap-3 bg-stone-50 shrink-0">
+          <div className="text-center">
+            <span className="text-xs font-bold text-slate-700">{pageLabel}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage <= 1 || !numPages}
+              className="flex-1 inline-flex items-center justify-center rounded-md border-2 border-stone-900 bg-white px-3 py-2 text-xs font-bold text-stone-900 shadow-[2px_2px_0_#9ca3af] disabled:opacity-50 disabled:shadow-none hover:bg-stone-100 transition-all active:translate-y-px active:translate-x-px active:shadow-none"
+            >
+              ← Sebelumnya
+            </button>
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.min(numPages, p + 1))}
+              disabled={currentPage >= numPages || !numPages}
+              className="flex-1 inline-flex items-center justify-center rounded-md border-2 border-stone-900 bg-white px-3 py-2 text-xs font-bold text-stone-900 shadow-[2px_2px_0_#9ca3af] disabled:opacity-50 disabled:shadow-none hover:bg-stone-100 transition-all active:translate-y-px active:translate-x-px active:shadow-none"
+            >
+              Selanjutnya →
+            </button>
+          </div>
         </div>
       </div>
     </div>
