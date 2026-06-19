@@ -26,14 +26,28 @@ export async function GET(req: Request) {
         title: true,
         categoryId: true,
         category: { select: { name: true } },
+        pdfKey: true,
       },
     });
 
-    return NextResponse.json({ modules }, { status: 200 });
+    let resolvePdfUrl = (key: string) => key;
+    try {
+      const { getMinioPublicUrl } = await import("@/lib/storage/minio");
+      resolvePdfUrl = getMinioPublicUrl;
+    } catch {
+      // MinIO not configured, fall back to raw key
+    }
+
+    const data = modules.map((module) => ({
+      ...module,
+      pdfUrl: resolvePdfUrl(module.pdfKey),
+    }));
+
+    return NextResponse.json({ modules: data }, { status: 200 });
   } catch (error) {
     console.error("GET_MODULES_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 },
     );
   }
@@ -43,7 +57,7 @@ export async function POST(req: Request) {
   try {
     if (!ensureAdmin(req)) {
       return NextResponse.json(
-        { message: "Forbidden. Hanya admin yang diizinkan." },
+        { message: "Forbidden." },
         { status: 403 }
       );
     }
@@ -68,7 +82,7 @@ export async function POST(req: Request) {
 
     if (!category) {
       return NextResponse.json(
-        { message: "Kategori tidak ditemukan." },
+        { message: "Category not found." },
         { status: 404 }
       );
     }
@@ -112,7 +126,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("CREATE_MODULE_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

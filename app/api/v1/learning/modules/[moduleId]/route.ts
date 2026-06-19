@@ -36,9 +36,17 @@ export async function GET(_req: Request, context: RouteContext) {
 
     if (!module) {
       return NextResponse.json(
-        { message: "Modul tidak ditemukan." },
+        { message: "Module not found." },
         { status: 404 }
       );
+    }
+
+    let resolvePdfUrl = (key: string) => key;
+    try {
+      const { getMinioPublicUrl } = await import("@/lib/storage/minio");
+      resolvePdfUrl = getMinioPublicUrl;
+    } catch {
+      // MinIO not configured, fall back to raw key
     }
 
     return NextResponse.json(
@@ -49,7 +57,7 @@ export async function GET(_req: Request, context: RouteContext) {
           title: module.title,
           content: module.content,
           pdfKey: module.pdfKey,
-          pdfUrl: module.pdfKey,
+          pdfUrl: resolvePdfUrl(module.pdfKey),
           categoryId: module.categoryId,
           category: module.category,
           createdAt: module.createdAt,
@@ -61,7 +69,7 @@ export async function GET(_req: Request, context: RouteContext) {
   } catch (error) {
     console.error("GET_MODULE_DETAIL_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }
@@ -71,7 +79,7 @@ export async function PUT(req: Request, context: RouteContext) {
   try {
     if (!ensureAdmin(req)) {
       return NextResponse.json(
-        { message: "Forbidden. Hanya admin yang diizinkan." },
+        { message: "Forbidden." },
         { status: 403 }
       );
     }
@@ -94,7 +102,7 @@ export async function PUT(req: Request, context: RouteContext) {
 
     if (!module) {
       return NextResponse.json(
-        { message: "Modul tidak ditemukan." },
+        { message: "Module not found." },
         { status: 404 }
       );
     }
@@ -109,7 +117,7 @@ export async function PUT(req: Request, context: RouteContext) {
 
       if (!category) {
         return NextResponse.json(
-          { message: "Kategori tidak ditemukan." },
+          { message: "Category not found." },
           { status: 404 }
         );
       }
@@ -134,12 +142,20 @@ export async function PUT(req: Request, context: RouteContext) {
       },
     });
 
+    let resolvePdfUrl = (key: string) => key;
+    try {
+      const { getMinioPublicUrl } = await import("@/lib/storage/minio");
+      resolvePdfUrl = getMinioPublicUrl;
+    } catch {
+      // MinIO not configured, fall back to raw key
+    }
+
     return NextResponse.json(
       {
         message: "Modul berhasil diperbarui",
         module: {
           ...updated,
-          pdfUrl: updated.pdfKey,
+          pdfUrl: resolvePdfUrl(updated.pdfKey),
         },
       },
       { status: 200 }
@@ -147,7 +163,7 @@ export async function PUT(req: Request, context: RouteContext) {
   } catch (error) {
     console.error("UPDATE_MODULE_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }
@@ -157,7 +173,7 @@ export async function DELETE(req: Request, context: RouteContext) {
   try {
     if (!ensureAdmin(req)) {
       return NextResponse.json(
-        { message: "Forbidden. Hanya admin yang diizinkan." },
+        { message: "Forbidden." },
         { status: 403 }
       );
     }
@@ -171,7 +187,7 @@ export async function DELETE(req: Request, context: RouteContext) {
 
     if (!module) {
       return NextResponse.json(
-        { message: "Modul tidak ditemukan." },
+        { message: "Module not found." },
         { status: 404 }
       );
     }
@@ -181,13 +197,13 @@ export async function DELETE(req: Request, context: RouteContext) {
     });
 
     return NextResponse.json(
-      { message: "Modul berhasil dihapus" },
+      { message: "Module successfully deleted" },
       { status: 200 }
     );
   } catch (error) {
     console.error("DELETE_MODULE_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

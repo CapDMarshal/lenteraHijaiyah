@@ -8,7 +8,7 @@ export async function GET(req: Request) {
 
     if (!userId) {
       return NextResponse.json(
-        { message: "Unauthorized. ID Pengguna tidak ditemukan." },
+        { message: "Unauthorized." },
         { status: 401 }
       );
     }
@@ -28,7 +28,7 @@ export async function GET(req: Request) {
     // 3. Handle jika tiba-tiba akun dihapus dari DB tapi token masih ada
     if (!user) {
       return NextResponse.json(
-        { message: "Pengguna tidak ditemukan." },
+        { message: "User not found." },
         { status: 404 }
       );
     }
@@ -41,7 +41,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("GET_ME_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }

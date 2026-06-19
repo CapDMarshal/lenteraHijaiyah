@@ -28,7 +28,7 @@ export async function GET() {
   } catch (error) {
     console.error("GET_CATEGORIES_ERROR", error);
     return NextResponse.json(
-      { message: "Terjadi kesalahan internal server" },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }
